@@ -2,7 +2,13 @@
 // context is the context from bot.onEvent
 // links is the object from flow.js from the respective dialog
 
-const { capQR } = require('./helper');
+function capQR(text) {
+	let result = text;
+	if (result.length > 20) {
+		result = `${result.slice(0, 17)}...`;
+	}
+	return result;
+}
 
 async function buildButton(url, title) { return [{ type: 'web_url', url, title }]; } module.exports.buildButton = buildButton;
 
@@ -101,7 +107,6 @@ module.exports.sendSequenceMsgs = async (context, msgs, buttonTitle) => {
 module.exports.getQR = async (opt) => {
 	const elements = [];
 	const firstArray = opt.menuOptions;
-
 	firstArray.forEach(async (element, index) => {
 		elements.push({
 			content_type: 'text',

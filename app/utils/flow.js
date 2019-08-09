@@ -1,6 +1,12 @@
 module.exports = {
 	avatarImage: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
 	getStarted: 'Olá, sou o DIPIOU',
+	share: {
+		title: 'DIPIOU_BOT',
+		subtitle: 'Dippy',
+		image_url: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
+		item_url: 'www.google.com',
+	},
 	greetings: {
 		text1: 'Olá, <USERNAME>! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
 		text2: 'Sou o assistente digital e estou aqui para te ajudar sobre a Lei Geral de Proteção de Dados (LGPD) 🤓',
@@ -14,6 +20,9 @@ module.exports = {
 		menuOptions: ['Meus Dados', 'Revogar meus Dados'],
 		menuPostback: ['meusDados', 'revogarDados'],
 	},
+	meusDados: {
+		text1: 'Usamos seus dados x e y',
+	},
 	revogarDados: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Mas antes de revogar seus dados, saiba que de modo geral usamos os dados dos clientes para usufruirem dos seguintes benefícios:',
@@ -21,6 +30,15 @@ module.exports = {
 		text4: 'Seus dados são bem-cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['revogacaoSim', 'revogacaoNao'],
+	},
+	revogacaoNao: {
+		text1: 'ok',
+	},
+	sobreLGPD: {
+		text1: 'LGPD é isso e aquilo',
+	},
+	sobreDipiou: {
+		text1: 'Dipiou é isso e aquilo',
 	},
 	revogacaoSim: {
 		text1: 'Sem problemas 👍',
@@ -45,5 +63,8 @@ module.exports = {
 	issueText: {
 		success: 'Obrigado por sua mensagem',
 		failure: 'Não consegui salvar a mensagem',
+	},
+	titularNao: {
+		text1: 'Então não pode revogar né',
 	},
 };

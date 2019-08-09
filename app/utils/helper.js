@@ -4,13 +4,10 @@ const accents = require('remove-accents');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
-module.exports.Sentry = Sentry;
 
-// Dialogflow
-module.exports.apiai = dialogFlow(process.env.DIALOGFLOW_TOKEN);
 
 // separates string in the first dot on the second half of the string
-module.exports.separateString = (someString) => {
+async function separateString(someString) {
 	if (someString.trim()[someString.length - 1] !== '.') { // trying to guarantee the last char is a dot so we never use halfLength alone as the divisor
 		someString += '.'; // eslint-disable-line no-param-reassign
 	}
@@ -26,7 +23,7 @@ module.exports.separateString = (someString) => {
 	return { firstString, secondString };
 };
 
-module.exports.formatDialogFlow = async (text) => {
+async function formatDialogFlow(text) {
 	let result = text.toLowerCase();
 	result = await result.replace(/([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2580-\u27BF]|\uD83E[\uDD10-\uDDFF])/g, '');
 	result = await accents.remove(result);
@@ -35,3 +32,25 @@ module.exports.formatDialogFlow = async (text) => {
 	}
 	return result.trim();
 };
+
+const aaa = {
+
+};
+async function buildTicket(state) {
+	let result = 'Ticket Revogar Dados\n';
+	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`	}
+	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`	}
+	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`	}
+	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`	}
+
+	return result;
+}
+
+
+module.exports = {
+	Sentry,
+	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
+	separateString,
+	formatDialogFlow,
+	buildTicket,
+}

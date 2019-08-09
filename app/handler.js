@@ -10,12 +10,12 @@ module.exports = async (context) => {
 	try {
 		// console.log(await MaAPI.getLogAction()); // print possible log actions
 		if (!context.state.dialog || context.state.dialog === '' || (context.event.postback && context.event.postback.payload === 'greetings')) { // because of the message that comes from the comment private-reply
-			await context.resetState(); await context.setState({ dialog: 'greetings' });
+			await context.setState({ dialog: 'greetings' });
 		}
 		// let user = await getUser(context)
 		// we reload politicianData on every useful event
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
-		console.log(context.state.politicianData);
+		// console.log(context.state.politicianData);
 
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
@@ -40,12 +40,12 @@ module.exports = async (context) => {
 			await context.setState({ whatWasTyped: context.event.message.text });
 			if (context.state.dialog === 'titularSim') {
 				await context.setState({ titularNome: context.state.whatWasTyped, dialog: 'askTitularCPF' });
-			} if (context.state.dialog === 'askTitularCPF') {
+			} else if (context.state.dialog === 'askTitularCPF') {
 				await context.setState({ titularCPF: context.state.whatWasTyped, dialog: 'askTitularPhone' });
-			} if (context.state.dialog === 'askTitularPhone') {
+			} else if (context.state.dialog === 'askTitularPhone') {
 				await context.setState({ titularPhone: context.state.whatWasTyped, dialog: 'askTitularMail' });
-			} if (context.state.dialog === 'askTitularMail') {
-				await context.setState({ titularMail: context.state.whatWasTyped, dialog: 'titularDadosFim' });
+			} else if (context.state.dialog === 'askTitularMail') {
+				await context.setState({ titularMail: context.state.whatWasTyped, dialog: 'gerarTicket' });
 			} else {
 				await dialogs.dialogFlow(context);
 			}
@@ -62,23 +62,47 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'atendimentoLGPD':
-			if (!context.state.ticketOn) {
+				if (!context.state.ticket23131) {
 				await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
 			} else {
 				await context.sendText(flow.atendimentoLGPD.waitQuestion);
 			}
 			break;
+			case 'meuTicket':
+			await context.sendText(context.state.ticket);
+			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
+			break;
+		case 'meusDados':
+			await context.sendText(flow.meusDados.text1);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'sobreLGPD':
+			await context.sendText(flow.sobreLGPD.text1);
+			await dialogs.sendMainMenu(context);
+			break;
 		case 'revogarDados':
-			await context.sendText(flow.revogarDados.text1);
-			await context.sendText(flow.revogarDados.text2);
-			await context.sendText(flow.revogarDados.text3);
-			await context.sendText(flow.revogarDados.text4, await attach.getQR(flow.revogarDados));
-			break;
+				await context.sendText(flow.revogarDados.text1);
+				await context.sendText(flow.revogarDados.text2);
+				await context.sendText(flow.revogarDados.text3);
+				await context.sendText(flow.revogarDados.text4, await attach.getQR(flow.revogarDados));
+				break;
 		case 'revogacaoSim':
-			await context.sendText(flow.revogacaoSim.text1);
-			await context.sendText(flow.revogacaoSim.text2);
-			await context.sendText(flow.revogacaoSim.text3, await attach.getQR(flow.revogacaoSim));
+				await context.sendText(flow.revogacaoSim.text1);
+				await context.sendText(flow.revogacaoSim.text2);
+				await context.sendText(flow.revogacaoSim.text3, await attach.getQR(flow.revogacaoSim));
 			break;
+		case 'revogacaoNao':
+				await context.sendText(flow.revogacaoNao.text1);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'sobreDipiou':
+			await context.sendText(flow.sobreDipiou.text1);
+			await dialogs.sendMainMenu(context);
+			break;
+			case 'titularNao':
+				await context.sendText(flow.titularNao.text1);
+				await dialogs.sendMainMenu(context);
+				break;
 		case 'titularSim':
 			await context.sendText(flow.titularSim.text1);
 			await context.sendText(flow.titularSim.askTitularName);
@@ -92,12 +116,20 @@ module.exports = async (context) => {
 		case 'askTitularMail':
 			await context.sendText(flow.titularSim.askTitularMail);
 			break;
-		case 'titularDadosFim':
+		case 'gerarTicket':
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
 			await context.sendText(flow.titularDadosFim.text2);
-			await context.setState({ ticketOn: true });
+			await context.setState({ ticket: await help.buildTicket(context.state) });
+			if (context.state.ticket) {
+				await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.ticket,
+					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);			
+			}
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
+			break;
+		case 'compartilhar':
+			await context.sendText('<BOTAO SHARE>');
+			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
 			break;
 		case 'createIssueDirect':
 			await createIssue(context);
