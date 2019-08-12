@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t appcivico/dpo-bot .
+docker build -t appcivico/dpo-chatbot .
