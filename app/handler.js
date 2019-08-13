@@ -46,6 +46,8 @@ module.exports = async (context) => {
 				await context.setState({ titularPhone: context.state.whatWasTyped, dialog: 'askTitularMail' });
 			} else if (context.state.dialog === 'askTitularMail') {
 				await context.setState({ titularMail: context.state.whatWasTyped, dialog: 'gerarTicket' });
+			} else if (context.state.dialog === 'meusDados') {
+				await context.setState({ dadosCPF: context.state.whatWasTyped, dialog: 'meusDadosTitular' });
 			} else {
 				await dialogs.dialogFlow(context);
 			}
@@ -62,18 +64,32 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'atendimentoLGPD':
-				if (!context.state.ticket23131) {
+			if (!context.state.ticket) {
 				await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
 			} else {
 				await context.sendText(flow.atendimentoLGPD.waitQuestion);
 			}
 			break;
-			case 'meuTicket':
-			await context.sendText(context.state.ticket);
+		case 'meuTicket':
+			if (context.state.ticket) { await context.sendText(context.state.ticket);	}
+			if (context.state.ticket2) { await context.sendText(context.state.ticket2);	}
 			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
 			break;
 		case 'meusDados':
-			await context.sendText(flow.meusDados.text1);
+			await context.sendText(flow.meusDados.meusDadosCPF);
+			break;
+		case 'meusDadosTitular':
+			await context.sendText(flow.meusDados.meusDadosTitular, await attach.getQR(flow.meusDados));
+			break;
+		case 'dadosTitularNao':
+			await context.sendText(flow.meusDados.dadosTitudadosTitularNaolarSim);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'dadosTitularSim':
+			await context.sendText(flow.meusDados.dadosTitularSim);
+			await context.setState({ ticket2: `Solicitação de envio dos dados do cliente de cpf ${context.state.dadosCPF}` });
+			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.ticket2,
+				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreLGPD':
@@ -81,28 +97,28 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'revogarDados':
-				await context.sendText(flow.revogarDados.text1);
-				await context.sendText(flow.revogarDados.text2);
-				await context.sendText(flow.revogarDados.text3);
-				await context.sendText(flow.revogarDados.text4, await attach.getQR(flow.revogarDados));
-				break;
+			await context.sendText(flow.revogarDados.text1);
+			await context.sendText(flow.revogarDados.text2);
+			await context.sendText(flow.revogarDados.text3);
+			await context.sendText(flow.revogarDados.text4, await attach.getQR(flow.revogarDados));
+			break;
 		case 'revogacaoSim':
-				await context.sendText(flow.revogacaoSim.text1);
-				await context.sendText(flow.revogacaoSim.text2);
-				await context.sendText(flow.revogacaoSim.text3, await attach.getQR(flow.revogacaoSim));
+			await context.sendText(flow.revogacaoSim.text1);
+			await context.sendText(flow.revogacaoSim.text2);
+			await context.sendText(flow.revogacaoSim.text3, await attach.getQR(flow.revogacaoSim));
 			break;
 		case 'revogacaoNao':
-				await context.sendText(flow.revogacaoNao.text1);
+			await context.sendText(flow.revogacaoNao.text1);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreDipiou':
 			await context.sendText(flow.sobreDipiou.text1);
 			await dialogs.sendMainMenu(context);
 			break;
-			case 'titularNao':
-				await context.sendText(flow.titularNao.text1);
-				await dialogs.sendMainMenu(context);
-				break;
+		case 'titularNao':
+			await context.sendText(flow.titularNao.text1);
+			await dialogs.sendMainMenu(context);
+			break;
 		case 'titularSim':
 			await context.sendText(flow.titularSim.text1);
 			await context.sendText(flow.titularSim.askTitularName);
@@ -123,7 +139,7 @@ module.exports = async (context) => {
 			await context.setState({ ticket: await help.buildTicket(context.state) });
 			if (context.state.ticket) {
 				await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.ticket,
-					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);			
+					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 			}
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;

@@ -21,7 +21,7 @@ async function separateString(someString) {
 	const secondString = someString.substring(dotIndex);
 
 	return { firstString, secondString };
-};
+}
 
 async function formatDialogFlow(text) {
 	let result = text.toLowerCase();
@@ -31,17 +31,14 @@ async function formatDialogFlow(text) {
 		result = result.slice(0, 250);
 	}
 	return result.trim();
-};
+}
 
-const aaa = {
-
-};
 async function buildTicket(state) {
 	let result = 'Ticket Revogar Dados\n';
-	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`	}
-	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`	}
-	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`	}
-	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`	}
+	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`;	}
+	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`;	}
+	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`;	}
+	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`;	}
 
 	return result;
 }
@@ -53,4 +50,4 @@ module.exports = {
 	separateString,
 	formatDialogFlow,
 	buildTicket,
-}
+};

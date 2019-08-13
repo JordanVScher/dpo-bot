@@ -21,7 +21,12 @@ module.exports = {
 		menuPostback: ['meusDados', 'revogarDados'],
 	},
 	meusDados: {
-		text1: 'Usamos seus dados x e y',
+		meusDadosCPF: 'Ok, primeiro preciso que você me forneça seu cpf para que seja possível consultar seus dados.',
+		meusDadosTitular: 'Ok, agora preciso que você confirme que você é o titular dos dados referentes a esse cpf. Você é o titular?',
+		dadosTitularSim: 'Salvamos o seu pedido de visualização de dados. Estaremos te retornando em breve.',
+		dadosTitularNao: 'Para segurança e privacidade, apenas o titular dos dados pode fazer essa requisição.',
+		menuOptions: ['Sim', 'Não'],
+		menuPostback: ['dadosTitularSim', 'dadosTitularNao'],
 	},
 	revogarDados: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
