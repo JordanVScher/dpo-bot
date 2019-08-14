@@ -37,7 +37,7 @@ module.exports = {
 		menuPostback: ['revogacaoSim', 'revogacaoNao'],
 	},
 	revogacaoNao: {
-		text1: 'ok',
+		text1: 'Tudo bem, se mudar de ideia, estamos aqui.',
 	},
 	sobreLGPD: {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
@@ -57,9 +57,13 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	titularSim: {
 		text1: 'Vou te fazer umas perguntas.',
 		askTitularName: 'Insira seu nome completo:',
+		askTitularNameFail: 'Nome inválido! Tente novamente',
 		askTitularCPF: 'Agora, insira seu CPF (apenas números, sem pontos ou vírgular ou traços)',
+		askTitularCPFFail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
 		askTitularPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
+		askTitularPhoneFail: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444',
 		askTitularMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askTitularMailFail: 'E-mail inválido! Tente Novamente',
 	},
 	titularDadosFim: {
 		text1: 'Guardando seus dados e gerando seu ticket',

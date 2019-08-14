@@ -43,6 +43,33 @@ async function buildTicket(state) {
 	return result;
 }
 
+async function getCPFValid(cpf) {
+	let result = cpf.replace(/[_.,-]/g, '');
+	if (!result || !parseInt(result, 10)) {
+		return false;
+	}
+	result = parseInt(result, 10);
+	if (result.toString().length !== 11) {
+		return false;
+	}
+
+	return result;
+}
+
+async function getPhoneValid(phone) {
+	let result = phone.replace(/[^0-9]+/ig, '');
+	if (!result || !parseInt(result, 10)) {
+		return false;
+	}
+	result = parseInt(result, 10);
+
+	if (result.toString().length < 8 || result.toString().length > 18) {
+		return false;
+	}
+
+	return result;
+}
+
 
 module.exports = {
 	Sentry,
@@ -50,4 +77,6 @@ module.exports = {
 	separateString,
 	formatDialogFlow,
 	buildTicket,
+	getCPFValid,
+	getPhoneValid,
 };

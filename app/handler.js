@@ -10,10 +10,6 @@ const DF = require('./utils/dialogFlow');
 
 module.exports = async (context) => {
 	try {
-		// console.log(await MaAPI.getLogAction()); // print possible log actions
-		if (!context.state.dialog || context.state.dialog === '' || (context.event.postback && context.event.postback.payload === 'greetings')) { // because of the message that comes from the comment private-reply
-			await context.setState({ dialog: 'greetings' });
-		}
 		// let user = await getUser(context)
 		// we reload politicianData on every useful event
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
@@ -31,6 +27,9 @@ module.exports = async (context) => {
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
 			await context.setState({ dialog: context.state.lastPBpayload });
+			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
+				await context.setState({ dialog: 'greetings' });
+			}
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
@@ -40,16 +39,22 @@ module.exports = async (context) => {
 				context.event.message.quick_reply.payload, context.event.message.quick_reply.payload);
 		} else if (context.event.isText) {
 			await context.setState({ whatWasTyped: context.event.message.text });
-			if (context.state.dialog === 'titularSim') {
-				await context.setState({ titularNome: context.state.whatWasTyped, dialog: 'askTitularCPF' });
-			} else if (context.state.dialog === 'askTitularCPF') {
-				await context.setState({ titularCPF: context.state.whatWasTyped, dialog: 'askTitularPhone' });
-			} else if (context.state.dialog === 'askTitularPhone') {
-				await context.setState({ titularPhone: context.state.whatWasTyped, dialog: 'askTitularMail' });
-			} else if (context.state.dialog === 'askTitularMail') {
-				await context.setState({ titularMail: context.state.whatWasTyped, dialog: 'gerarTicket' });
-			} else if (context.state.dialog === 'meusDados') {
-				await context.setState({ dadosCPF: context.state.whatWasTyped, dialog: 'meusDadosTitular' });
+			if (context.state.dialog === 'titularSim' || context.state.dialog === 'invalidName') {
+				await dialogs.checkFullName(context);
+			} else if (context.state.dialog === 'askTitularCPF' || context.state.dialog === 'invalidCPF') {
+				await dialogs.checkCPF(context);
+			} else if (context.state.dialog === 'askTitularPhone' || context.state.dialog === 'invalidPhone') {
+				await dialogs.checkPhone(context);
+			} else if (context.state.dialog === 'askTitularMail' || context.state.dialog === 'invalidMail') {
+				await dialogs.checkEmail(context);
+			} else if (context.state.dialog === 'meusDados' || context.state.dialog === 'meusDadosCPF') {
+				await context.setState({ dadosCPF: await help.getCPFValid(context.state.whatWasTyped) });
+				if (context.state.dadosCPF) {
+					await context.setState({ dadosCPF: context.state.whatWasTyped, dialog: 'meusDadosTitular' });
+				} else {
+					await context.setState({ dadosCPF: '', dialog: 'meusDadosCPF' });
+					await context.sendText(flow.titularSim.askTitularCPFFail);
+				}
 			} else {
 				await DF.dialogFlow(context);
 			}
