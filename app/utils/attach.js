@@ -161,10 +161,10 @@ module.exports.sendShare = async (context, links) => {
 			template_type: 'generic',
 			elements: [
 				{
-					title: links.siteTitle,
-					subtitle: links.siteSubTitle,
-					image_url: links.imageURL,
-					item_url: links.siteURL,
+					title: links.title,
+					subtitle: links.subtitle,
+					image_url: links.image_url,
+					item_url: links.item_url + process.env.PAGE_ID,
 					buttons: [{
 						type: 'element_share',
 					}],

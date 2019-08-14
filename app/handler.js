@@ -138,7 +138,6 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
 		case 'compartilhar':
-			await context.sendText('<BOTAO SHARE>');
 			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
 			break;
 		case 'createIssueDirect':

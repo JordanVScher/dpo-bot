@@ -5,7 +5,7 @@ module.exports = {
 		title: 'DIPIOU_BOT',
 		subtitle: 'Dippy',
 		image_url: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
-		item_url: 'www.google.com',
+		item_url: 'https://www.facebook.com/',
 	},
 	greetings: {
 		text1: 'Olá, <USERNAME>! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
