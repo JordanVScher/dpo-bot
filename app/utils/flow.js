@@ -68,7 +68,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		ticketOpened: 'Seu ticket foi aberto e será respondido em até 72h. Enquanto isso, você pode escolher uma das opções abaixo e compartilhar o Dipi aqui para mais pessoas saberem de mim 🤓',
 	},
 	issueText: {
-		success: 'Obrigado por sua mensagem. Vamos te responder em breve.',
+		success: 'Você me pegou. Preciso pensar e te retorno em breve.',
 		failure: 'Não consegui salvar a mensagem',
 	},
 	titularNao: {
