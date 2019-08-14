@@ -31,7 +31,7 @@ module.exports = {
 	revogarDados: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Mas antes de revogar seus dados, saiba que de modo geral usamos os dados dos clientes para usufruirem dos seguintes benefícios:',
-		text3: '1) Receber novidades pelos canais de comunicação\n2) Ganhar descontos exclusivos\n3) [demais itens]',
+		text3: '1) Receber novidades pelos canais de comunicação\n2) Ganhar descontos exclusivos',
 		text4: 'Seus dados são bem-cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['revogacaoSim', 'revogacaoNao'],
@@ -40,14 +40,16 @@ module.exports = {
 		text1: 'ok',
 	},
 	sobreLGPD: {
-		text1: 'LGPD é isso e aquilo',
+		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
+
+A legislação se fundamenta em diversos valores, como o respeito à privacidade; à autodeterminação informativa; à liberdade de expressão, de informação, de comunicação e de opinião; à inviolabilidade da intimidade, da honra e da imagem; ao desenvolvimento econômico e tecnológico e a inovação; à livre iniciativa, livre concorrência e defesa do consumidor e aos direitos humanos liberdade e dignidade das pessoas. `,
 	},
 	sobreDipiou: {
-		text1: 'Dipiou é isso e aquilo',
+		text1: 'Sou um chatbot, um robô conversacional, para harmozinar sua comunição com as empresas, sempre pensando em valorizar a sua privacidade.',
 	},
 	revogacaoSim: {
 		text1: 'Sem problemas 👍',
-		text2: 'Você precisa ser o titular dos dados que deseja revogar, tudo bem? De acordo com a lei [xpto]\n[texto sobre responsabilidade]',
+		text2: 'Você precisa ser o titular dos dados que deseja revogar, tudo bem?',
 		text3: 'Você é o titular dos dados?',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['titularSim', 'titularNao'],
@@ -66,10 +68,10 @@ module.exports = {
 		ticketOpened: 'Seu ticket foi aberto e será respondido em até 72h. Enquanto isso, você pode escolher uma das opções abaixo e compartilhar o Dipi aqui para mais pessoas saberem de mim 🤓',
 	},
 	issueText: {
-		success: 'Obrigado por sua mensagem',
+		success: 'Obrigado por sua mensagem. Vamos te responder em breve.',
 		failure: 'Não consegui salvar a mensagem',
 	},
 	titularNao: {
-		text1: 'Então não pode revogar né',
+		text1: 'Nesse caso, não será possível continuar com a operação.',
 	},
 };

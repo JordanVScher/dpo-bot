@@ -5,6 +5,8 @@ const flow = require('./utils/flow');
 const help = require('./utils/helper');
 const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
+const DF = require('./utils/dialogFlow');
+
 
 module.exports = async (context) => {
 	try {
@@ -49,7 +51,7 @@ module.exports = async (context) => {
 			} else if (context.state.dialog === 'meusDados') {
 				await context.setState({ dadosCPF: context.state.whatWasTyped, dialog: 'meusDadosTitular' });
 			} else {
-				await dialogs.dialogFlow(context);
+				await DF.dialogFlow(context);
 			}
 		}
 		switch (context.state.dialog) {
@@ -64,16 +66,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'atendimentoLGPD':
-			if (!context.state.ticket) {
-				await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
-			} else {
-				await context.sendText(flow.atendimentoLGPD.waitQuestion);
-			}
-			break;
-		case 'meuTicket':
-			if (context.state.ticket) { await context.sendText(context.state.ticket);	}
-			if (context.state.ticket2) { await context.sendText(context.state.ticket2);	}
-			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
+			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
 			break;
 		case 'meusDados':
 			await context.sendText(flow.meusDados.meusDadosCPF);
@@ -87,8 +80,7 @@ module.exports = async (context) => {
 			break;
 		case 'dadosTitularSim':
 			await context.sendText(flow.meusDados.dadosTitularSim);
-			await context.setState({ ticket2: `Solicitação de envio dos dados do cliente de cpf ${context.state.dadosCPF}` });
-			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.ticket2,
+			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, `Solicitação de envio dos dados do cliente de cpf ${context.state.dadosCPF}`,
 				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 			await dialogs.sendMainMenu(context);
 			break;
@@ -135,12 +127,9 @@ module.exports = async (context) => {
 		case 'gerarTicket':
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
-			await context.sendText(flow.titularDadosFim.text2);
-			await context.setState({ ticket: await help.buildTicket(context.state) });
-			if (context.state.ticket) {
-				await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.ticket,
-					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
-			}
+			// await context.sendText(flow.titularDadosFim.text2);
+			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, await help.buildTicket(context.state),
+				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
 		case 'compartilhar':
