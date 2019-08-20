@@ -58,7 +58,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		text1: 'Vou te fazer umas perguntas.',
 		askTitularName: 'Insira seu nome completo:',
 		askTitularNameFail: 'Nome inválido! Tente novamente',
-		askTitularCPF: 'Agora, insira seu CPF (apenas números, sem pontos ou vírgular ou traços)',
+		askTitularCPF: 'Agora, insira seu CPF.',
 		askTitularCPFFail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
 		askTitularPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
 		askTitularPhoneFail: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444',

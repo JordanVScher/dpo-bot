@@ -1,10 +1,12 @@
 const Sentry = require('@sentry/node');
 const dialogFlow = require('apiai-promise');
 const accents = require('remove-accents');
+const validarCpf = require('validar-cpf');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
 
+async function addChar(a, b, position) { return a.substring(0, position) + b + a.substring(position); }
 
 // separates string in the first dot on the second half of the string
 async function separateString(someString) {
@@ -45,31 +47,22 @@ async function buildTicket(state) {
 
 async function getCPFValid(cpf) {
 	let result = cpf.replace(/[_.,-]/g, '');
-	if (!result || !parseInt(result, 10)) {
-		return false;
-	}
-	result = parseInt(result, 10);
-	if (result.toString().length !== 11) {
-		return false;
-	}
-
+	if (!result || cpf.length < 11 || !/^\d+$/.test(result)) { return false; }
+	result = await addChar(result, '.', 3);
+	result = await addChar(result, '.', 7);
+	result = await addChar(result, '-', 11);
+	if (validarCpf(result) === false) { return false;	}
 	return result;
 }
+
 
 async function getPhoneValid(phone) {
-	let result = phone.replace(/[^0-9]+/ig, '');
-	if (!result || !parseInt(result, 10)) {
-		return false;
-	}
-	result = parseInt(result, 10);
-
-	if (result.toString().length < 8 || result.toString().length > 18) {
-		return false;
-	}
+	const result = phone.trim().replace(/[^0-9]+/ig, '');
+	if (!result || !parseInt(result, 10)) { return false; }
+	if (result.length < 8 || result.length > 18) { return false; }
 
 	return result;
 }
-
 
 module.exports = {
 	Sentry,
