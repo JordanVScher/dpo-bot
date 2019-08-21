@@ -46,7 +46,7 @@ async function checkEmail(context) {
 
 async function sendMainMenu(context, text) {
 	const textToSend = text || flow.mainMenu.text1;
-	await context.sendText(textToSend, await checkQR.buildMainMenu(context.state));
+	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
 module.exports = {

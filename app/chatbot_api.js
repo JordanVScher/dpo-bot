@@ -7,6 +7,19 @@ const queryString = require('query-string');
 const security_token = process.env.SECURITY_TOKEN_MA;
 const apiUri = process.env.MANDATOABERTO_API_URL;
 
+async function handleRequestAnswer(response) {
+	try {
+		const res = await response.json();
+		if (!res || res.error || res.form_error) { console.log('erro'); }
+		console.log(res);
+
+		return res;
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
+}
+
 module.exports = {
 	async getPoliticianData(pageId) {
 		const res = await request(
@@ -129,14 +142,7 @@ module.exports = {
 		return knowledgeBase;
 	},
 
-	async postPrivateReply(
-		item,
-		page_id,
-		post_id,
-		comment_id,
-		permalink,
-		user_id,
-	) {
+	async postPrivateReply(item, page_id, post_id, comment_id, permalink, user_id) {
 		const res = await request.post(
 			`${apiUri}/api/chatbot/private-reply?page_id=${page_id}&item=${item}&post_id=${post_id}&comment_id=${comment_id}&permalink=${permalink}&user_id=${user_id}&security_token=${security_token}`,
 		);
@@ -156,19 +162,29 @@ module.exports = {
 
 	async getAvailableIntents(pageId, page) {
 		// has pagination
-		const res = await request(
-			`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&page=${page}&security_token=${security_token}`,
-		);
+		const res = await request(`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&page=${page}&security_token=${security_token}`);
 		const intents = await res.json();
 		return intents;
 	},
 
 	async getAllAvailableIntents(pageId) {
-		const res = await request(
-			`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&security_token=${security_token}`,
-		);
+		const res = await request(`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&security_token=${security_token}`);
 		const intents = await res.json();
 		return intents;
+	},
+
+	async getTicketTypes() {
+		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/ticket/type?security_token=${security_token}`));
+	},
+
+	async getuserTickets(fb_id) {
+		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({ fb_id }));
+	},
+
+	async postNewTicket(chatbot_id, fb_id, type_id, message) {
+		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({
+			chatbot_id, fb_id, type_id, message,
+		}));
 	},
 
 	async logFlowChange(recipient_fb_id, politician_id, payload, human_name) {

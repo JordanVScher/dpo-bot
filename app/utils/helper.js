@@ -35,12 +35,19 @@ async function formatDialogFlow(text) {
 	return result.trim();
 }
 
-async function buildTicket(state) {
+async function buildTicketRevogar(state) {
 	let result = 'Ticket Revogar Dados\n';
 	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`;	}
 	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`;	}
 	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`;	}
 	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`;	}
+
+	return result;
+}
+
+async function buildTicketVisualizar(state) {
+	let result = 'Ticket Visualizar Dados\n';
+	if (state.dadosCPF) { result += `CPF: ${state.dadosCPF}\n`;	}
 
 	return result;
 }
@@ -64,12 +71,26 @@ async function getPhoneValid(phone) {
 	return result;
 }
 
+async function getUserTicketTypes(tickets) {
+	const result = [];
+
+	tickets.forEach((element) => {
+		if (!result.includes(element.id)) {
+			result.push(element.id);
+		}
+	});
+
+	return result.sort();
+}
+
 module.exports = {
 	Sentry,
 	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
 	separateString,
 	formatDialogFlow,
-	buildTicket,
+	buildTicketRevogar,
+	buildTicketVisualizar,
 	getCPFValid,
 	getPhoneValid,
+	getUserTicketTypes,
 };

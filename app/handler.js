@@ -7,7 +7,6 @@ const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
 
-
 module.exports = async (context) => {
 	try {
 		// let user = await getUser(context)
@@ -85,8 +84,7 @@ module.exports = async (context) => {
 			break;
 		case 'dadosTitularSim':
 			await context.sendText(flow.meusDados.dadosTitularSim);
-			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, `Solicitação de envio dos dados do cliente de cpf ${context.state.dadosCPF}`,
-				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreLGPD':
@@ -132,9 +130,7 @@ module.exports = async (context) => {
 		case 'gerarTicket':
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
-			// await context.sendText(flow.titularDadosFim.text2);
-			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, await help.buildTicket(context.state),
-				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state));
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
 		case 'compartilhar':
