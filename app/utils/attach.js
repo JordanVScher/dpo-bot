@@ -134,16 +134,17 @@ async function sendShare(context, cardData) {
 
 async function sendTicket(context, ticket) {
 	let msg = `Pedido ${ticket.id}\n`;
-	if (ticket.message && Array.isArray(ticket.message)) { msg += `Detalhes: ${ticket.message.join('\n')}`;	}
+	if (ticket.message && Array.isArray(ticket.message)) { msg += `\nDetalhes: ${ticket.message.join('\n')}`;	}
 	msg += `\nEstado: ${ticket.status}`;
 	msg += `\nData de criação: ${moment(ticket.created_at).format('LLLL')}`;
-	const buttons = [{
-		type: 'postback',
-		title: 'Cancelar Ticket',
-		payload: `cancelTicket${ticket.id}`,
-	}];
+	// const buttons = [{
+	// 	type: 'postback',
+	// 	title: 'Cancelar Ticket',
+	// 	payload: `cancelTicket${ticket.id}`,
+	// }];
 
-	await context.sendButtonTemplate(msg, buttons);
+	// await context.sendButtonTemplate(msg, buttons);
+	await context.sendText(msg);
 }
 
 module.exports = {
