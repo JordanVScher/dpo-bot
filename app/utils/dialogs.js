@@ -1,7 +1,13 @@
+const assistenteAPI = require('../chatbot_api');
 const flow = require('./flow');
-// const attach = require('./attach');
+const attach = require('./attach');
 const checkQR = require('./checkQR');
 const help = require('./helper');
+
+async function sendMainMenu(context, text) {
+	const textToSend = text || flow.mainMenu.text1;
+	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
+}
 
 async function checkFullName(context) {
 	if (/^[a-zA-Z]+$/.test(context.state.whatWasTyped)) {
@@ -43,12 +49,27 @@ async function checkEmail(context) {
 	}
 }
 
+async function meuTicket(context) {
+	await context.setState({ userTickets: await assistenteAPI.getuserTickets(context.session.user.id) });
 
-async function sendMainMenu(context, text) {
-	const textToSend = text || flow.mainMenu.text1;
-	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
+	if (context.state.userTickets.itens_count > 0) {
+		for (const ticket of context.state.userTickets.tickets) { // eslint-disable-line no-restricted-syntax
+			await attach.sendTicket(context, ticket);
+		}
+		await context.typing(1000 * 3);
+	}
+	await sendMainMenu(context);
+}
+
+async function atendimentoLGPD(context) {
+	const options = await checkQR.buildAtendimento(context);
+	if (!options) {
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.atendimentoLGPD.text1, options);
+	}
 }
 
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD,
 };

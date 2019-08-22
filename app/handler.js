@@ -70,7 +70,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'atendimentoLGPD':
-			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
+			await dialogs.atendimentoLGPD(context);
 			break;
 		case 'meusDados':
 			await context.sendText(flow.meusDados.meusDadosCPF);
@@ -82,9 +82,9 @@ module.exports = async (context) => {
 			await context.sendText(flow.meusDados.dadosTitudadosTitularNaolarSim);
 			await dialogs.sendMainMenu(context);
 			break;
-		case 'dadosTitularSim':
+		case 'dadosTitularSim': // meusDados
 			await context.sendText(flow.meusDados.dadosTitularSim);
-			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketVisualizar(context.state));
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreLGPD':
@@ -127,14 +127,19 @@ module.exports = async (context) => {
 		case 'askTitularMail':
 			await context.sendText(flow.titularSim.askTitularMail);
 			break;
-		case 'gerarTicket':
+		case 'gerarTicket': // revogar dados
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
-			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state));
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketRevogar(context.state));
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
+		case 'meuTicket':
+			await dialogs.meuTicket(context);
+			break;
 		case 'compartilhar':
-			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
+			await context.sendText(flow.share.txt1);
+			await attach.sendShare(context, flow.share.cardData);
+			await dialogs.sendMainMenu(context);
 			break;
 		case 'createIssueDirect':
 			await createIssue(context);

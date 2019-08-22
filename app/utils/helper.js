@@ -1,10 +1,13 @@
 const Sentry = require('@sentry/node');
+const moment = require('moment');
 const dialogFlow = require('apiai-promise');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
+moment.locale('pt-BR');
+
 
 async function addChar(a, b, position) { return a.substring(0, position) + b + a.substring(position); }
 
@@ -85,6 +88,7 @@ async function getUserTicketTypes(tickets) {
 
 module.exports = {
 	Sentry,
+	moment,
 	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
 	separateString,
 	formatDialogFlow,

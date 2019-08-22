@@ -1,6 +1,4 @@
-// Module for sending attachments to bot
-// context is the context from bot.onEvent
-// links is the object from flow.js from the respective dialog
+const { moment } = require('./helper');
 
 function capQR(text) {
 	let result = text;
@@ -13,7 +11,7 @@ function capQR(text) {
 async function buildButton(url, title) { return [{ type: 'web_url', url, title }]; } module.exports.buildButton = buildButton;
 
 // sends one card with an image and link
-module.exports.sendCardWithLink = async function sendCardWithLink(context, cardData, url, text) {
+async function sendCardWithLink(context, cardData, url, text) {
 	await context.sendAttachment({
 		type: 'template',
 		payload: {
@@ -33,78 +31,27 @@ module.exports.sendCardWithLink = async function sendCardWithLink(context, cardD
 			],
 		},
 	});
-};
+}
 
-module.exports.cardLinkNoImage = async (context, title, url) => {
+async function cardLinkNoImage(context, title, url) {
 	await context.sendAttachment({
 		type: 'template',
 		payload: { template_type: 'generic', elements: [{ title, subtitle: ' ', buttons: [{ type: 'web_url', url, title }] }] },
 	});
-};
+}
 
-module.exports.sendCardWithout = async function sendCardWithLink(context, cardData) {
-	await context.sendAttachment({
-		type: 'template',
-		payload: {
-			template_type: 'generic',
-			elements: [
-				{
-					title: cardData.title,
-					subtitle: cardData.sub,
-					image_url: cardData.imageLink,
-					// default_action: {
-					// 	type: 'web_url',
-					// 	url,
-					// 	messenger_extensions: 'false',
-					// 	webview_height_ratio: 'full',
-					// },
-				},
-			],
-		},
-	});
-};
-
-module.exports.sendAtividade2Cards = async (context, cards, cpf) => {
-	const elements = [];
-
-	cards.forEach(async (element) => {
-		elements.push({
-			title: element.title,
-			subtitle: element.subtitle,
-			image_url: element.image_url,
-			default_action: {
-				type: 'web_url',
-				url: element.url.replace('CPFRESPOSTA', cpf),
-				// messenger_extensions: 'false',
-				// webview_height_ratio: 'full',
-			},
-			buttons: [
-				{ type: 'web_url', url: element.url.replace('CPFRESPOSTA', cpf), title: 'Fazer Atividade' }],
-		});
-	});
-
-
-	await context.sendAttachment({
-		type: 'template',
-		payload: {
-			template_type: 'generic',
-			elements,
-		},
-	});
-};
-
-module.exports.sendSequenceMsgs = async (context, msgs, buttonTitle) => {
+async function sendSequenceMsgs(context, msgs, buttonTitle) {
 	for (let i = 0; i < msgs.length; i++) {
 		if (msgs[i] && msgs[i].text && msgs[i].url) {
 			await context.sendButtonTemplate(msgs[i].text, await buildButton(msgs[i].url, buttonTitle));
 		}
 	}
-};
+}
 
 // get quick_replies opject with elements array
 // supossed to be used with menuOptions and menuPostback for each dialog on flow.js
 
-module.exports.getQR = async (opt) => {
+async function getQR(opt) {
 	const elements = [];
 	const firstArray = opt.menuOptions;
 	firstArray.forEach(async (element, index) => {
@@ -116,7 +63,7 @@ module.exports.getQR = async (opt) => {
 	});
 
 	return { quick_replies: elements };
-};
+}
 
 async function getVoltarQR(lastDialog) {
 	let lastPostback = '';
@@ -134,8 +81,8 @@ async function getVoltarQR(lastDialog) {
 	};
 }
 
-module.exports.getVoltarQR = getVoltarQR;
-module.exports.getErrorQR = async (opt, lastDialog) => {
+
+async function getErrorQR(opt, lastDialog) {
 	const elements = [];
 	const firstArray = opt.menuOptions;
 
@@ -152,24 +99,53 @@ module.exports.getErrorQR = async (opt, lastDialog) => {
 	console.log('ERRORQR', elements);
 
 	return { quick_replies: elements };
-};
+}
 
-module.exports.sendShare = async (context, links) => {
+async function sendShare(context, cardData) {
+	const buttons = [
+		{
+			type: 'web_url',
+			title: 'Ver Chatbot',
+			url: `m.me/${process.env.PAGE_ID}`,
+		},
+	];
+
 	await context.sendAttachment({
 		type: 'template',
 		payload: {
 			template_type: 'generic',
 			elements: [
 				{
-					title: links.title,
-					subtitle: links.subtitle,
-					image_url: links.image_url,
-					item_url: links.item_url + process.env.PAGE_ID,
-					buttons: [{
-						type: 'element_share',
-					}],
+					title: cardData.title,
+					subtitle: (cardData.text && cardData.text !== '') ? cardData.text : cardData.sub,
+					image_url: cardData.image_url,
+					default_action: {
+						type: 'web_url',
+						url: `${cardData.item_url}/${process.env.PAGE_ID}`,
+						messenger_extensions: 'false',
+						webview_height_ratio: 'full',
+					},
+					buttons,
 				},
 			],
 		},
 	});
+}
+
+async function sendTicket(context, ticket) {
+	let msg = `Pedido ${ticket.id}\n`;
+	if (ticket.message && Array.isArray(ticket.message)) { msg += `Detalhes: ${ticket.message.join('\n')}`;	}
+	msg += `\nEstado: ${ticket.status}`;
+	msg += `\nData de criação: ${moment(ticket.created_at).format('LLLL')}`;
+	const buttons = [{
+		type: 'postback',
+		title: 'Cancelar Ticket',
+		payload: `cancelTicket${ticket.id}`,
+	}];
+
+	await context.sendButtonTemplate(msg, buttons);
+}
+
+module.exports = {
+	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicket,
 };
