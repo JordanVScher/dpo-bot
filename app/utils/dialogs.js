@@ -51,11 +51,8 @@ async function checkEmail(context) {
 
 async function meuTicket(context) {
 	await context.setState({ userTickets: await assistenteAPI.getuserTickets(context.session.user.id) });
-
 	if (context.state.userTickets.itens_count > 0) {
-		for (const ticket of context.state.userTickets.tickets) { // eslint-disable-line no-restricted-syntax
-			await attach.sendTicket(context, ticket);
-		}
+		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);
 	}
 	await sendMainMenu(context);

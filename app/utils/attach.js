@@ -132,21 +132,36 @@ async function sendShare(context, cardData) {
 	});
 }
 
-async function sendTicket(context, ticket) {
-	let msg = `Pedido ${ticket.id}\n`;
-	if (ticket.message && Array.isArray(ticket.message)) { msg += `\nDetalhes: ${ticket.message.join('\n')}`;	}
-	msg += `\nEstado: ${ticket.status}`;
-	msg += `\nData de criação: ${moment(ticket.created_at).format('LLLL')}`;
-	// const buttons = [{
-	// 	type: 'postback',
-	// 	title: 'Cancelar Ticket',
-	// 	payload: `cancelTicket${ticket.id}`,
-	// }];
 
-	// await context.sendButtonTemplate(msg, buttons);
-	await context.sendText(msg);
+async function sendTicketCards(context, tickets) {
+	const elements = [];
+
+	tickets.forEach((element) => {
+		let msg = '';
+
+		if (element.message) msg += `Detalhes: ${element.message}`;
+		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('LLLL')}`;
+		elements.push({
+			title: `Pedido ${element.id}`,
+			subtitle: msg,
+			buttons: [{
+				type: 'postback',
+				title: 'Cancelar Ticket',
+				payload: `cancelarT${element.id}`,
+			}],
+		});
+	});
+
+
+	await context.sendAttachment({
+		type: 'template',
+		payload: {
+			template_type: 'generic',
+			elements,
+		},
+	});
 }
 
 module.exports = {
-	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicket,
+	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards,
 };
