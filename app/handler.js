@@ -84,7 +84,7 @@ module.exports = async (context) => {
 			break;
 		case 'dadosTitularSim': // meusDados
 			await context.sendText(flow.meusDados.dadosTitularSim);
-			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketVisualizar(context.state));
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreLGPD':
@@ -130,7 +130,7 @@ module.exports = async (context) => {
 		case 'gerarTicket': // revogar dados
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
-			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketRevogar(context.state));
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state));
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
 		case 'meuTicket':
