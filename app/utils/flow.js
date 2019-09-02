@@ -35,7 +35,7 @@ module.exports = {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Mas antes de revogar seus dados, saiba que de modo geral usamos os dados dos clientes para usufruirem dos seguintes benefícios:',
 		text3: '1) Receber novidades pelos canais de comunicação\n2) Ganhar descontos exclusivos',
-		text4: 'Seus dados são bem-cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
+		text4: 'Seus dados são bem cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['revogacaoSim', 'revogacaoNao'],
 	},
