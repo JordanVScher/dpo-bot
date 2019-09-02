@@ -10,7 +10,7 @@ async function sendMainMenu(context, text) {
 }
 
 async function checkFullName(context) {
-	if (/^[a-zA-Z]+$/.test(context.state.whatWasTyped)) {
+	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ titularNome: context.state.whatWasTyped, dialog: 'askTitularCPF' });
 	} else {
 		await context.sendText(flow.titularSim.askTitularNameFail);

@@ -20,6 +20,8 @@ async function buildMainMenu(context) {
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 	if (context.state.sendShare) { options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' }); }
 
+	// options.push({ content_type: 'text', title: 'Teste LGPD', payload: 'testeAtendimento' });
+
 	return { quick_replies: options };
 }
 

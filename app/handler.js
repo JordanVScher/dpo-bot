@@ -144,6 +144,9 @@ module.exports = async (context) => {
 		case 'createIssueDirect':
 			await createIssue(context);
 			break;
+		case 'testeAtendimento':
+			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
+			break;
 		} // end switch case
 	} catch (error) {
 		const date = new Date();

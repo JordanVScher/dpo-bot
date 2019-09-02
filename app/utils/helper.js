@@ -39,18 +39,18 @@ async function formatDialogFlow(text) {
 }
 
 async function buildTicketRevogar(state) {
-	let result = 'Ticket Revogar Dados\n';
-	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`;	}
-	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`;	}
-	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`;	}
-	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`;	}
+	const result = {};
+	if (state.titularNome) { result.titularNome = state.titularNome;	}
+	if (state.titularCPF) { result.cpf = state.titularCPF;	}
+	if (state.titularPhone) { result.telefone = state.titularPhone;	}
+	if (state.titularMail) { result.mail = state.titularMail;	}
 
 	return result;
 }
 
 async function buildTicketVisualizar(state) {
-	let result = 'Ticket Visualizar Dados\n';
-	if (state.dadosCPF) { result += `CPF: ${state.dadosCPF}\n`;	}
+	const result = {};
+	if (state.dadosCPF) { result.cpf = state.dadosCPF;	}
 
 	return result;
 }
