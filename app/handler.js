@@ -38,7 +38,10 @@ module.exports = async (context) => {
 				context.event.message.quick_reply.payload, context.event.message.quick_reply.payload);
 		} else if (context.event.isText) {
 			await context.setState({ whatWasTyped: context.event.message.text });
-			if (context.state.dialog === 'titularSim' || context.state.dialog === 'invalidName') {
+
+			if (context.state.whatWasTyped === process.env.TESTEKEYWORD) {
+				await context.setState({ dialog: 'testeAtendimento' });
+			} else if (context.state.dialog === 'titularSim' || context.state.dialog === 'invalidName') {
 				await dialogs.checkFullName(context);
 			} else if (context.state.dialog === 'askTitularCPF' || context.state.dialog === 'invalidCPF') {
 				await dialogs.checkCPF(context);

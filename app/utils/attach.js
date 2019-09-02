@@ -139,16 +139,16 @@ async function sendTicketCards(context, tickets) {
 	tickets.forEach((element) => {
 		let msg = '';
 
-		if (element.message) msg += `Detalhes: ${element.message}`;
-		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('LLLL')}`;
+		// if (element.message) msg += `Detalhes: ${element.message}`;
+		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
 		elements.push({
-			title: `Pedido ${element.id}`,
+			title: `Pedido ${element.type.name}`,
 			subtitle: msg,
-			buttons: [{
-				type: 'postback',
-				title: 'Cancelar Ticket',
-				payload: `cancelarT${element.id}`,
-			}],
+			// buttons: [{
+			// 	type: 'postback',
+			// 	title: 'Cancelar Ticket',
+			// 	payload: `cancelarT${element.id}`,
+			// }],
 		});
 	});
 
