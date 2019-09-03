@@ -166,4 +166,20 @@ module.exports = {
 		}
 		return false;
 	},
+
+	async getPendinQuestion(fb_id, type = 'preparatory') {
+		return handleRequestAnswer(await request.get(`${apiUri}/api/chatbot/questionnaire/pending?security_token=${security_token}`).query({ fb_id, type }));
+	},
+
+	async postQuizAnswer(fb_id, type, code, answer_value) {
+		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/questionnaire/answer?security_token=${security_token}`).query({
+			fb_id, type, code, answer_value,
+		}));
+	},
+
+	async resetQuiz(fb_id, type) {
+		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/questionnaire/reset?security_token=${security_token}`).query({
+			fb_id, type,
+		}));
+	},
 };

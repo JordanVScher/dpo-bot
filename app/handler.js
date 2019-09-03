@@ -6,6 +6,7 @@ const help = require('./utils/helper');
 const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
+const quiz = require('./utils/quiz');
 
 module.exports = async (context) => {
 	try {
@@ -33,7 +34,14 @@ module.exports = async (context) => {
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
-			await context.setState({ dialog: context.state.lastQRpayload });
+			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
+			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
+				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
+			} else if (context.state.lastQRpayload.slice(0, 13) === 'extraQuestion') {
+				await quiz.answerExtraQuestion(context);
+			} else {
+				await context.setState({ dialog: context.state.lastQRpayload });
+			}
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.message.quick_reply.payload, context.event.message.quick_reply.payload);
 		} else if (context.event.isText) {
@@ -57,6 +65,17 @@ module.exports = async (context) => {
 					await context.setState({ dadosCPF: '', dialog: 'meusDadosCPF' });
 					await context.sendText(flow.titularSim.askTitularCPFFail);
 				}
+			} else if (context.state.onTextQuiz === true) {
+				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
+				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
+					await quiz.handleAnswer(context, context.state.whatWasTyped);
+				} else {
+					await context.sendText('Formato inválido, digite só um número, exemplo 10');
+					await context.setState({ dialog: 'startQuiz' });
+				}
+			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && process.env.ENV !== 'prod2') {
+				console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
+				await context.setState({ dialog: 'greetings', quizEnded: false });
 			} else {
 				await DF.dialogFlow(context);
 			}
@@ -146,6 +165,13 @@ module.exports = async (context) => {
 			break;
 		case 'createIssueDirect':
 			await createIssue(context);
+			break;
+		case 'beginQuiz':
+			await context.setState({ startedQuiz: true, typeQuiz: 'preparatory' });
+			await context.sendText(flow.quiz.beginQuiz);
+			// falls throught
+		case 'startQuiz':
+			await quiz.answerQuiz(context);
 			break;
 		case 'testeAtendimento':
 			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
