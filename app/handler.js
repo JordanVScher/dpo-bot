@@ -7,6 +7,7 @@ const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
 const quiz = require('./utils/quiz');
+const { checkUserOnLabelName } = require('./utils/postback');
 
 module.exports = async (context) => {
 	try {
@@ -73,7 +74,7 @@ module.exports = async (context) => {
 					await context.sendText('Formato inválido, digite só um número, exemplo 10');
 					await context.setState({ dialog: 'startQuiz' });
 				}
-			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && process.env.ENV !== 'prod2') {
+			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin')) {
 				console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
 				await context.setState({ dialog: 'greetings', quizEnded: false });
 			} else {
