@@ -8,6 +8,11 @@ const validarCpf = require('validar-cpf');
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
 moment.locale('pt-BR');
 
+function sentryError(msg, err) {
+	console.log(msg, err || '');
+	if (process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
+	return false;
+}
 
 async function addChar(a, b, position) { return a.substring(0, position) + b + a.substring(position); }
 
@@ -128,4 +133,5 @@ module.exports = {
 	getPhoneValid,
 	getUserTicketTypes,
 	handleRequestAnswer,
+	sentryError,
 };

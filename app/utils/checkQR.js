@@ -1,6 +1,7 @@
 const { getuserTickets } = require('../chatbot_api');
 const { getTicketTypes } = require('../chatbot_api');
 const { getUserTicketTypes } = require('./helper');
+const { checkUserOnLabelName } = require('./postback');
 const flow = require('./flow');
 
 async function reloadTicket(context) {
@@ -19,7 +20,7 @@ async function buildMainMenu(context) {
 	if (context.state.userTicketTypes.length > 0) { options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' }); }
 	options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
-	if (context.state.quizEnded !== true) {	options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' }); }
+	if (context.state.quizEnded !== true && await checkUserOnLabelName(context.session.user.id, 'funcionario')) {	options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' }); }
 	if (context.state.sendShare) { options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' }); }
 
 	return { quick_replies: options };
