@@ -1,4 +1,5 @@
 const { moment } = require('./helper');
+const flow = require('./flow');
 
 function capQR(text) {
 	let result = text;
@@ -131,23 +132,34 @@ async function sendShare(context, cardData) {
 		},
 	});
 }
-const statusDictionary = {
-	pending: 'Pendente',
-	closed: 'Fechado',
-	progress: 'Em Progresso',
-	canceled: 'Cancelado',
-};
+
+function comparePosition(a, b) {
+	const positionA = a.position;
+	const positionB = b.position;
+
+	let comparison = 0;
+	if (positionA > positionB) {
+		comparison = true;
+	} else if (positionA >= positionB) {
+		comparison = false;
+	}
+	return comparison;
+}
+
 
 async function sendTicketCards(context, tickets) {
-	const elements = [];
+	const cards = [];
 
 	tickets.forEach((element) => {
 		let msg = '';
 
 		// if (element.message) msg += `Detalhes: ${element.message}`;
-		if (element.status && statusDictionary[element.status]) msg += `\nEstado: ${statusDictionary[element.status]}`;
+		if (element.status && flow.ticketStatusDictionary[element.status]) {
+			msg += `\nEstado: ${flow.ticketStatusDictionary[element.status].name}`;
+			element.position = flow.ticketStatusDictionary[element.status].position; // eslint-disable-line no-param-reassign
+		}
 		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
-		elements.push({
+		cards.push({
 			title: `Pedido ${element.type.name}`,
 			subtitle: msg,
 			// buttons: [{
@@ -158,12 +170,13 @@ async function sendTicketCards(context, tickets) {
 		});
 	});
 
+	cards.sort(comparePosition);
 
 	await context.sendAttachment({
 		type: 'template',
 		payload: {
 			template_type: 'generic',
-			elements,
+			elements: cards,
 		},
 	});
 }
