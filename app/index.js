@@ -31,7 +31,7 @@ bot.onEvent(handler);
 
 const server = createServer(bot, { verifyToken: config.verifyToken });
 
-server.post('/add-admin', async (req, res) => {
+server.post('/add-label', async (req, res) => {
 	if (!req.body || !req.body.user_id || !req.body.label_name || !req.body.security_token) {
 		res.status(400); res.send('Params user_id, label_name and security_token are required!');
 	} else {
