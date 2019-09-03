@@ -131,8 +131,11 @@ async function associatesLabelToUser(userID, labelName) {
 		// 		}
 		// 	});
 		// }
-
-		return client.associateLabel(userID, labelID);
+		try {
+			return client.associateLabel(userID, labelID);
+		} catch (error) {
+			return sentryError('Erro em associateLabel', error);
+		}
 	} catch (error) {
 		return sentryError('Erro em associatesLabelToUser', error);
 	}
