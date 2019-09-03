@@ -14,7 +14,8 @@ async function buildMainMenu(context) {
 	await reloadTicket(context);
 	const options = [];
 
-	if (context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length) { options.push({ content_type: 'text', title: 'Atendimento LGPD', payload: 'atendimentoLGPD' }); }
+	// if (context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length) { options.push({ content_type: 'text', title: 'Atendimento LGPD', payload: 'atendimentoLGPD' }); }
+	options.push({ content_type: 'text', title: 'Atendimento LGPD', payload: 'testeAtendimento' });
 	if (context.state.userTicketTypes.length > 0) { options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' }); }
 	options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });

@@ -131,7 +131,12 @@ async function sendShare(context, cardData) {
 		},
 	});
 }
-
+const statusDictionary = {
+	pending: 'Pendente',
+	closed: 'Fechado',
+	progress: 'Em Progresso',
+	canceled: 'Cancelado',
+};
 
 async function sendTicketCards(context, tickets) {
 	const elements = [];
@@ -140,6 +145,7 @@ async function sendTicketCards(context, tickets) {
 		let msg = '';
 
 		// if (element.message) msg += `Detalhes: ${element.message}`;
+		if (element.status && statusDictionary[element.status]) msg += `\nEstado: ${statusDictionary[element.status]}`;
 		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
 		elements.push({
 			title: `Pedido ${element.type.name}`,
