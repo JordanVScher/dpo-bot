@@ -133,22 +133,11 @@ async function sendShare(context, cardData) {
 	});
 }
 
-function comparePosition(a, b) {
-	const positionA = a.position;
-	const positionB = b.position;
-
-	let comparison = 0;
-	if (positionA > positionB) {
-		comparison = true;
-	} else if (positionA >= positionB) {
-		comparison = false;
-	}
-	return comparison;
-}
-
 
 async function sendTicketCards(context, tickets) {
 	const cards = [];
+
+	tickets.sort((a, b) => flow.ticketStatusDictionary[a.status].position - flow.ticketStatusDictionary[b.status].position);
 
 	tickets.forEach((element) => {
 		let msg = '';
@@ -159,18 +148,18 @@ async function sendTicketCards(context, tickets) {
 			element.position = flow.ticketStatusDictionary[element.status].position; // eslint-disable-line no-param-reassign
 		}
 		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
+		if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
 		cards.push({
 			title: `Pedido ${element.type.name}`,
 			subtitle: msg,
-			// buttons: [{
-			// 	type: 'postback',
-			// 	title: 'Cancelar Ticket',
-			// 	payload: `cancelarT${element.id}`,
-			// }],
+			buttons: [{
+				type: 'postback',
+				title: 'Cancelar Ticket',
+				payload: `cancelarT${element.id}`,
+			}],
 		});
 	});
 
-	cards.sort(comparePosition);
 
 	await context.sendAttachment({
 		type: 'template',
@@ -180,6 +169,7 @@ async function sendTicketCards(context, tickets) {
 		},
 	});
 }
+
 
 module.exports = {
 	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards,
