@@ -83,8 +83,10 @@ async function getUserTicketTypes(tickets) {
 	const result = [];
 
 	tickets.forEach((element) => {
-		if (!result.includes(element.id)) {
-			result.push(element.id);
+		if (!result.includes(element.type.id)) { // avoind adding repeated types
+			if (element.status !== 'canceled' && element.status !== 'closed') { // add only types that are open or in_progress
+				result.push(element.type.id);
+			}
 		}
 	});
 

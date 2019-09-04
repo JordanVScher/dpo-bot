@@ -32,7 +32,7 @@ async function buildAtendimento(context) {
 
 	context.state.ticketTypes.ticket_types.forEach((element) => {
 		if (!context.state.userTicketTypes.includes(element.id)) { // check which type of ticket the user doesn't have yet so we can show only the respective option
-			options.push({ content_type: 'text', title: flow.atendimentoLGPD.menuOptions[element.id - 1], payload: flow.atendimentoLGPD.menuPostback[element.id - 1]	});
+			options.push(flow.atendimentoLGPD.options[element.id]);
 		}
 	});
 

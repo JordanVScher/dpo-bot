@@ -20,8 +20,18 @@ module.exports = {
 	atendimentoLGPD: {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
-		menuOptions: ['Meus Dados', 'Revogar meus Dados'],
-		menuPostback: ['meusDados', 'revogarDados'],
+		options: {
+			1: {
+				content_type: 'text',
+				title: 'Revogar meus Dados',
+				payload: 'revogarDados',
+			},
+			2: {
+				content_type: 'text',
+				title: 'Meus Dados',
+				payload: 'meusDados',
+			},
+		},
 	},
 	meusDados: {
 		meusDadosCPF: 'Ok, primeiro preciso que você me forneça seu cpf para que seja possível consultar seus dados.',
