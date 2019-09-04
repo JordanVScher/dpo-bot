@@ -160,11 +160,13 @@ async function sendTicketCards(context, tickets) {
 				payload: `leaveTMsg${element.id}`,
 			});
 
-			buttons.push({
-				type: 'postback',
-				title: 'Cancelar Ticket',
-				payload: `cancelarT${element.id}`,
-			});
+			if (element.status !== 'canceled' && element.status !== 'closed') {
+				buttons.push({
+					type: 'postback',
+					title: 'Cancelar Ticket',
+					payload: `cancelarT${element.id}`,
+				});
+			}
 
 			cards.push({
 				title: `Pedido ${element.type.name}`,
