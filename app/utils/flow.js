@@ -89,7 +89,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	},
 	ticketStatus: {
 		pending: { name: 'Aberto', position: 1 },
-		progress: { name: 'Em Progresso', position: 2 },
+		progress: { name: 'Em Andamento', position: 2 },
 		closed: { name: 'Fechado', position: 3 },
 		canceled: { name: 'Cancelado', position: 4 },
 	},
