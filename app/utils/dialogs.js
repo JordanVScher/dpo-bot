@@ -50,7 +50,7 @@ async function checkEmail(context) {
 }
 
 async function meuTicket(context) {
-	await context.setState({ userTickets: await assistenteAPI.getuserTickets(context.session.user.id) });
+	await context.setState({ userTickets: await assistenteAPI.getuserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
 	if (context.state.userTickets.itens_count > 0) {
 		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);
@@ -89,6 +89,7 @@ async function seeTicketMessages(context) {
 }
 
 async function newTicketMessage(context) {
+	await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
 	const res = await assistenteAPI.putAddMsgTicket(context.state.currentTicket.id, context.state.ticketMsg);
 	if (res && res.id) {
 		await context.sendText(flow.leaveTMsg.cancelSuccess);
