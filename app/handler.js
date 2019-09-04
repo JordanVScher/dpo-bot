@@ -27,9 +27,12 @@ module.exports = async (context) => {
 
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
-			await context.setState({ dialog: context.state.lastPBpayload });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
+			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
+				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
+			} else {
+				await context.setState({ dialog: context.state.lastPBpayload });
 			}
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.postback.payload, context.event.postback.title);
@@ -164,6 +167,20 @@ module.exports = async (context) => {
 			await attach.sendShare(context, flow.share.cardData);
 			await dialogs.sendMainMenu(context);
 			break;
+		case 'cancelConfirmation':
+			await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
+			await context.sendText(flow.cancelConfirmation.confirm.replace('<TYPE>', context.state.currentTicket.type.name), await attach.getQR(flow.cancelConfirmation));
+			break;
+		case 'confirmaCancelamento': {
+			const res = await assistenteAPI.putStatusTickets(context.state.ticketID, 'canceled');
+			if (res && res.id) {
+				await context.sendText(flow.cancelConfirmation.cancelSuccess);
+				await dialogs.sendMainMenu(context);
+			} else {
+				await context.sendText(flow.cancelConfirmation.cancelFailure);
+			}
+			break;
+		}
 		case 'createIssueDirect':
 			await createIssue(context);
 			break;

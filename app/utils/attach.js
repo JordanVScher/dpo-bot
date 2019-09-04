@@ -136,17 +136,10 @@ async function sendShare(context, cardData) {
 
 async function sendTicketCards(context, tickets) {
 	const cards = [];
-
-	tickets.sort((a, b) => flow.ticketStatusDictionary[a.status].position - flow.ticketStatusDictionary[b.status].position);
-
+	tickets.sort((a, b) => flow.ticketStatus[a.status].position - flow.ticketStatus[b.status].position);
 	tickets.forEach((element) => {
 		let msg = '';
-
-		// if (element.message) msg += `Detalhes: ${element.message}`;
-		if (element.status && flow.ticketStatusDictionary[element.status]) {
-			msg += `\nEstado: ${flow.ticketStatusDictionary[element.status].name}`;
-			element.position = flow.ticketStatusDictionary[element.status].position; // eslint-disable-line no-param-reassign
-		}
+		if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
 		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
 		if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
 		cards.push({
@@ -159,7 +152,6 @@ async function sendTicketCards(context, tickets) {
 			}],
 		});
 	});
-
 
 	await context.sendAttachment({
 		type: 'template',

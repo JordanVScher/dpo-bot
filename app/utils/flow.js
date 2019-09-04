@@ -87,10 +87,17 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		invalid: 'Esse formato é inválido! Tente Novamente',
 		done: 'Você terminou o Questionário Preparatório! Parabéns!',
 	},
-	ticketStatusDictionary: {
+	ticketStatus: {
 		pending: { name: 'Aberto', position: 1 },
 		progress: { name: 'Em Progresso', position: 2 },
 		closed: { name: 'Fechado', position: 3 },
 		canceled: { name: 'Cancelado', position: 4 },
+	},
+	cancelConfirmation: {
+		confirm: 'Tem certeza que quer cancelar o ticket de <TYPE>?',
+		cancelSuccess: 'Cancelamos seu ticket com sucesso',
+		cancelFailure: 'Houce um erro na hora de cancelar seu ticket. Tente novamente.',
+		menuOptions: ['Sim', 'Não'],
+		menuPostback: ['confirmaCancelamento', 'meuTicket'],
 	},
 };
