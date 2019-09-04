@@ -96,8 +96,15 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	cancelConfirmation: {
 		confirm: 'Tem certeza que quer cancelar o ticket de <TYPE>?',
 		cancelSuccess: 'Cancelamos seu ticket com sucesso',
-		cancelFailure: 'Houce um erro na hora de cancelar seu ticket. Tente novamente.',
+		cancelFailure: 'Houve um erro na hora de cancelar seu ticket. Tente novamente.',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['confirmaCancelamento', 'meuTicket'],
+	},
+	leaveTMsg: {
+		text1: 'Digite sua mensagem!',
+		cancelSuccess: 'Conseguimos salvar sua mensagem.',
+		cancelFailure: 'Houce um erro na hora de salvar sua mensagem. Tente novamente.',
+		menuOptions: ['Voltar'],
+		menuPostback: ['meuTicket'],
 	},
 };

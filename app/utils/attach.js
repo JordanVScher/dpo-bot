@@ -138,19 +138,40 @@ async function sendTicketCards(context, tickets) {
 	const cards = [];
 	tickets.sort((a, b) => flow.ticketStatus[a.status].position - flow.ticketStatus[b.status].position);
 	tickets.forEach((element) => {
-		let msg = '';
-		if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
-		if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
-		if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
-		cards.push({
-			title: `Pedido ${element.type.name}`,
-			subtitle: msg,
-			buttons: [{
+		if (cards.length <= 10) {
+			let msg = '';
+			if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
+			if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
+			if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
+			// if (process.env.ENV === 'LOCAL') msg += `\nID: ${element.id}`;
+
+			const buttons = [];
+			// if (element.message && element.message.length > 0) {
+			// buttons.push({
+			// type: 'postback',
+			// title: 'Ver Mensagens',
+			// payload: `verTMsg${element.id}`,
+			// });
+			// }
+
+			buttons.push({
+				type: 'postback',
+				title: 'Deixar Mensagem',
+				payload: `leaveTMsg${element.id}`,
+			});
+
+			buttons.push({
 				type: 'postback',
 				title: 'Cancelar Ticket',
 				payload: `cancelarT${element.id}`,
-			}],
-		});
+			});
+
+			cards.push({
+				title: `Pedido ${element.type.name}`,
+				subtitle: msg,
+				buttons,
+			});
+		}
 	});
 
 	await context.sendAttachment({

@@ -67,6 +67,37 @@ async function atendimentoLGPD(context) {
 	}
 }
 
+async function cancelTicket(context) {
+	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled');
+	if (res && res.id) {
+		await context.sendText(flow.cancelConfirmation.cancelSuccess);
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.cancelConfirmation.cancelFailure);
+	}
+}
+
+async function seeTicketMessages(context) {
+	await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
+	const messages = context.state.currentTicket.message;
+	await context.sendText('Mensagens do ticket:');
+	for (let i = 0; i < messages.length; i++) {
+		const element = messages[i];
+		await context.sendText(element);
+	}
+	await sendMainMenu(context);
+}
+
+async function newTicketMessage(context) {
+	const res = await assistenteAPI.putAddMsgTicket(context.state.currentTicket.id, context.state.ticketMsg);
+	if (res && res.id) {
+		await context.sendText(flow.leaveTMsg.cancelSuccess);
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.leaveTMsg.cancelFailure);
+	}
+}
+
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD, cancelTicket, seeTicketMessages, newTicketMessage,
 };

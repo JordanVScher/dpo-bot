@@ -31,6 +31,11 @@ module.exports = async (context) => {
 				await context.setState({ dialog: 'greetings' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
 				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
+			} else if (context.state.lastPBpayload.slice(0, 9) === 'leaveTMsg') {
+				await context.setState({ dialog: 'leaveTMsg', ticketID: context.state.lastPBpayload.replace('leaveTMsg', '') });
+				await context.sendText(flow.leaveTMsg.text1, await attach.getQR(flow.leaveTMsg));
+			} else if (context.state.lastPBpayload.slice(0, 7) === 'verTMsg') {
+				await context.setState({ dialog: 'verTMsg', ticketID: context.state.lastPBpayload.replace('verTMsg', '') });
 			} else {
 				await context.setState({ dialog: context.state.lastPBpayload });
 			}
@@ -80,10 +85,13 @@ module.exports = async (context) => {
 			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin')) {
 				console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
 				await context.setState({ dialog: 'greetings', quizEnded: false });
+			} else if (context.state.dialog === 'leaveTMsg') {
+				await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
 			} else {
 				await DF.dialogFlow(context);
 			}
 		}
+
 		switch (context.state.dialog) {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
@@ -171,16 +179,15 @@ module.exports = async (context) => {
 			await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
 			await context.sendText(flow.cancelConfirmation.confirm.replace('<TYPE>', context.state.currentTicket.type.name), await attach.getQR(flow.cancelConfirmation));
 			break;
-		case 'confirmaCancelamento': {
-			const res = await assistenteAPI.putStatusTickets(context.state.ticketID, 'canceled');
-			if (res && res.id) {
-				await context.sendText(flow.cancelConfirmation.cancelSuccess);
-				await dialogs.sendMainMenu(context);
-			} else {
-				await context.sendText(flow.cancelConfirmation.cancelFailure);
-			}
+		case 'confirmaCancelamento':
+			await dialogs.cancelTicket(context);
 			break;
-		}
+		case 'verTicketMsg':
+			await dialogs.seeTicketMessages(context);
+			break;
+		case 'newTicketMsg':
+			await dialogs.newTicketMessage(context);
+			break;
 		case 'createIssueDirect':
 			await createIssue(context);
 			break;

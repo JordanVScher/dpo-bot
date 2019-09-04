@@ -97,8 +97,12 @@ module.exports = {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({ fb_id }));
 	},
 
-	async putStatusTickets(TicketID, status) {
+	async putStatusTicket(TicketID, status) {
 		return handleRequestAnswer(await request.put(`${apiUri}/api/chatbot/ticket/${TicketID}?security_token=${security_token}`).query({ status }));
+	},
+
+	async putAddMsgTicket(TicketID, message) {
+		return handleRequestAnswer(await request.put(`${apiUri}/api/chatbot/ticket/${TicketID}?security_token=${security_token}`).query({ message }));
 	},
 
 	async postNewTicket(chatbot_id, fb_id, type_id, data, message = '') {
@@ -160,7 +164,7 @@ module.exports = {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/log/actions?security_token=${security_token}`));
 	},
 
-	async setIntentStatus(politician_id, recipient_fb_id,	intent,	entity_is_correct) {
+	async setIntentStatus(politician_id, recipient_fb_id, intent, entity_is_correct) {
 		if (intent && intent.id) {
 			return handleRequestAnswer(await request.post(
 				`${apiUri}/api/chatbot/politician/${politician_id}/intents/${
