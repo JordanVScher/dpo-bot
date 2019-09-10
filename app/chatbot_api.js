@@ -93,7 +93,7 @@ module.exports = {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/ticket/type?security_token=${security_token}`));
 	},
 
-	async getuserTickets(fb_id) {
+	async getUserTickets(fb_id) {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({ fb_id }));
 	},
 

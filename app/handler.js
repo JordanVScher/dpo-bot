@@ -83,8 +83,7 @@ module.exports = async (context) => {
 					await context.setState({ dialog: 'startQuiz' });
 				}
 			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin')) {
-				console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
-				await context.setState({ dialog: 'greetings', quizEnded: false });
+				await dialogs.handleReset(context);
 			} else if (context.state.dialog === 'leaveTMsg') {
 				await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
 			} else {

@@ -50,7 +50,7 @@ async function checkEmail(context) {
 }
 
 async function meuTicket(context) {
-	await context.setState({ userTickets: await assistenteAPI.getuserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
+	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
 	if (context.state.userTickets.itens_count > 0) {
 		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);
@@ -99,6 +99,17 @@ async function newTicketMessage(context) {
 	}
 }
 
+async function handleReset(context) {
+	console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
+	const meusTickets = await assistenteAPI.getUserTickets(context.session.user.id);
+	if (meusTickets && meusTickets.tickets) {
+		meusTickets.tickets.forEach((element) => {
+			assistenteAPI.putStatusTicket(element.id, 'canceled');
+		});
+	}
+	await context.setState({ dialog: 'greetings', quizEnded: false });
+}
+
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD, cancelTicket, seeTicketMessages, newTicketMessage,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD, cancelTicket, seeTicketMessages, newTicketMessage, handleReset,
 };
