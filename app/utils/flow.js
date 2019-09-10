@@ -95,7 +95,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		beginQuiz: 'Vamos lá!',
 		form_error: 'Ops, Ocorreu um erro interno, tente novamente!',
 		invalid: 'Esse formato é inválido! Tente Novamente',
-		done: 'Você terminou o Questionário Preparatório! Parabéns!',
+		// done: 'Você terminou o Questionário Preparatório! Parabéns!',
 	},
 	ticketStatus: {
 		pending: { name: 'Aberto', position: 1 },

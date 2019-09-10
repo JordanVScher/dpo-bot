@@ -1,11 +1,10 @@
 const { capQR } = require('./attach');
-const flow = require('./flow');
+// const flow = require('./flow');
 const { sendMainMenu } = require('./dialogs');
 
 
 module.exports.endQuiz = async (context) => {
 	await context.setState({ dialog: 'endQuiz', quizEnded: true });
-	await context.sendText(flow.quiz.done);
 	await context.typing(1000 * 5);
 	await sendMainMenu(context);
 };
