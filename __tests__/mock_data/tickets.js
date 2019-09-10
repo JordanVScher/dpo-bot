@@ -1,8 +1,4 @@
 module.exports = {
-	types: {
-		ticket_types:
-      [{ id: 1, name: 'Tipo 1' }, { name: 'Tipo 2', id: 2 }],
-	},
 	UserOneOfEachStatus: {
 		tickets: [
 			{
@@ -85,6 +81,69 @@ module.exports = {
 			},
 		],
 		itens_count: 4,
+	},
+
+	userOneOpen: {
+		tickets: [
+			{
+				response: [],
+				closed_at: null,
+				id: 1,
+				type: {
+					id: 1,
+					name: 'Tipo 1',
+				},
+				message: [],
+				status: 'pending',
+				assigned_at: '2019-09-03T17:46:50',
+				created_at: '2019-09-02T14:24:58',
+				recipient: {
+					name: 'Jon',
+					id: 1,
+				},
+			},
+		],
+		itens_count: 1,
+	},
+
+	userAllClosed: {
+		tickets: [
+			{
+				response: [],
+				closed_at: null,
+				id: 1,
+				type: {
+					id: 1,
+					name: 'Tipo 1',
+				},
+				message: [],
+				status: 'canceled',
+				assigned_at: '2019-09-03T17:46:50',
+				created_at: '2019-09-02T14:24:58',
+				recipient: {
+					name: 'Jon',
+					id: 1,
+				},
+			},
+			{
+				response: [],
+				closed_at: null,
+				id: 2,
+				type: {
+					id: 2,
+					name: 'Tipo 2',
+				},
+				message: [],
+				status: 'closed',
+				assigned_at: '2019-09-03T17:46:50',
+				created_at: '2019-09-02T14:24:58',
+				recipient: {
+					name: 'Jon',
+					id: 1,
+				},
+			},
+		],
+		itens_count: 2,
 	},
 
 	userRepeatedTickets: {
