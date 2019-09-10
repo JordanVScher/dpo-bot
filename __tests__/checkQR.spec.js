@@ -3,6 +3,7 @@ require('dotenv').config();
 const tickets = require('./mock_data/tickets');
 const cont = require('./mock_data/context');
 const checkQR = require('../app/utils/checkQR');
+const { atendimentoLGPD } = require('../app/utils/flow');
 const { getUserTicketTypes } = require('../app/utils/helper');
 
 jest.mock('../app/chatbot_api');
@@ -99,4 +100,44 @@ it('buildMainMenu - mainMenu with all tickets closed', async () => {
 	await expect(result.quick_replies[1].payload === 'meuTicket').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[3].payload === 'sobreDipiou').toBeTruthy();
+});
+
+it('buildAtendimento - atendimento with no tickets', async () => {
+	const context = cont.quickReplyContext();
+	context.state.userTickets = { tickets: [] };
+
+	const result = await checkQR.buildAtendimento(context);
+	await expect(result.quick_replies.length === 2).toBeTruthy();
+	await expect(result.quick_replies[0].payload === atendimentoLGPD.options['1'].payload).toBeTruthy();
+	await expect(result.quick_replies[1].payload === atendimentoLGPD.options['2'].payload).toBeTruthy();
+});
+
+it('buildAtendimento - atendimento with all tickets closed', async () => {
+	const context = cont.quickReplyContext();
+	context.state.userTickets = tickets.userAllClosed;
+	context.state.userTicketTypes = await getUserTicketTypes(context.state.userTickets.tickets);
+
+	const result = await checkQR.buildAtendimento(context);
+	await expect(result.quick_replies.length === 2).toBeTruthy();
+	await expect(result.quick_replies[0].payload === atendimentoLGPD.options['1'].payload).toBeTruthy();
+	await expect(result.quick_replies[1].payload === atendimentoLGPD.options['2'].payload).toBeTruthy();
+});
+
+it('buildAtendimento - atendimento with one ticket open', async () => {
+	const context = cont.quickReplyContext();
+	context.state.userTickets = tickets.userRepeatedTickets;
+	context.state.userTicketTypes = await getUserTicketTypes(context.state.userTickets.tickets);
+
+	const result = await checkQR.buildAtendimento(context);
+	await expect(result.quick_replies.length === 1).toBeTruthy();
+	await expect(result.quick_replies[0].payload === atendimentoLGPD.options['2'].payload).toBeTruthy();
+});
+
+it('buildAtendimento - atendimento with all tickets', async () => {
+	const context = cont.quickReplyContext();
+	context.state.userTickets = tickets.UserOneOfEachStatus;
+	context.state.userTicketTypes = await getUserTicketTypes(context.state.userTickets.tickets);
+
+	const result = await checkQR.buildAtendimento(context);
+	await expect(result).toBeFalsy();
 });

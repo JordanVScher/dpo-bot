@@ -202,7 +202,7 @@ module.exports = {
 			{
 				type: {
 					id: 2,
-					name: 'Tipo 1',
+					name: 'Tipo 2',
 				},
 				id: 2,
 				closed_at: null,
