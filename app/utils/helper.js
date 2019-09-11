@@ -55,7 +55,9 @@ async function buildTicketRevogar(state) {
 
 async function buildTicketVisualizar(state) {
 	const result = {};
+
 	if (state.dadosCPF) { result.cpf = state.dadosCPF;	}
+	if (state.dadosMail) { result.mail = state.dadosMail;	}
 
 	return result;
 }
@@ -98,6 +100,7 @@ async function handleErrorApi(options, res, err) {
 	msg += `\nPath: ${options.path}`;
 	msg += `\nQuery: ${JSON.stringify(options.query, null, 2)}`;
 	msg += `\nMethod: ${options.method}`;
+	msg += `\nMoment: ${new Date()}`;
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack}`;
 

@@ -9,43 +9,46 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
-async function checkFullName(context) {
+async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg) {
 	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
-		await context.setState({ titularNome: context.state.whatWasTyped, dialog: 'askTitularCPF' });
+		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
-		await context.sendText(flow.titularSim.askTitularNameFail);
-		await context.setState({ dialog: 'invalidName' });
+		if (reaskMsg) await context.sendText(reaskMsg);
+		await context.setState({ dialog: invalidDialog });
 	}
 }
 
-async function checkCPF(context) {
+async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg) {
 	const cpf = await help.getCPFValid(context.state.whatWasTyped);
 
 	if (cpf) {
-		await context.setState({ titularCPF: cpf, dialog: 'askTitularPhone' });
+		await context.setState({ [stateName]: cpf, dialog: successDialog });
 	} else {
-		await context.sendText(flow.titularSim.askTitularCPFFail);
-		await context.setState({ dialog: 'invalidCPF' });
+		if (reaskMsg) await context.sendText(reaskMsg);
+		await context.setState({ dialog: invalidDialog });
 	}
 }
 
-async function checkPhone(context) {
+async function checkPhone(context, stateName, successDialog, invalidDialog, reaskMsg) {
 	const phone = await help.getPhoneValid(context.state.whatWasTyped);
 
 	if (phone) {
-		await context.setState({ titularPhone: phone, dialog: 'askTitularMail' });
+		await context.setState({ [stateName]: phone, dialog: successDialog });
+		// await context.setState({ titularPhone: phone, dialog: 'askRevogarMail' });
 	} else {
-		await context.sendText(flow.titularSim.askTitularPhoneFail);
-		await context.setState({ dialog: 'invalidPhone' });
+		if (reaskMsg) await context.sendText(flow.revogarDados.askRevogarPhoneFail);
+		// await context.sendText(flow.revogarDados.askRevogarPhoneFail);
+		await context.setState({ dialog: invalidDialog });
+		// await context.setState({ dialog: 'invalidPhone' });
 	}
 }
 
-async function checkEmail(context) {
+async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg) {
 	if (context.state.whatWasTyped.includes('@')) {
-		await context.setState({ titularMail: context.state.whatWasTyped, dialog: 'gerarTicket' });
+		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
-		await context.sendText(flow.titularSim.askTitularMailFail);
-		await context.setState({ dialog: 'invalidMail' });
+		if (reaskMsg)	await context.sendText(reaskMsg);
+		await context.setState({ dialog: invalidDialog });
 	}
 }
 
@@ -107,7 +110,7 @@ async function handleReset(context) {
 			assistenteAPI.putStatusTicket(element.id, 'canceled');
 		});
 	}
-	await context.setState({ dialog: 'greetings', quizEnded: false });
+	await context.setState({ dialog: 'greetings', quizEnded: false, sendShare: false });
 }
 
 module.exports = {
