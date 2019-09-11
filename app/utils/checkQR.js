@@ -23,7 +23,7 @@ async function buildMainMenu(context) {
 
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'funcionario') });
-		if (context.state.isFuncionario === true) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
+		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
 
 	if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });

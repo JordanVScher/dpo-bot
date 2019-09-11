@@ -114,7 +114,6 @@ async function handleErrorApi(options, res, err) {
 	}
 }
 
-
 async function handleRequestAnswer(response) {
 	try {
 		const res = await response.json();
