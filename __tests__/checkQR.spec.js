@@ -33,7 +33,7 @@ it('buildMainMenu - mainMenu with sendShare', async () => {
 
 it('buildMainMenu - mainMenu for funcionario ', async () => {
 	const context = cont.quickReplyContext();
-	context.state.isFuncionario = true;
+	context.state.isFuncionario = { name: 'etiqueta', id: '0001' };
 	const result = await checkQR.buildMainMenu(context);
 	await expect(result.quick_replies.length === 4).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'atendimentoLGPD').toBeTruthy();
@@ -44,7 +44,7 @@ it('buildMainMenu - mainMenu for funcionario ', async () => {
 
 it('buildMainMenu - mainMenu for funcionario, quizEnded true and share  ', async () => {
 	const context = cont.quickReplyContext();
-	context.state.isFuncionario = true;
+	context.state.isFuncionario = { name: 'etiqueta', id: '0001' };
 	context.state.quizEnded = true;
 	context.state.sendShare = true;
 
