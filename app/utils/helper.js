@@ -1,10 +1,18 @@
 const Sentry = require('@sentry/node');
+const moment = require('moment');
 const dialogFlow = require('apiai-promise');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
+moment.locale('pt-BR');
+
+function sentryError(msg, err) {
+	console.log(msg, err || '');
+	if (process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
+	return false;
+}
 
 async function addChar(a, b, position) { return a.substring(0, position) + b + a.substring(position); }
 
@@ -35,12 +43,19 @@ async function formatDialogFlow(text) {
 	return result.trim();
 }
 
-async function buildTicket(state) {
-	let result = 'Ticket Revogar Dados\n';
-	if (state.titularNome) { result += `Nome: ${state.titularNome}\n`;	}
-	if (state.titularCPF) { result += `CPF: ${state.titularCPF}\n`;	}
-	if (state.titularPhone) { result += `Telefone: ${state.titularPhone}\n`;	}
-	if (state.titularMail) { result += `E-mail: ${state.titularMail}\n`;	}
+async function buildTicketRevogar(state) {
+	const result = {};
+	if (state.titularNome) { result.titularNome = state.titularNome;	}
+	if (state.titularCPF) { result.cpf = state.titularCPF;	}
+	if (state.titularPhone) { result.telefone = state.titularPhone;	}
+	if (state.titularMail) { result.mail = state.titularMail;	}
+
+	return result;
+}
+
+async function buildTicketVisualizar(state) {
+	const result = {};
+	if (state.dadosCPF) { result.cpf = state.dadosCPF;	}
 
 	return result;
 }
@@ -64,12 +79,61 @@ async function getPhoneValid(phone) {
 	return result;
 }
 
+async function getUserTicketTypes(tickets) {
+	const result = [];
+
+	tickets.forEach((element) => {
+		if (!result.includes(element.type.id)) { // avoind adding repeated types
+			if (element.status !== 'canceled' && element.status !== 'closed') { // add only types that are open or in_progress
+				result.push(element.type.id);
+			}
+		}
+	});
+
+	return result.sort();
+}
+
+async function handleErrorApi(options, res, err) {
+	let msg = `Endereço: ${options.host}`;
+	msg += `\nPath: ${options.path}`;
+	msg += `\nQuery: ${JSON.stringify(options.query, null, 2)}`;
+	msg += `\nMethod: ${options.method}`;
+	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
+	if (err) msg += `\nErro: ${err.stack}`;
+
+	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+
+	if ((res && (res.error || res.form_error)) || (!res && err)) {
+		if (process.env.ENV !== 'local') {
+			msg += `\nEnv: ${process.env.ENV}`;
+			await Sentry.captureMessage(msg);
+		}
+	}
+}
+
+
+async function handleRequestAnswer(response) {
+	try {
+		const res = await response.json();
+		await handleErrorApi(response.options, res, false);
+		return res;
+	} catch (error) {
+		await handleErrorApi(response.options, false, error);
+		return {};
+	}
+}
+
 module.exports = {
 	Sentry,
+	moment,
 	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
 	separateString,
 	formatDialogFlow,
-	buildTicket,
+	buildTicketRevogar,
+	buildTicketVisualizar,
 	getCPFValid,
 	getPhoneValid,
+	getUserTicketTypes,
+	handleRequestAnswer,
+	sentryError,
 };

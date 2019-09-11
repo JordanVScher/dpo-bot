@@ -2,10 +2,13 @@ module.exports = {
 	avatarImage: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
 	getStarted: 'Olá, sou o DIPIOU',
 	share: {
-		title: 'DIPIOU_BOT',
-		subtitle: 'Dippy',
-		image_url: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
-		item_url: 'https://www.facebook.com/',
+		txt1: 'Encaminhe nosso bot!',
+		cardData: {
+			title: 'DIPIOU_BOT',
+			subtitle: 'Dippy',
+			image_url: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
+			item_url: 'https://www.facebook.com',
+		},
 	},
 	greetings: {
 		text1: 'Olá, <USERNAME>! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
@@ -17,8 +20,18 @@ module.exports = {
 	atendimentoLGPD: {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
-		menuOptions: ['Meus Dados', 'Revogar meus Dados'],
-		menuPostback: ['meusDados', 'revogarDados'],
+		options: {
+			1: {
+				content_type: 'text',
+				title: 'Revogar meus Dados',
+				payload: 'revogarDados',
+			},
+			2: {
+				content_type: 'text',
+				title: 'Meus Dados',
+				payload: 'meusDados',
+			},
+		},
 	},
 	meusDados: {
 		meusDadosCPF: 'Ok, primeiro preciso que você me forneça seu cpf para que seja possível consultar seus dados.',
@@ -32,7 +45,7 @@ module.exports = {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Mas antes de revogar seus dados, saiba que de modo geral usamos os dados dos clientes para usufruirem dos seguintes benefícios:',
 		text3: '1) Receber novidades pelos canais de comunicação\n2) Ganhar descontos exclusivos',
-		text4: 'Seus dados são bem-cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
+		text4: 'Seus dados são bem cuidados, mas você tem todo direito de revogá-lo. Você gostaria de continuar a revogação?',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['revogacaoSim', 'revogacaoNao'],
 	},
@@ -77,5 +90,31 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	},
 	titularNao: {
 		text1: 'Nesse caso, não será possível continuar com a operação.',
+	},
+	quiz: {
+		beginQuiz: 'Vamos lá!',
+		form_error: 'Ops, Ocorreu um erro interno, tente novamente!',
+		invalid: 'Esse formato é inválido! Tente Novamente',
+		// done: 'Você terminou o Questionário Preparatório! Parabéns!',
+	},
+	ticketStatus: {
+		pending: { name: 'Aberto', position: 1 },
+		progress: { name: 'Em Andamento', position: 2 },
+		closed: { name: 'Fechado', position: 3 },
+		canceled: { name: 'Cancelado', position: 4 },
+	},
+	cancelConfirmation: {
+		confirm: 'Tem certeza que quer cancelar o ticket de <TYPE>?',
+		cancelSuccess: 'Cancelamos seu ticket com sucesso',
+		cancelFailure: 'Houve um erro na hora de cancelar seu ticket. Tente novamente.',
+		menuOptions: ['Sim', 'Não'],
+		menuPostback: ['confirmaCancelamento', 'meuTicket'],
+	},
+	leaveTMsg: {
+		text1: 'Digite sua mensagem!',
+		cancelSuccess: 'Conseguimos salvar sua mensagem.',
+		cancelFailure: 'Houce um erro na hora de salvar sua mensagem. Tente novamente.',
+		menuOptions: ['Voltar'],
+		menuPostback: ['meuTicket'],
 	},
 };

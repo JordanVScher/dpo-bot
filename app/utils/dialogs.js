@@ -1,10 +1,16 @@
+const assistenteAPI = require('../chatbot_api');
 const flow = require('./flow');
-// const attach = require('./attach');
+const attach = require('./attach');
 const checkQR = require('./checkQR');
 const help = require('./helper');
 
+async function sendMainMenu(context, text) {
+	const textToSend = text || flow.mainMenu.text1;
+	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
+}
+
 async function checkFullName(context) {
-	if (/^[a-zA-Z]+$/.test(context.state.whatWasTyped)) {
+	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ titularNome: context.state.whatWasTyped, dialog: 'askTitularCPF' });
 	} else {
 		await context.sendText(flow.titularSim.askTitularNameFail);
@@ -43,12 +49,67 @@ async function checkEmail(context) {
 	}
 }
 
+async function meuTicket(context) {
+	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
+	if (context.state.userTickets.itens_count > 0) {
+		await attach.sendTicketCards(context, context.state.userTickets.tickets);
+		await context.typing(1000 * 3);
+	}
+	await sendMainMenu(context);
+}
 
-async function sendMainMenu(context, text) {
-	const textToSend = text || flow.mainMenu.text1;
-	await context.sendText(textToSend, await checkQR.buildMainMenu(context.state));
+async function atendimentoLGPD(context) {
+	const options = await checkQR.buildAtendimento(context);
+	if (!options) {
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.atendimentoLGPD.text1, options);
+	}
+}
+
+async function cancelTicket(context) {
+	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled');
+	if (res && res.id) {
+		await context.sendText(flow.cancelConfirmation.cancelSuccess);
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.cancelConfirmation.cancelFailure);
+	}
+}
+
+async function seeTicketMessages(context) {
+	await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
+	const messages = context.state.currentTicket.message;
+	await context.sendText('Mensagens do ticket:');
+	for (let i = 0; i < messages.length; i++) {
+		const element = messages[i];
+		await context.sendText(element);
+	}
+	await sendMainMenu(context);
+}
+
+async function newTicketMessage(context) {
+	await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
+	const res = await assistenteAPI.putAddMsgTicket(context.state.currentTicket.id, context.state.ticketMsg);
+	if (res && res.id) {
+		await context.sendText(flow.leaveTMsg.cancelSuccess);
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.leaveTMsg.cancelFailure);
+	}
+}
+
+async function handleReset(context) {
+	console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
+	const meusTickets = await assistenteAPI.getUserTickets(context.session.user.id);
+	if (meusTickets && meusTickets.tickets) {
+		meusTickets.tickets.forEach((element) => {
+			assistenteAPI.putStatusTicket(element.id, 'canceled');
+		});
+	}
+	await context.setState({ dialog: 'greetings', quizEnded: false });
 }
 
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD, cancelTicket, seeTicketMessages, newTicketMessage, handleReset,
 };

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const { MessengerBot, FileSessionStore, withTyping } = require('bottender');
 const { createServer } = require('bottender/restify');
+const requests = require('../requests');
 
 const config = require('./bottender.config.js').messenger;
 // const { getPoliticianData } = require('./mandatoaberto_api');
@@ -29,6 +30,14 @@ const handler = require('./handler');
 bot.onEvent(handler);
 
 const server = createServer(bot, { verifyToken: config.verifyToken });
+
+server.post('/add-label', async (req, res) => {
+	await requests.addLabel(req, res);
+});
+
+server.get('/name-id', async (req, res) => {
+	await requests.getNameFBID(req, res);
+});
 
 server.listen(process.env.API_PORT, () => {
 	console.log(`Server is running on ${process.env.API_PORT} port...`);

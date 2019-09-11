@@ -6,7 +6,8 @@ const help = require('./utils/helper');
 const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
-
+const quiz = require('./utils/quiz');
+const { checkUserOnLabelName } = require('./utils/postback');
 
 module.exports = async (context) => {
 	try {
@@ -26,20 +27,38 @@ module.exports = async (context) => {
 
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
-			await context.setState({ dialog: context.state.lastPBpayload });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
+			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
+				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
+			} else if (context.state.lastPBpayload.slice(0, 9) === 'leaveTMsg') {
+				await context.setState({ dialog: 'leaveTMsg', ticketID: context.state.lastPBpayload.replace('leaveTMsg', '') });
+				await context.sendText(flow.leaveTMsg.text1, await attach.getQR(flow.leaveTMsg));
+			} else if (context.state.lastPBpayload.slice(0, 7) === 'verTMsg') {
+				await context.setState({ dialog: 'verTMsg', ticketID: context.state.lastPBpayload.replace('verTMsg', '') });
+			} else {
+				await context.setState({ dialog: context.state.lastPBpayload });
 			}
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
-			await context.setState({ dialog: context.state.lastQRpayload });
+			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
+			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
+				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
+			} else if (context.state.lastQRpayload.slice(0, 13) === 'extraQuestion') {
+				await quiz.answerExtraQuestion(context);
+			} else {
+				await context.setState({ dialog: context.state.lastQRpayload });
+			}
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.message.quick_reply.payload, context.event.message.quick_reply.payload);
 		} else if (context.event.isText) {
 			await context.setState({ whatWasTyped: context.event.message.text });
-			if (context.state.dialog === 'titularSim' || context.state.dialog === 'invalidName') {
+
+			if (context.state.whatWasTyped === process.env.TESTEKEYWORD) {
+				await context.setState({ dialog: 'testeAtendimento' });
+			} else if (context.state.dialog === 'titularSim' || context.state.dialog === 'invalidName') {
 				await dialogs.checkFullName(context);
 			} else if (context.state.dialog === 'askTitularCPF' || context.state.dialog === 'invalidCPF') {
 				await dialogs.checkCPF(context);
@@ -55,10 +74,23 @@ module.exports = async (context) => {
 					await context.setState({ dadosCPF: '', dialog: 'meusDadosCPF' });
 					await context.sendText(flow.titularSim.askTitularCPFFail);
 				}
+			} else if (context.state.onTextQuiz === true) {
+				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
+				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
+					await quiz.handleAnswer(context, context.state.whatWasTyped);
+				} else {
+					await context.sendText('Formato inválido, digite só um número, exemplo 10');
+					await context.setState({ dialog: 'startQuiz' });
+				}
+			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin')) {
+				await dialogs.handleReset(context);
+			} else if (context.state.dialog === 'leaveTMsg') {
+				await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
 			} else {
 				await DF.dialogFlow(context);
 			}
 		}
+
 		switch (context.state.dialog) {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
@@ -71,7 +103,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'atendimentoLGPD':
-			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
+			await dialogs.atendimentoLGPD(context);
 			break;
 		case 'meusDados':
 			await context.sendText(flow.meusDados.meusDadosCPF);
@@ -83,10 +115,9 @@ module.exports = async (context) => {
 			await context.sendText(flow.meusDados.dadosTitudadosTitularNaolarSim);
 			await dialogs.sendMainMenu(context);
 			break;
-		case 'dadosTitularSim':
+		case 'dadosTitularSim': // meusDados
 			await context.sendText(flow.meusDados.dadosTitularSim);
-			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, `Solicitação de envio dos dados do cliente de cpf ${context.state.dadosCPF}`,
-				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreLGPD':
@@ -129,19 +160,45 @@ module.exports = async (context) => {
 		case 'askTitularMail':
 			await context.sendText(flow.titularSim.askTitularMail);
 			break;
-		case 'gerarTicket':
+		case 'gerarTicket': // revogar dados
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
-			// await context.sendText(flow.titularDadosFim.text2);
-			await assistenteAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, await help.buildTicket(context.state),
-				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state));
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
+		case 'meuTicket':
+			await dialogs.meuTicket(context);
+			break;
 		case 'compartilhar':
-			await dialogs.sendMainMenu(context, 'Como posso te ajudar?');
+			await context.sendText(flow.share.txt1);
+			await attach.sendShare(context, flow.share.cardData);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'cancelConfirmation':
+			await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
+			await context.sendText(flow.cancelConfirmation.confirm.replace('<TYPE>', context.state.currentTicket.type.name), await attach.getQR(flow.cancelConfirmation));
+			break;
+		case 'confirmaCancelamento':
+			await dialogs.cancelTicket(context);
+			break;
+		case 'verTicketMsg':
+			await dialogs.seeTicketMessages(context);
+			break;
+		case 'newTicketMsg':
+			await dialogs.newTicketMessage(context);
 			break;
 		case 'createIssueDirect':
 			await createIssue(context);
+			break;
+		case 'beginQuiz':
+			await context.setState({ startedQuiz: true, typeQuiz: 'preparatory' });
+			await context.sendText(flow.quiz.beginQuiz);
+			// falls throught
+		case 'startQuiz':
+			await quiz.answerQuiz(context);
+			break;
+		case 'testeAtendimento':
+			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
 			break;
 		} // end switch case
 	} catch (error) {
