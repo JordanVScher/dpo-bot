@@ -108,7 +108,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.meusDados.meusDadosTitular.replace('<CPF>', context.state.dadosCPF), await attach.getQR(flow.meusDados));
 			break;
 		case 'dadosTitularNao':
-			await context.sendText(flow.meusDados.dadosTitudadosTitularNaolarSim);
+			await context.sendText(flow.meusDados.dadosTitularNao);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'meusDadosEmail':
