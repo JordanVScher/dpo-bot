@@ -1,4 +1,5 @@
 const { moment } = require('./helper');
+const { sentryError } = require('./helper');
 const flow = require('./flow');
 
 function capQR(text) {
@@ -185,7 +186,29 @@ async function sendTicketCards(context, tickets) {
 	});
 }
 
+async function sendMsgFromAssistente(context, code, defaultMsgs) {
+	try {
+		const answers = context.state && context.state.politicianData && context.state.politicianData.answers ? context.state.politicianData.answers : false;
+		let msgToSend;
+
+		if (answers && answers.length > 0) {
+			const currentMsg = answers.find((x) => x.code === code);
+			if (currentMsg && currentMsg.content) msgToSend = currentMsg.content;
+		}
+
+		if (msgToSend && msgToSend.length > 0) {
+			await context.sendText(msgToSend);
+		} else if (defaultMsgs && defaultMsgs.length > 0) {
+			for (const msg of defaultMsgs) { // eslint-disable-line
+				await context.sendText(msg);
+			}
+		}
+	} catch (error) {
+		sentryError('Erro em sendMsgFromAssistente', error);
+	}
+}
+
 
 module.exports = {
-	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards,
+	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
 };
