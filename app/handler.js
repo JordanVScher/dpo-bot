@@ -91,7 +91,7 @@ module.exports = async (context) => {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
 			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.session.user.first_name));
-			await context.sendText(flow.greetings.text2);
+			await attach.sendMsgFromAssistente(context, 'greetings', flow.greetings.text2);
 			await dialogs.sendMainMenu(context);
 			await context.setState({ sendShare: true });
 			break;
