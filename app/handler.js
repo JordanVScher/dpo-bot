@@ -91,7 +91,7 @@ module.exports = async (context) => {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
 			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.session.user.first_name));
-			await attach.sendMsgFromAssistente(context, 'greetings', flow.greetings.text2);
+			await attach.sendMsgFromAssistente(context, 'greetings', [flow.greetings.text2]);
 			await dialogs.sendMainMenu(context);
 			await context.setState({ sendShare: true });
 			break;
@@ -102,6 +102,7 @@ module.exports = async (context) => {
 			await dialogs.atendimentoLGPD(context);
 			break;
 		case 'meusDados':
+			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
 			await context.sendText(flow.meusDados.meusDadosCPF);
 			break;
 		case 'meusDadosTitular':
@@ -128,10 +129,8 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'revogarDados':
-			await context.sendText(flow.revogarDados.text1);
-			await context.sendText(flow.revogarDados.text2);
-			await context.sendText(flow.revogarDados.text3);
-			await context.sendText(flow.revogarDados.text4, await attach.getQR(flow.revogarDados));
+			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogarDados.text1, flow.revogarDados.text2, flow.revogarDados.text3, flow.revogarDados.text4]);
+			await context.sendText(flow.revogarDados.text5, await attach.getQR(flow.revogarDados));
 			break;
 		case 'revogacaoNao':
 			await context.sendText(flow.revogacaoNao.text1);

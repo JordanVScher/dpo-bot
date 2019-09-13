@@ -186,7 +186,7 @@ async function sendTicketCards(context, tickets) {
 	});
 }
 
-async function sendMsgFromAssistente(context, code, defaultMsg) {
+async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	try {
 		const answers = context.state && context.state.politicianData && context.state.politicianData.answers ? context.state.politicianData.answers : false;
 		let msgToSend;
@@ -198,8 +198,10 @@ async function sendMsgFromAssistente(context, code, defaultMsg) {
 
 		if (msgToSend && msgToSend.length > 0) {
 			await context.sendText(msgToSend);
-		} else if (defaultMsg && defaultMsg.length > 0) {
-			await context.sendText(defaultMsg);
+		} else if (defaultMsgs && defaultMsgs.length > 0) {
+			for (const msg of defaultMsgs) { // eslint-disable-line
+				await context.sendText(msg);
+			}
 		}
 	} catch (error) {
 		sentryError('Erro em sendMsgFromAssistente', error);
