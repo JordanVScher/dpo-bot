@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const testFolder = './.sessions/';
 const fs = require('fs');
-const { associatesLabelToUser } = require('./app/utils/postback');
+const { linkUserToLabelByName } = require('./app/utils/labels');
 
 async function getFBIDJson() { // eslint-disable-line
 	const result = {};
@@ -41,10 +41,11 @@ async function addLabel(req, res) {
 		const userID = req.body.user_id;
 		const labelName = req.body.label_name;
 		const securityToken = req.body.security_token;
+		const pageToken = req.body.fb_access_token;
 		if (securityToken !== process.env.SECURITY_TOKEN_MA) {
 			res.status(401); res.send('Unauthorized!');
 		} else {
-			const response = await associatesLabelToUser(userID, labelName);
+			const response = await linkUserToLabelByName(userID, labelName, pageToken, true);
 			res.status(200); res.send(response);
 		}
 	}

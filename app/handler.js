@@ -7,7 +7,7 @@ const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
 const quiz = require('./utils/quiz');
-const { checkUserOnLabelName } = require('./utils/postback');
+const { checkUserOnLabelName } = require('./utils/labels');
 
 module.exports = async (context) => {
 	try {
@@ -78,7 +78,7 @@ module.exports = async (context) => {
 					await context.sendText('Formato inválido, digite só um número, exemplo 10');
 					await context.setState({ dialog: 'startQuiz' });
 				}
-			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin')) {
+			} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token)) {
 				await dialogs.handleReset(context);
 			} else if (context.state.dialog === 'leaveTMsg') {
 				await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
@@ -192,7 +192,7 @@ module.exports = async (context) => {
 			await quiz.answerQuiz(context);
 			break;
 		case 'testeAtendimento':
-			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPD));
+			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPDTest));
 			break;
 		} // end switch case
 	} catch (error) {
