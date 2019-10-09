@@ -17,6 +17,10 @@ module.exports = {
 	mainMenu: {
 		text1: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 	},
+	atendimentoLGPDTest: { // a copy of the options below
+		menuOptions: ['Revogar meus Dados', 'Meus Dados'],
+		menuPostback: ['revogarDados', 'meusDados'],
+	},
 	atendimentoLGPD: {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',

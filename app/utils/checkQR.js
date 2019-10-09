@@ -1,7 +1,7 @@
 const { getUserTickets } = require('../chatbot_api');
 const { getTicketTypes } = require('../chatbot_api');
 const { getUserTicketTypes } = require('./helper');
-const { checkUserOnLabelName } = require('./postback');
+const { checkUserOnLabelName } = require('./labels');
 const flow = require('./flow');
 
 async function reloadTicket(context) {
@@ -22,7 +22,7 @@ async function buildMainMenu(context) {
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 
 	if (context.state.quizEnded !== true) {
-		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'funcionario') });
+		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
 

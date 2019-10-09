@@ -7,7 +7,7 @@ const { atendimentoLGPD } = require('../app/utils/flow');
 const { getUserTicketTypes } = require('../app/utils/helper');
 
 jest.mock('../app/chatbot_api');
-jest.mock('../app/utils/postback');
+jest.mock('../app/utils/labels');
 
 it('buildMainMenu - mainMenu - no tickets', async () => {
 	const context = cont.quickReplyContext();
