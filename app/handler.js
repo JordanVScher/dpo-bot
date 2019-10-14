@@ -32,7 +32,6 @@ module.exports = async (context) => {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
-				await context.setState({ dialog: 'solicitacao1' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
 				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'leaveTMsg') {
@@ -72,10 +71,15 @@ module.exports = async (context) => {
 			} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
 				// -- 2
-			} else if (['solicitacao2', 'consultaCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'consultaTitular', 'consultaCPF');
-			} else if (['consultaEmail', 'consultaEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket2', 'consultaEmailReAsk');
+			} else if (['solicitacao2', 'consultarCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'consultarTitular', 'consultarCPF');
+			} else if (['consultarEmail', 'consultarEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket2', 'consultarEmailReAsk');
+				// -- 3
+			} else if (['solicitacao3', 'alterarCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'alterarTitular', 'alterarCPF');
+			} else if (['alterarEmail', 'alterarEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'alterarEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -137,20 +141,34 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicket(context.state)));
 			break;
-		// case 'solicitacao2': // 'consulta'
-		// 	await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
-		// 	await context.sendText(flow.consulta.consultaCPF);
-		// 	break;
-		// case 'consultaTitular':
-		// 	await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consulta.CPFNext));
-		// 	break;
-		// case 'consultaEmail':
-		// 	await context.sendText(flow.consulta.askMail);
-		// 	break;
-		// case 'gerarTicket2':
-		// 	await dialogs.createTicket(context,
-		// 		await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicket(context.state)));
-		// 	break;
+		case 'solicitacao2': // 'consultar'
+			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
+			await context.sendText(flow.consultar.consultarCPF);
+			break;
+		case 'consultarTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
+			break;
+		case 'consultarEmail':
+			await context.sendText(flow.consultar.askMail);
+			break;
+		case 'gerarTicket2':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicket(context.state)));
+			break;
+		case 'solicitacao3': // 'alterar'
+			await attach.sendMsgFromAssistente(context, 'ticket_type_3', []);
+			await context.sendText(flow.alterar.alterarCPF);
+			break;
+		case 'alterarTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
+			break;
+		case 'alterarEmail':
+			await context.sendText(flow.alterar.askMail);
+			break;
+		case 'gerarTicket3':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
+			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
 			await dialogs.sendMainMenu(context);

@@ -56,9 +56,15 @@ module.exports = {
 		menuOptions: ['Aceitar', 'Recusar'],
 		menuPostback: ['askRevogarCPF', 'titularNao'],
 	},
-	consulta: {
-		consultaCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível consultar seus dados.',
-		CPFNext: 'consultaEmail',
+	consultar: {
+		consultarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível consultar seus dados.',
+		CPFNext: 'consultarEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
+	alterar: {
+		alterarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível alterar seus dados.',
+		CPFNext: 'alterarEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
