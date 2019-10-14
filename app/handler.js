@@ -65,11 +65,11 @@ module.exports = async (context) => {
 			} else if (context.state.dialog === 'askRevogarPhone' || context.state.dialog === 'invalidPhone') {
 				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone', flow.revogarDados.askRevogarPhoneFail);
 			} else if (context.state.dialog === 'askRevogarMail' || context.state.dialog === 'invalidMail') {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail', flow.revogarDados.askRevogarMailFail);
-			} else if (context.state.dialog === 'meusDados' || context.state.dialog === 'meusDadosCPF') {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail', flow.revogarDados.askRevogarMailFail);
+			} else if (context.state.dialog === 'solicitacao2' || context.state.dialog === 'meusDadosCPF') {
 				await dialogs.checkCPF(context, 'dadosCPF', 'meusDadosTitular', 'meusDadosCPF', flow.revogarDados.askRevogarCPFFail);
 			} else if (context.state.dialog === 'meusDadosEmail' || context.state.dialog === 'meusDadosEmailReAsk') {
-				await dialogs.checkEmail(context, 'dadosMail', 'meusDadosEnd', 'meusDadosEmailReAsk', flow.meusDados.askMail);
+				await dialogs.checkEmail(context, 'dadosMail', 'gerarTicket2', 'meusDadosEmailReAsk', flow.meusDados.askMail);
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -92,43 +92,15 @@ module.exports = async (context) => {
 			await context.sendImage(flow.avatarImage);
 			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.session.user.first_name));
 			await attach.sendMsgFromAssistente(context, 'greetings', [flow.greetings.text2]);
-			await dialogs.sendMainMenu(context);
-			await context.setState({ sendShare: true });
+			await dialogs.sendMainMenu(context, flow.mainMenu.firstTime);
 			break;
 		case 'mainMenu':
 			await dialogs.sendMainMenu(context);
 			break;
-		case 'atendimentoLGPD':
-			await dialogs.atendimentoLGPD(context);
+		case 'solicitacoes':
+			await dialogs.solicitacoesMenu(context);
 			break;
-		case 'meusDados':
-			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
-			await context.sendText(flow.meusDados.meusDadosCPF);
-			break;
-		case 'meusDadosTitular':
-			await context.sendText(flow.meusDados.meusDadosTitular.replace('<CPF>', context.state.dadosCPF), await attach.getQR(flow.meusDados));
-			break;
-		case 'dadosTitularNao':
-			await context.sendText(flow.meusDados.dadosTitularNao);
-			await dialogs.sendMainMenu(context);
-			break;
-		case 'meusDadosEmail':
-			await context.sendText(flow.meusDados.askMail);
-			break;
-		case 'meusDadosEnd':
-			await context.sendText(flow.meusDados.meusDadosFim);
-			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
-			await dialogs.sendMainMenu(context);
-			break;
-		case 'sobreLGPD':
-			await context.sendText(flow.sobreLGPD.text1);
-			await dialogs.sendMainMenu(context);
-			break;
-		case 'sobreDipiou':
-			await context.sendText(flow.sobreDipiou.text1);
-			await dialogs.sendMainMenu(context);
-			break;
-		case 'revogarDados':
+		case 'solicitacao1': // revogarDados
 			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogarDados.text1, flow.revogarDados.text2, flow.revogarDados.text3, flow.revogarDados.text4]);
 			await context.sendText(flow.revogarDados.text5, await attach.getQR(flow.revogarDados));
 			break;
@@ -154,19 +126,41 @@ module.exports = async (context) => {
 		case 'askRevogarMail':
 			await context.sendText(flow.revogarDados.askRevogarMail);
 			break;
-		case 'gerarTicket': // revogar dados
+		case 'gerarTicket1':
 			await context.sendText(flow.titularDadosFim.text1);
 			await context.sendImage(flow.titularDadosFim.gif);
 			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state));
 			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
 			break;
+		case 'solicitacao2': // 'meusDados'
+			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
+			await context.sendText(flow.meusDados.meusDadosCPF);
+			break;
+		case 'meusDadosTitular':
+			await context.sendText(flow.meusDados.meusDadosTitular.replace('<CPF>', context.state.dadosCPF), await attach.getQR(flow.meusDados));
+			break;
+		case 'dadosTitularNao':
+			await context.sendText(flow.meusDados.dadosTitularNao);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'meusDadosEmail':
+			await context.sendText(flow.meusDados.askMail);
+			break;
+		case 'gerarTicket2':
+			await context.sendText(flow.meusDados.meusDadosFim);
+			await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state));
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'sobreLGPD':
+			await context.sendText(flow.sobreLGPD.text1);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'sobreDipiou':
+			await context.sendText(flow.sobreDipiou.text1);
+			await dialogs.sendMainMenu(context);
+			break;
 		case 'meuTicket':
 			await dialogs.meuTicket(context);
-			break;
-		case 'compartilhar':
-			await context.sendText(flow.share.txt1);
-			await attach.sendShare(context, flow.share.cardData);
-			await dialogs.sendMainMenu(context);
 			break;
 		case 'cancelConfirmation':
 			await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
@@ -192,7 +186,17 @@ module.exports = async (context) => {
 			await quiz.answerQuiz(context);
 			break;
 		case 'testeAtendimento':
-			await context.sendText(flow.atendimentoLGPD.text1, await attach.getQR(flow.atendimentoLGPDTest));
+			await context.sendText(flow.solicitacoes.text1, await attach.getQR(flow.solicitacoes));
+			break;
+		case 'notificationOn':
+			await assistenteAPI.updateBlacklistMA(context.session.user.id, 1);
+			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
+			await context.sendText(flow.notifications.on);
+			break;
+		case 'notificationOff':
+			await assistenteAPI.updateBlacklistMA(context.session.user.id, 0);
+			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
+			await context.sendText(flow.notifications.off);
 			break;
 		} // end switch case
 	} catch (error) {

@@ -1,9 +1,22 @@
+const { solicitacoes } = require('../../app/utils/flow');
+
+const { activeSolicitations } = solicitacoes;
+
+function buildTicketTypes(types) {
+	const result = [];
+	types.forEach((e) => {
+		result.push({ id: e, name: `Teste ${e}` });
+	});
+
+	return { ticket_types: result };
+}
+
 function quickReplyContext(payload, dialog, lastActivity = new Date()) {
 	return {
 		state: {
 			userTickets: { tickets: [] },
 			userTicketTypes: [],
-			ticketTypes: { ticket_types: [{ id: 1, name: 'Tipo 1' }, { name: 'Tipo 2', id: 2 }] },
+			ticketTypes: buildTicketTypes(activeSolicitations),
 			user: {},
 			dialog,
 			lastQRpayload: payload,
@@ -47,7 +60,7 @@ function postbackContext(payload, title, dialog = 'prompt', lastActivity = new D
 		state: {
 			userTickets: { tickets: [] },
 			userTicketTypes: [],
-			ticketTypes: { ticket_types: [{ id: 1, name: 'Tipo 1' }, { name: 'Tipo 2', id: 2 }] },
+			ticketTypes: buildTicketTypes(activeSolicitations),
 			user: {},
 			dialog,
 			lastPBpayload: payload,
@@ -92,7 +105,7 @@ function textContext(text, dialog, lastActivity = new Date()) {
 		state: {
 			userTickets: { tickets: [] },
 			userTicketTypes: [],
-			ticketTypes: { ticket_types: [{ id: 1, name: 'Tipo 1' }, { name: 'Tipo 2', id: 2 }] },
+			ticketTypes: buildTicketTypes(activeSolicitations),
 			user: {},
 			dialog,
 			politicianData: {

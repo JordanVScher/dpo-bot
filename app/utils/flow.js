@@ -15,27 +15,17 @@ module.exports = {
 		text2: 'Sou o assistente digital e estou aqui para te ajudar sobre a Lei Geral de Proteção de Dados (LGPD) 🤓',
 	},
 	mainMenu: {
-		text1: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
+		text1: 'Ajudo em algo mais?',
+		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 	},
-	atendimentoLGPDTest: { // a copy of the options below
-		menuOptions: ['Revogar meus Dados', 'Meus Dados'],
-		menuPostback: ['revogarDados', 'meusDados'],
-	},
-	atendimentoLGPD: {
+	solicitacoes: {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
-		options: {
-			1: {
-				content_type: 'text',
-				title: 'Revogar meus Dados',
-				payload: 'revogarDados',
-			},
-			2: {
-				content_type: 'text',
-				title: 'Meus Dados',
-				payload: 'meusDados',
-			},
-		},
+		// add the new type of ticket to the array below to properly include it on the menu
+		activeSolicitations: [1, 2, 3, 4, 5],
+		// fixed menu, for testing only
+		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Transferir dados'],
+		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5'],
 	},
 	meusDados: {
 		meusDadosCPF: 'Ok, primeiro preciso que você me forneça seu cpf para que seja possível consultar seus dados.',

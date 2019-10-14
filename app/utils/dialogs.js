@@ -61,12 +61,12 @@ async function meuTicket(context) {
 	await sendMainMenu(context);
 }
 
-async function atendimentoLGPD(context) {
+async function solicitacoesMenu(context) {
 	const options = await checkQR.buildAtendimento(context);
 	if (!options) {
 		await sendMainMenu(context);
 	} else {
-		await context.sendText(flow.atendimentoLGPD.text1, options);
+		await context.sendText(flow.solicitacoes.text1, options);
 	}
 }
 
@@ -114,5 +114,5 @@ async function handleReset(context) {
 }
 
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, atendimentoLGPD, cancelTicket, seeTicketMessages, newTicketMessage, handleReset,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, solicitacoesMenu, cancelTicket, seeTicketMessages, newTicketMessage, handleReset,
 };

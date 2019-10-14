@@ -103,36 +103,42 @@ async function getErrorQR(opt, lastDialog) {
 	return { quick_replies: elements };
 }
 
-async function sendShare(context, cardData) {
-	const buttons = [
-		{
-			type: 'web_url',
-			title: 'Ver Chatbot',
-			url: `m.me/${process.env.PAGE_ID}`,
-		},
-	];
+// async function sendShare(context, cardData) {
+// 	// case 'compartilhar':
+// 	// 	await context.sendText(flow.share.txt1);
+// 	// 	await attach.sendShare(context, flow.share.cardData);
+// 	// 	await dialogs.sendMainMenu(context);
+// 	// 	break;
 
-	await context.sendAttachment({
-		type: 'template',
-		payload: {
-			template_type: 'generic',
-			elements: [
-				{
-					title: cardData.title,
-					subtitle: (cardData.text && cardData.text !== '') ? cardData.text : cardData.sub,
-					image_url: cardData.image_url,
-					default_action: {
-						type: 'web_url',
-						url: `${cardData.item_url}/${process.env.PAGE_ID}`,
-						messenger_extensions: 'false',
-						webview_height_ratio: 'full',
-					},
-					buttons,
-				},
-			],
-		},
-	});
-}
+// 	const buttons = [
+// 		{
+// 			type: 'web_url',
+// 			title: 'Ver Chatbot',
+// 			url: `m.me/${process.env.PAGE_ID}`,
+// 		},
+// 	];
+
+// 	await context.sendAttachment({
+// 		type: 'template',
+// 		payload: {
+// 			template_type: 'generic',
+// 			elements: [
+// 				{
+// 					title: cardData.title,
+// 					subtitle: (cardData.text && cardData.text !== '') ? cardData.text : cardData.sub,
+// 					image_url: cardData.image_url,
+// 					default_action: {
+// 						type: 'web_url',
+// 						url: `${cardData.item_url}/${process.env.PAGE_ID}`,
+// 						messenger_extensions: 'false',
+// 						webview_height_ratio: 'full',
+// 					},
+// 					buttons,
+// 				},
+// 			],
+// 		},
+// 	});
+// }
 
 
 async function sendTicketCards(context, tickets) {
@@ -210,5 +216,5 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 
 
 module.exports = {
-	sendShare, getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
+	getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
 };
