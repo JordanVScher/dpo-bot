@@ -63,7 +63,7 @@ async function buildTicketVisualizar(state) {
 }
 
 async function getCPFValid(cpf) {
-	let result = cpf.replace(/[_.,-]/g, '');
+	let result = cpf.replace(/[_.,-\s]/g, '');
 	if (!result || cpf.length < 11 || !/^\d+$/.test(result)) { return false; }
 	result = await addChar(result, '.', 3);
 	result = await addChar(result, '.', 7);
@@ -71,7 +71,6 @@ async function getCPFValid(cpf) {
 	if (validarCpf(result) === false) { return false;	}
 	return result;
 }
-
 
 async function getPhoneValid(phone) {
 	const result = phone.trim().replace(/[^0-9]+/ig, '');
@@ -85,7 +84,7 @@ async function getUserTicketTypes(tickets) {
 	const result = [];
 
 	tickets.forEach((element) => {
-		if (!result.includes(element.type.id)) { // avoind adding repeated types
+		if (!result.includes(element.type.id)) { // dont add repeated types
 			if (element.status !== 'canceled' && element.status !== 'closed') { // add only types that are open or in_progress
 				result.push(element.type.id);
 			}
