@@ -80,6 +80,11 @@ module.exports = async (context) => {
 				await dialogs.checkCPF(context, 'titularCPF', 'alterarTitular', 'alterarCPF');
 			} else if (['alterarEmail', 'alterarEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'alterarEmailReAsk');
+				// -- 4
+			} else if (['incidenteAskPDF', 'incidenteCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
+			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'incidenteEmailReAsk');
 				// -- 5
 			} else if (['solicitacao5', 'faleConoscoCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'faleConoscoTitular', 'faleConoscoCPF');
@@ -105,6 +110,8 @@ module.exports = async (context) => {
 			} else {
 				await DF.dialogFlow(context);
 			}
+		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
+			await dialogs.handleFiles(context);
 		}
 		switch (context.state.dialog) {
 		case 'greetings':
@@ -175,6 +182,35 @@ module.exports = async (context) => {
 			await context.sendText(flow.alterar.askMail);
 			break;
 		case 'gerarTicket3':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
+			break;
+		case 'solicitacao4': // 'incidente'
+			await context.setState({ incidenteAnonimo: false, titularFiles: [] });
+			await attach.sendMsgFromAssistente(context, 'ticket_type_4', []);
+			await context.sendText(flow.incidente.intro, await attach.getQR(flow.incidente));
+			break;
+		case 'incidenteA':
+			await context.setState({ incidenteAnonimo: true });
+		// falls throught
+		case 'incidenteI':
+		case 'incidenteAskFile':
+			await context.sendText(flow.incidente.askFile);
+			break;
+		case 'incidenteAskPDF':
+			await context.sendText(flow.incidente.incidenteCPF);
+			break;
+		case 'incidenteTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
+			break;
+		case 'incidenteEmail':
+			await context.sendText(flow.incidente.askMail);
+			break;
+		case 'gerarTicketAnomino4':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, ''));
+			break;
+		case 'gerarTicket4':
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
 			break;

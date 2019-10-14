@@ -19,6 +19,25 @@ async function createTicket(context, ticketID) {
 	}
 }
 
+async function handleFiles(context) {
+	const filesUrl = [];
+
+	console.log(context.event.message.attachments);
+	filesUrl.push(...context.state.titularFiles);
+	context.event.message.attachments.forEach((element) => {
+		if (element.payload && element.payload.url) filesUrl.push(element.payload.url);
+	});
+
+	await context.setState({ titularFiles: filesUrl });
+	if (['incidenteAskFile', 'incidenteI', 'incidenteA'].includes(context.state.dialog)) {
+		if (context.state.incidenteAnonimo === true) {
+			await context.setState({ dialog: 'gerarTicketAnomino4' });
+		} else {
+			await context.setState({ dialog: 'incidenteAskPDF' });
+		}
+	}
+}
+
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.name) {
 	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
@@ -121,5 +140,17 @@ async function handleReset(context) {
 }
 
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, solicitacoesMenu, cancelTicket, seeTicketMessages, newTicketMessage, handleReset, createTicket,
+	sendMainMenu,
+	checkFullName,
+	checkCPF,
+	checkPhone,
+	checkEmail,
+	meuTicket,
+	solicitacoesMenu,
+	cancelTicket,
+	seeTicketMessages,
+	newTicketMessage,
+	handleReset,
+	createTicket,
+	handleFiles,
 };

@@ -25,17 +25,17 @@ async function buildMainMenu(context) {
 		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
 
 		const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.id === 6) || {};
+		getFaleDPO.name = 'Fale com DPO';
 		if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
 	}
-
 
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
 
-	// options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
-	// options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
+	options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
+	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
 
 	return { quick_replies: options };
@@ -58,6 +58,13 @@ async function buildAtendimento(context) {
 			options.push(aux);
 		}
 	});
+
+	options.push({
+		content_type: 'text',
+		title: 'Reportar Incidente',
+		payload: 'solicitacao4',
+	});
+
 
 	if (options.length === 0) return false;
 	return { quick_replies: options };

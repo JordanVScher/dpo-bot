@@ -68,6 +68,16 @@ module.exports = {
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
+	incidente: {
+		intro: 'Você pode reportar o incidente de forma anônima ou se indentificar. Como prefere?',
+		menuOptions: ['Identificado', 'Anônimo'],
+		menuPostback: ['incidenteI', 'incidenteA'],
+		askFile: 'Como preferir, agora, suba o arquivo nessa conversa e me envie.',
+		incidenteCPF: 'Ok, agora preciso que você me forneça seu CPF para que seja possível reportar o incidente.',
+		CPFNext: 'incidenteEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
 	faleConosco: {
 		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível enviar uma mensagem.',
 		CPFNext: 'faleConoscoEmail',
