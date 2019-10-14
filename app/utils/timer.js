@@ -1,22 +1,22 @@
 const { sendMainMenu } = require('./dialogs');
-const { faleConosco } = require('./flow');
+const { informacoes } = require('./flow');
 
-const faleConoscoTimer = {};
+const informacoesTimer = {};
 
-async function createFaleConoscoTimer(userID, context) {
-	if (faleConoscoTimer[userID]) { clearTimeout(faleConoscoTimer[userID]); delete faleConoscoTimer[userID]; }
-	faleConoscoTimer[userID] = setTimeout(async () => {
-		await context.sendText(faleConosco.textWait);
+async function createInformacoesTimer(userID, context) {
+	if (informacoesTimer[userID]) { clearTimeout(informacoesTimer[userID]); delete informacoesTimer[userID]; }
+	informacoesTimer[userID] = setTimeout(async () => {
+		await context.sendText(informacoes.textWait);
 		await sendMainMenu(context);
-		delete faleConoscoTimer[userID]; // deleting this timer from timers object
-	}, faleConosco.time);
+		delete informacoesTimer[userID]; // deleting this timer from timers object
+	}, informacoes.time);
 }
 
 async function deleteTimers(userID) {
-	if (faleConoscoTimer[userID]) { clearTimeout(faleConoscoTimer[userID]); delete faleConoscoTimer[userID]; }
+	if (informacoesTimer[userID]) { clearTimeout(informacoesTimer[userID]); delete informacoesTimer[userID]; }
 }
 
 
 module.exports = {
-	deleteTimers, createFaleConoscoTimer,
+	deleteTimers, createInformacoesTimer,
 };

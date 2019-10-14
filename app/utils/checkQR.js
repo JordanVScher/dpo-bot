@@ -15,11 +15,12 @@ async function buildMainMenu(context) {
 	await reloadTicket(context);
 	const options = [];
 
+	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
 	if (context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length) options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
 	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
-	options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
-	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
+	// options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
+	// options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
@@ -27,7 +28,6 @@ async function buildMainMenu(context) {
 	}
 
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
-	options.push({ content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' });
 
 	return { quick_replies: options };
 }

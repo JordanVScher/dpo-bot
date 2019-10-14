@@ -203,9 +203,9 @@ module.exports = async (context) => {
 		case 'startQuiz':
 			await quiz.answerQuiz(context);
 			break;
-		case 'faleConosco':
-			await context.sendText(flow.faleConosco.text1);
-			await timer.createFaleConoscoTimer(context.session.user.id, context);
+		case 'informacoes':
+			await context.sendText(flow.informacoes.text1);
+			await timer.createInformacoesTimer(context.session.user.id, context);
 			break;
 		case 'testeAtendimento':
 			await context.sendText(flow.solicitacoes.text1, await attach.getQR(flow.solicitacoes));

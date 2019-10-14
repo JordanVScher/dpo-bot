@@ -109,7 +109,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		menuOptions: ['Voltar'],
 		menuPostback: ['meuTicket'],
 	},
-	faleConosco: {
+	informacoes: {
 		text1: 'Digite sua mensagem que vamos te responder o quanto antes.',
 		textWait: 'Tudo bem, qualquer dúvida é só mandar.',
 		time: 1000 * 20,
