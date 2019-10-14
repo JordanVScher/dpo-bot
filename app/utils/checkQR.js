@@ -16,17 +16,23 @@ async function buildMainMenu(context) {
 	const options = [];
 
 	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
-	if (context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length) options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
+	if (context.state.userTicketTypes.length < flow.solicitacoes.activeSolicitations) options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
 	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
-	// options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
-	// options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
+
+	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
+		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.id === 5);
+		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
+	}
+
 
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
 
+	// options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
+	// options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
 
 	return { quick_replies: options };

@@ -80,6 +80,11 @@ module.exports = async (context) => {
 				await dialogs.checkCPF(context, 'titularCPF', 'alterarTitular', 'alterarCPF');
 			} else if (['alterarEmail', 'alterarEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'alterarEmailReAsk');
+				// -- 5
+			} else if (['solicitacao5', 'faleConoscoCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'faleConoscoTitular', 'faleConoscoCPF');
+			} else if (['faleConoscoEmail', 'faleConoscoEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket5', 'faleConoscoEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -168,6 +173,20 @@ module.exports = async (context) => {
 		case 'gerarTicket3':
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
+			break;
+		case 'solicitacao5': // 'fale conosco'
+			await attach.sendMsgFromAssistente(context, 'ticket_type_3', []);
+			await context.sendText(flow.faleConosco.faleConoscoCPF);
+			break;
+		case 'faleConoscoTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
+			break;
+		case 'faleConoscoEmail':
+			await context.sendText(flow.faleConosco.askMail);
+			break;
+		case 'gerarTicket5':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 5, await help.buildTicket(context.state)));
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);

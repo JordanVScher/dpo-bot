@@ -24,7 +24,7 @@ module.exports = {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
 		// add the new type of ticket to the array below to properly include it on the menu
-		activeSolicitations: [1, 2, 3, 4, 5],
+		activeSolicitations: [1, 2, 3],
 		// fixed menu, for testing only
 		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Transferir dados'],
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5'],
@@ -65,6 +65,12 @@ module.exports = {
 	alterar: {
 		alterarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível alterar seus dados.',
 		CPFNext: 'alterarEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
+	faleConosco: {
+		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível enviar uma mensagem.',
+		CPFNext: 'faleConoscoEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
