@@ -10,14 +10,16 @@ async function sendMainMenu(context, text) {
 }
 
 async function createTicket(context, ticketID) {
+	await context.sendText(flow.mainMenu.gerando);
 	if (ticketID && ticketID.id) {
-		await context.sendText(flow.mainMenu.createTicket.replace('<TICKET>', ticketID.id));
+		await context.typing(1000 * 2.5);
+		await sendMainMenu(context, flow.mainMenu.createTicket.replace('<TICKET>', ticketID.id));
 	} else {
 		await context.sendText('Erro ao criar o ticket');
 	}
 }
 
-async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg) {
+async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.name) {
 	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
@@ -26,7 +28,7 @@ async function checkFullName(context, stateName, successDialog, invalidDialog, r
 	}
 }
 
-async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg) {
+async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.cpf) {
 	const cpf = await help.getCPFValid(context.state.whatWasTyped);
 
 	if (cpf) {
@@ -37,21 +39,18 @@ async function checkCPF(context, stateName, successDialog, invalidDialog, reaskM
 	}
 }
 
-async function checkPhone(context, stateName, successDialog, invalidDialog, reaskMsg) {
+async function checkPhone(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.phone) {
 	const phone = await help.getPhoneValid(context.state.whatWasTyped);
 
 	if (phone) {
 		await context.setState({ [stateName]: phone, dialog: successDialog });
-		// await context.setState({ titularPhone: phone, dialog: 'askRevogarMail' });
 	} else {
-		if (reaskMsg) await context.sendText(flow.revogarDados.askRevogarPhoneFail);
-		// await context.sendText(flow.revogarDados.askRevogarPhoneFail);
+		if (reaskMsg) await context.sendText(reaskMsg);
 		await context.setState({ dialog: invalidDialog });
-		// await context.setState({ dialog: 'invalidPhone' });
 	}
 }
 
-async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg) {
+async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.mail) {
 	if (context.state.whatWasTyped.includes('@')) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {

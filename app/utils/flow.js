@@ -17,6 +17,7 @@ module.exports = {
 	mainMenu: {
 		text1: 'Ajudo em algo mais?',
 		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
+		gerando: 'Gerando seu ticket...',
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".\nO Número de protocolo do seu chamado é: <TICKET>.',
 	},
 	solicitacoes: {
@@ -28,41 +29,38 @@ module.exports = {
 		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Transferir dados'],
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5'],
 	},
-	meusDados: {
-		meusDadosCPF: 'Ok, primeiro preciso que você me forneça seu cpf para que seja possível consultar seus dados.',
-		meusDadosTitular: 'Eu declaro ser o proprietário dos dados referentes ao CPF <CPF>.',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
-		meusDadosFim: 'Salvamos o seu pedido de visualização de dados. Estaremos te retornando em breve.',
-		dadosTitularNao: 'Para segurança e privacidade, apenas o titular dos dados pode fazer essa requisição.',
-		menuOptions: ['Aceitar', 'Recusar'],
-		menuPostback: ['meusDadosEmail', 'dadosTitularNao'],
+	dataFail: {
+		cpf: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
+		name: 'Nome inválido! Tente novamente',
+		phone: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444',
+		mail: 'E-mail inválido! Tente Novamente',
 	},
-	revogarDados: {
+	revogar: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Mas antes de revogar seus dados, saiba que de modo geral usamos os dados dos clientes para usufruirem dos seguintes benefícios:',
 		text3: '1) Receber novidades pelos canais de comunicação\n2) Ganhar descontos exclusivos',
 		text4: 'Seus dados são bem cuidados, mas você tem todo direito de revogá-lo.',
 		text5: 'Você gostaria de continuar a revogação?',
-		revogacaoNao: 'Sem problemas 👍',
+		CPFNext: 'askRevogarName',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['askRevogarCPF', 'revogacaoNao'],
+		revogacaoNao: 'Sem problemas 👍',
 		askRevogarCPF: 'Primeiro, preciso que você entre com seu CPF.',
-		askRevogarCPFFail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
 		askRevogarName: 'Insira seu nome completo:',
-		askRevogarNameFail: 'Nome inválido! Tente novamente',
 		askRevogarPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
-		askRevogarPhoneFail: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444',
 		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askRevogarMailFail: 'E-mail inválido! Tente Novamente',
 	},
-	renovarDadosAskTitular: {
+	CPFConfirm: {
 		ask: 'Eu declaro ser o proprietário dos dados referentes ao CPF <CPF>.',
+		revogacaoNao: 'Para segurança e privacidade, apenas o titular dos dados pode fazer essa requisição.',
 		menuOptions: ['Aceitar', 'Recusar'],
-		menuPostback: ['askRevogarName', 'revogacaoNao'],
+		menuPostback: ['askRevogarCPF', 'titularNao'],
 	},
-	revogacaoNao: {
-		text1: 'Tudo bem, se mudar de ideia, estamos aqui.',
+	consulta: {
+		consultaCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível consultar seus dados.',
+		CPFNext: 'consultaEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
 	sobreLGPD: {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
@@ -71,12 +69,6 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	},
 	sobreDipiou: {
 		text1: 'Sou um chatbot, um robô conversacional, para harmozinar sua comunição com as empresas, sempre pensando em valorizar a sua privacidade.',
-	},
-	titularDadosFim: {
-		text1: 'Guardando seus dados e gerando seu ticket',
-		gif: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/a651b037-1f1c-408c-b107-a11f5e63f1a9.gif',
-		text2: '[texto sobre processo de autenticação a definir]',
-		ticketOpened: 'Seu ticket foi aberto e será respondido em até 72h. Enquanto isso, você pode escolher uma das opções abaixo e compartilhar o Dipi aqui para mais pessoas saberem de mim 🤓',
 	},
 	issueText: {
 		success: 'Você me pegou. Preciso pensar e te retorno em breve.',

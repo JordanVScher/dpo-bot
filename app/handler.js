@@ -32,6 +32,7 @@ module.exports = async (context) => {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
+				await context.setState({ dialog: 'solicitacao1' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
 				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'leaveTMsg') {
@@ -61,18 +62,20 @@ module.exports = async (context) => {
 
 			if (context.state.whatWasTyped === process.env.TESTEKEYWORD) {
 				await context.setState({ dialog: 'testeAtendimento' });
-			} else if (context.state.dialog === 'askRevogarCPF' || context.state.dialog === 'invalidCPF') {
-				await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF', flow.revogarDados.askRevogarCPFFail);
-			} else if (context.state.dialog === 'askRevogarName' || context.state.dialog === 'invalidName') {
-				await dialogs.checkFullName(context, 'titularNome', 'askRevogarPhone', 'invalidName', flow.revogarDados.askRevogarNameFail);
-			} else if (context.state.dialog === 'askRevogarPhone' || context.state.dialog === 'invalidPhone') {
-				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone', flow.revogarDados.askRevogarPhoneFail);
-			} else if (context.state.dialog === 'askRevogarMail' || context.state.dialog === 'invalidMail') {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail', flow.revogarDados.askRevogarMailFail);
-			} else if (context.state.dialog === 'solicitacao2' || context.state.dialog === 'meusDadosCPF') {
-				await dialogs.checkCPF(context, 'dadosCPF', 'meusDadosTitular', 'meusDadosCPF', flow.revogarDados.askRevogarCPFFail);
-			} else if (context.state.dialog === 'meusDadosEmail' || context.state.dialog === 'meusDadosEmailReAsk') {
-				await dialogs.checkEmail(context, 'dadosMail', 'gerarTicket2', 'meusDadosEmailReAsk', flow.meusDados.askMail);
+				// -- 1
+			} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
+			} else if (['askRevogarName', 'invalidName'].includes(context.state.dialog)) {
+				await dialogs.checkFullName(context, 'titularNome', 'askRevogarPhone', 'invalidName');
+			} else if (['askRevogarPhone', 'invalidPhone'].includes(context.state.dialog)) {
+				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
+			} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
+				// -- 2
+			} else if (['solicitacao2', 'consultaCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'consultaTitular', 'consultaCPF');
+			} else if (['consultaEmail', 'consultaEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket2', 'consultaEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -103,59 +106,51 @@ module.exports = async (context) => {
 		case 'solicitacoes':
 			await dialogs.solicitacoesMenu(context);
 			break;
-		case 'solicitacao1': // revogarDados
-			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogarDados.text1, flow.revogarDados.text2, flow.revogarDados.text3, flow.revogarDados.text4]);
-			await context.sendText(flow.revogarDados.text5, await attach.getQR(flow.revogarDados));
+		case 'titularNao':
+			await context.sendText(flow.CPFConfirm.revogacaoNao);
+			await dialogs.sendMainMenu(context);
+			break;
+		case 'solicitacao1': // revogar
+			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogar.text1, flow.revogar.text2, flow.revogar.text3, flow.revogar.text4]);
+			await context.sendText(flow.revogar.text5, await attach.getQR(flow.revogar));
 			break;
 		case 'revogacaoNao':
-			await context.sendText(flow.revogacaoNao.text1);
+			await context.sendText(flow.revogar.revogacaoNao);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'askRevogarCPF':
-			await context.sendText(flow.revogarDados.askRevogarCPF);
+			await context.sendText(flow.revogar.askRevogarCPF);
 			break;
 		case 'askRevogarTitular':
-			await context.sendText(flow.renovarDadosAskTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.renovarDadosAskTitular));
-			break;
-		case 'titularNao':
-			await dialogs.sendMainMenu(context);
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
 		case 'askRevogarName':
-			await context.sendText(flow.revogarDados.askRevogarName);
+			await context.sendText(flow.revogar.askRevogarName);
 			break;
 		case 'askRevogarPhone':
-			await context.sendText(flow.revogarDados.askRevogarPhone);
+			await context.sendText(flow.revogar.askRevogarPhone);
 			break;
 		case 'askRevogarMail':
-			await context.sendText(flow.revogarDados.askRevogarMail);
+			await context.sendText(flow.revogar.askRevogarMail);
 			break;
 		case 'gerarTicket1':
-			await context.sendText(flow.titularDadosFim.text1);
-			await context.sendImage(flow.titularDadosFim.gif);
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicketRevogar(context.state)));
-			await dialogs.sendMainMenu(context, flow.titularDadosFim.ticketOpened);
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicket(context.state)));
 			break;
-		case 'solicitacao2': // 'meusDados'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
-			await context.sendText(flow.meusDados.meusDadosCPF);
-			break;
-		case 'meusDadosTitular':
-			await context.sendText(flow.meusDados.meusDadosTitular.replace('<CPF>', context.state.dadosCPF), await attach.getQR(flow.meusDados));
-			break;
-		case 'dadosTitularNao':
-			await context.sendText(flow.meusDados.dadosTitularNao);
-			await dialogs.sendMainMenu(context);
-			break;
-		case 'meusDadosEmail':
-			await context.sendText(flow.meusDados.askMail);
-			break;
-		case 'gerarTicket2':
-			await context.sendText(flow.meusDados.meusDadosFim);
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicketVisualizar(context.state)));
-			await dialogs.sendMainMenu(context);
-			break;
+		// case 'solicitacao2': // 'consulta'
+		// 	await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
+		// 	await context.sendText(flow.consulta.consultaCPF);
+		// 	break;
+		// case 'consultaTitular':
+		// 	await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consulta.CPFNext));
+		// 	break;
+		// case 'consultaEmail':
+		// 	await context.sendText(flow.consulta.askMail);
+		// 	break;
+		// case 'gerarTicket2':
+		// 	await dialogs.createTicket(context,
+		// 		await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicket(context.state)));
+		// 	break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
 			await dialogs.sendMainMenu(context);

@@ -66,6 +66,23 @@ async function getQR(opt) {
 
 	return { quick_replies: elements };
 }
+async function getQRCPF(opt, firstPayload) {
+	const elements = [];
+	const firstArray = opt.menuOptions;
+	firstArray.forEach(async (element, index) => {
+		const aux = {
+			content_type: 'text',
+			title: await capQR(element),
+			payload: opt.menuPostback[index],
+		};
+
+		if (index === 0 && firstPayload) { aux.payload = firstPayload; }
+		elements.push(aux);
+	});
+
+
+	return { quick_replies: elements };
+}
 
 async function getVoltarQR(lastDialog) {
 	let lastPostback = '';
@@ -147,7 +164,7 @@ async function sendTicketCards(context, tickets) {
 	tickets.forEach((element) => {
 		if (cards.length < 10 && element.id) {
 			let msg = '';
-			// msg += `\nNúmero de Protocolo: ${element.id}`;
+			msg += `\nNúmero de Protocolo: ${element.id}`;
 			if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
 			if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
 			if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
@@ -216,5 +233,5 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 
 
 module.exports = {
-	getErrorQR, getVoltarQR, getQR, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
+	getErrorQR, getVoltarQR, getQR, getQRCPF, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
 };

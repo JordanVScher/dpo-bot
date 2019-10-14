@@ -43,21 +43,12 @@ async function formatDialogFlow(text) {
 	return result.trim();
 }
 
-async function buildTicketRevogar(state) {
+async function buildTicket(state) {
 	const result = {};
 	if (state.titularNome) { result.titularNome = state.titularNome;	}
 	if (state.titularCPF) { result.cpf = state.titularCPF;	}
 	if (state.titularPhone) { result.telefone = state.titularPhone;	}
 	if (state.titularMail) { result.mail = state.titularMail;	}
-
-	return result;
-}
-
-async function buildTicketVisualizar(state) {
-	const result = {};
-
-	if (state.dadosCPF) { result.cpf = state.dadosCPF;	}
-	if (state.dadosMail) { result.mail = state.dadosMail;	}
 
 	return result;
 }
@@ -130,8 +121,7 @@ module.exports = {
 	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
 	separateString,
 	formatDialogFlow,
-	buildTicketRevogar,
-	buildTicketVisualizar,
+	buildTicket,
 	getCPFValid,
 	getPhoneValid,
 	getUserTicketTypes,
