@@ -145,12 +145,12 @@ async function sendTicketCards(context, tickets) {
 	const cards = [];
 	tickets.sort((a, b) => flow.ticketStatus[a.status].position - flow.ticketStatus[b.status].position);
 	tickets.forEach((element) => {
-		if (cards.length <= 10) {
+		if (cards.length < 10 && element.id) {
 			let msg = '';
+			// msg += `\nNúmero de Protocolo: ${element.id}`;
 			if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
 			if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
 			if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
-			// if (process.env.ENV === 'LOCAL') msg += `\nID: ${element.id}`;
 
 			const buttons = [];
 			// if (element.message && element.message.length > 0) {

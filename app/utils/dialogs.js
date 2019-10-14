@@ -9,6 +9,14 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
+async function createTicket(context, ticketID) {
+	if (ticketID && ticketID.id) {
+		await context.sendText(flow.mainMenu.createTicket.replace('<TICKET>', ticketID.id));
+	} else {
+		await context.sendText('Erro ao criar o ticket');
+	}
+}
+
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg) {
 	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
@@ -114,5 +122,5 @@ async function handleReset(context) {
 }
 
 module.exports = {
-	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, solicitacoesMenu, cancelTicket, seeTicketMessages, newTicketMessage, handleReset,
+	sendMainMenu, checkFullName, checkCPF, checkPhone, checkEmail, meuTicket, solicitacoesMenu, cancelTicket, seeTicketMessages, newTicketMessage, handleReset, createTicket,
 };
