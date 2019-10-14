@@ -27,6 +27,7 @@ async function buildMainMenu(context) {
 	}
 
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
+	options.push({ content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' });
 
 	return { quick_replies: options };
 }

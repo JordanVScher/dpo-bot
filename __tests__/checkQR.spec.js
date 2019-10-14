@@ -15,10 +15,11 @@ it('buildMainMenu - mainMenu - no tickets', async () => {
 	const context = cont.quickReplyContext();
 
 	const result = await checkQR.buildMainMenu(context);
-	await expect(result.quick_replies.length === 3).toBeTruthy();
+	await expect(result.quick_replies.length === 4).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'solicitacoes').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreDipiou').toBeTruthy();
+	await expect(result.quick_replies[3].payload === 'faleConosco').toBeTruthy();
 });
 
 // it('buildMainMenu - mainMenu with sendShare', async () => {
@@ -37,11 +38,12 @@ it('buildMainMenu - mainMenu for funcionario ', async () => {
 	const context = cont.quickReplyContext();
 	context.state.isFuncionario = { name: 'etiqueta', id: '0001' };
 	const result = await checkQR.buildMainMenu(context);
-	await expect(result.quick_replies.length === 4).toBeTruthy();
+	await expect(result.quick_replies.length === 5).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'solicitacoes').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreDipiou').toBeTruthy();
 	await expect(result.quick_replies[3].payload === 'beginQuiz').toBeTruthy();
+	await expect(result.quick_replies[4].payload === 'faleConosco').toBeTruthy();
 });
 
 it('buildMainMenu - mainMenu for funcionario and quizEnded true', async () => {
@@ -51,10 +53,11 @@ it('buildMainMenu - mainMenu for funcionario and quizEnded true', async () => {
 	context.state.sendShare = true;
 
 	const result = await checkQR.buildMainMenu(context);
-	await expect(result.quick_replies.length === 3).toBeTruthy();
+	await expect(result.quick_replies.length === 4).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'solicitacoes').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreDipiou').toBeTruthy();
+	await expect(result.quick_replies[3].payload === 'faleConosco').toBeTruthy();
 });
 
 it('buildMainMenu - mainMenu with all kinds of tickets open', async () => {
@@ -63,12 +66,13 @@ it('buildMainMenu - mainMenu with all kinds of tickets open', async () => {
 	context.state.userTicketTypes = await getUserTicketTypes(context.state.userTickets.tickets);
 
 	const result = await checkQR.buildMainMenu(context);
-	await expect(result.quick_replies.length === 3).toBeTruthy();
+	await expect(result.quick_replies.length === 4).toBeTruthy();
 	await expect(context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length).toBeFalsy();
 	await expect(context.state.userTickets && context.state.userTickets.itens_count > 0).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'meuTicket').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreDipiou').toBeTruthy();
+	await expect(result.quick_replies[3].payload === 'faleConosco').toBeTruthy();
 });
 
 it('buildMainMenu - mainMenu with one kind of ticket open', async () => {
@@ -78,13 +82,14 @@ it('buildMainMenu - mainMenu with one kind of ticket open', async () => {
 
 	const result = await checkQR.buildMainMenu(context);
 
-	await expect(result.quick_replies.length === 4).toBeTruthy();
+	await expect(result.quick_replies.length === 5).toBeTruthy();
 	await expect(context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length).toBeTruthy();
 	await expect(context.state.userTickets && context.state.userTickets.itens_count > 0).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'solicitacoes').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'meuTicket').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[3].payload === 'sobreDipiou').toBeTruthy();
+	await expect(result.quick_replies[4].payload === 'faleConosco').toBeTruthy();
 });
 
 it('buildMainMenu - mainMenu with all tickets closed', async () => {
@@ -94,13 +99,14 @@ it('buildMainMenu - mainMenu with all tickets closed', async () => {
 
 	const result = await checkQR.buildMainMenu(context);
 
-	await expect(result.quick_replies.length === 4).toBeTruthy();
+	await expect(result.quick_replies.length === 5).toBeTruthy();
 	await expect(context.state.userTicketTypes.length < context.state.ticketTypes.ticket_types.length).toBeTruthy();
 	await expect(context.state.userTickets && context.state.userTickets.itens_count > 0).toBeTruthy();
 	await expect(result.quick_replies[0].payload === 'solicitacoes').toBeTruthy();
 	await expect(result.quick_replies[1].payload === 'meuTicket').toBeTruthy();
 	await expect(result.quick_replies[2].payload === 'sobreLGPD').toBeTruthy();
 	await expect(result.quick_replies[3].payload === 'sobreDipiou').toBeTruthy();
+	await expect(result.quick_replies[4].payload === 'faleConosco').toBeTruthy();
 });
 
 it('buildAtendimento - atendimento with no tickets', async () => {

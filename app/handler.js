@@ -7,6 +7,7 @@ const dialogs = require('./utils/dialogs');
 const attach = require('./utils/attach');
 const DF = require('./utils/dialogFlow');
 const quiz = require('./utils/quiz');
+const timer = require('./utils/timer');
 const { checkUserOnLabelName } = require('./utils/labels');
 
 module.exports = async (context) => {
@@ -24,6 +25,8 @@ module.exports = async (context) => {
 			picture: context.session.user.profile_pic,
 			// session: JSON.stringify(context.state),
 		});
+
+		await timer.deleteTimers(context.session.user.id);
 
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
@@ -184,6 +187,10 @@ module.exports = async (context) => {
 			// falls throught
 		case 'startQuiz':
 			await quiz.answerQuiz(context);
+			break;
+		case 'faleConosco':
+			await context.sendText(flow.faleConosco.text1);
+			await timer.createFaleConoscoTimer(context.session.user.id, context);
 			break;
 		case 'testeAtendimento':
 			await context.sendText(flow.solicitacoes.text1, await attach.getQR(flow.solicitacoes));
