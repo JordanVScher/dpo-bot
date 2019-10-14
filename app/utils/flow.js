@@ -74,6 +74,15 @@ module.exports = {
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
+	atendimento: {
+		intro: 'Essa é uma solicitação apenas para autoridade e avisando que se for midia ou titular, deve ir para o Fale conosco. Tudo bem?',
+		menuOptions: ['Continuar', 'Voltar'],
+		menuPostback: ['atendimentoAskCPF', 'mainMenu'],
+		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível enviar uma mensagem.',
+		CPFNext: 'atendimentoEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
 	sobreLGPD: {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
 

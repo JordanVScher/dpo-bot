@@ -16,13 +16,16 @@ async function buildMainMenu(context) {
 	const options = [];
 
 	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
-	if (context.state.userTicketTypes.length < flow.solicitacoes.activeSolicitations) options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
+	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
 	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
 		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.id === 5);
 		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
+
+		const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.id === 6) || {};
+		if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
 	}
 
 

@@ -85,6 +85,11 @@ module.exports = async (context) => {
 				await dialogs.checkCPF(context, 'titularCPF', 'faleConoscoTitular', 'faleConoscoCPF');
 			} else if (['faleConoscoEmail', 'faleConoscoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket5', 'faleConoscoEmailReAsk');
+				// -- 6
+			} else if (['solicitacao6', 'atendimentoAskCPF', 'atendimentoCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'atendimentoTitular', 'atendimentoCPF');
+			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -101,7 +106,6 @@ module.exports = async (context) => {
 				await DF.dialogFlow(context);
 			}
 		}
-
 		switch (context.state.dialog) {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
@@ -175,7 +179,7 @@ module.exports = async (context) => {
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
 			break;
 		case 'solicitacao5': // 'fale conosco'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_3', []);
+			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
 			await context.sendText(flow.faleConosco.faleConoscoCPF);
 			break;
 		case 'faleConoscoTitular':
@@ -187,6 +191,23 @@ module.exports = async (context) => {
 		case 'gerarTicket5':
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 5, await help.buildTicket(context.state)));
+			break;
+		case 'solicitacao6': // 'atendimento'
+			await attach.sendMsgFromAssistente(context, 'ticket_type_6', []);
+			await context.sendText(flow.atendimento.intro, await attach.getQR(flow.atendimento));
+			break;
+		case 'atendimentoAskCPF':
+			await context.sendText(flow.atendimento.atendimentoCPF);
+			break;
+		case 'atendimentoTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
+			break;
+		case 'atendimentoEmail':
+			await context.sendText(flow.atendimento.askMail);
+			break;
+		case 'gerarTicket6':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 6, await help.buildTicket(context.state)));
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
