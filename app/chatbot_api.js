@@ -45,11 +45,16 @@ module.exports = {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/answer?politician_id=${politician_id}&question_name=${question_name}&security_token=${security_token}`));
 	},
 
-	async postIssue(politician_id, fb_id, message, entities, issue_active) {
+	async postIssue(politician_id, fb_id, message, entities = {}, issue_active) {
 		if (issue_active === 1 || issue_active === true) {
 			message = encodeURI(message);
 			entities = JSON.stringify(entities);
-			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?politician_id=${politician_id}&fb_id=${fb_id}&message=${message}&entities=${entities}&security_token=${security_token}`));
+			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?&security_token=${security_token}`).query({
+				politician_id,
+				fb_id,
+				message,
+				entities: { result: entities },
+			}));
 		}
 		return false;
 	},
@@ -85,8 +90,8 @@ module.exports = {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&page=${page}&security_token=${security_token}`));
 	},
 
-	async getAllAvailableIntents(pageId) {
-		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/intents/available?fb_page_id=${pageId}&security_token=${security_token}`));
+	async getAllAvailableIntents(fb_page_id) {
+		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/intents/available?&security_token=${security_token}`).query({ fb_page_id }));
 	},
 
 	async getTicketTypes() {
