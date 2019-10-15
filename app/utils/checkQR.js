@@ -16,7 +16,7 @@ async function buildMainMenu(context) {
 	const options = [];
 
 	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
-	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
+	// options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
 	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
 

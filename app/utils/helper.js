@@ -8,9 +8,9 @@ const validarCpf = require('validar-cpf');
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
 moment.locale('pt-BR');
 
-function sentryError(msg, err) {
+function sentryError(msg, err, override) {
 	console.log(msg, err || '');
-	if (process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
+	if (override || process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
 	return false;
 }
 
@@ -85,6 +85,7 @@ async function getUserTicketTypes(tickets) {
 	return result.sort();
 }
 
+
 async function handleErrorApi(options, res, err) {
 	let msg = `Endereço: ${options.host}`;
 	msg += `\nPath: ${options.path}`;
@@ -94,7 +95,7 @@ async function handleErrorApi(options, res, err) {
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack}`;
 
-	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
 		if (process.env.ENV !== 'local') {

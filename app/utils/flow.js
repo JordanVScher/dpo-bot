@@ -23,11 +23,17 @@ module.exports = {
 	solicitacoes: {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
+		userHasOpenTicket: 'Você já tem uma solicitação de <TIPO_TICKET> em andamento. Você pode visualizar seus chamados na opção Meus Tickets.',
+		noSolicitationType: 'Ops, não entendi que tipo de solicitação você quer. Tente Novamente.',
 		// add the new type of ticket to the array below to properly include it on the menu
 		activeSolicitations: [1, 2, 3],
 		// fixed menu, for testing only
 		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Transferir dados'],
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5'],
+		// dictionary: [dialogflow entity]: tycket_type id
+		typeDic: {
+			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 4,
+		},
 	},
 	dataFail: {
 		cpf: 'CPF inválido! Exemplo de CPF: 123.123.123-00',

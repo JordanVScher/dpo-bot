@@ -96,6 +96,34 @@ async function solicitacoesMenu(context) {
 	}
 }
 
+async function handleSolicitacaoRequest(context) {
+	const data = {};
+	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
+
+	if (!entities) {
+		await context.setState({ dialog: 'solicitacoes' });
+	} else if (entities.solicitacao === '') {
+		await context.setState({ dialog: 'solicitacoes' });
+	} else {
+		const idSolicitation = flow.solicitacoes.typeDic[entities.solicitacao]; data.idSolicitation = idSolicitation;
+		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
+		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
+		if (ticket) {
+			if (userHas) { // if user already has an open ticket for this, warn him and go to main menu
+				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
+				await sendMainMenu(context);
+			} else { // no open ticket, send user to the proper solicitation flow
+				await context.setState({ dialog: `solicitacao${idSolicitation}` });
+			}
+		} else { // DF found an entity but we dont have it in our dictionary
+			await context.sendText(flow.solicitacoes.noSolicitationType);
+			await sendMainMenu(context);
+		}
+	}
+
+	return data;
+}
+
 async function cancelTicket(context) {
 	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled');
 	if (res && res.id) {
@@ -153,4 +181,5 @@ module.exports = {
 	handleReset,
 	createTicket,
 	handleFiles,
+	handleSolicitacaoRequest,
 };
