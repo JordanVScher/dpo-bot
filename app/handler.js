@@ -80,11 +80,6 @@ module.exports = async (context) => {
 				await dialogs.checkCPF(context, 'titularCPF', 'alterarTitular', 'alterarCPF');
 			} else if (['alterarEmail', 'alterarEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'alterarEmailReAsk');
-				// -- 4
-			} else if (['incidenteAskPDF', 'incidenteCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
-			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'incidenteEmailReAsk');
 				// -- 5
 			} else if (['solicitacao5', 'faleConoscoCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'faleConoscoTitular', 'faleConoscoCPF');
@@ -95,6 +90,11 @@ module.exports = async (context) => {
 				await dialogs.checkCPF(context, 'titularCPF', 'atendimentoTitular', 'atendimentoCPF');
 			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
+				// -- 7
+			} else if (['incidenteAskPDF', 'incidenteCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
+			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -186,9 +186,9 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
 			break;
-		case 'solicitacao4': // 'incidente'
+		case 'solicitacao7': // 'incidente'
 			await context.setState({ incidenteAnonimo: false, titularFiles: [] });
-			await attach.sendMsgFromAssistente(context, 'ticket_type_4', []);
+			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
 			await context.sendText(flow.incidente.intro, await attach.getQR(flow.incidente));
 			break;
 		case 'incidenteA':
@@ -207,13 +207,13 @@ module.exports = async (context) => {
 		case 'incidenteEmail':
 			await context.sendText(flow.incidente.askMail);
 			break;
-		case 'gerarTicketAnomino4':
+		case 'gerarTicketAnomino7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, ''));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, ''));
 			break;
-		case 'gerarTicket4':
+		case 'gerarTicket7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state)));
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);

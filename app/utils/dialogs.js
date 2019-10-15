@@ -31,7 +31,7 @@ async function handleFiles(context) {
 	await context.setState({ titularFiles: filesUrl });
 	if (['incidenteAskFile', 'incidenteI', 'incidenteA'].includes(context.state.dialog)) {
 		if (context.state.incidenteAnonimo === true) {
-			await context.setState({ dialog: 'gerarTicketAnomino4' });
+			await context.setState({ dialog: 'gerarTicketAnomino7' });
 		} else {
 			await context.setState({ dialog: 'incidenteAskPDF' });
 		}

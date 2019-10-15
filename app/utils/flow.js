@@ -28,11 +28,11 @@ module.exports = {
 		// add the new type of ticket to the array below to properly include it on the menu
 		activeSolicitations: [1, 2, 3],
 		// fixed menu, for testing only
-		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Transferir dados'],
-		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5'],
+		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Fale com DPO', 'Incidente'],
+		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao6', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
-			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 4,
+			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7,
 		},
 	},
 	dataFail: {
