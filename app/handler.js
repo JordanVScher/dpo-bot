@@ -46,6 +46,11 @@ module.exports = async (context) => {
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
+			if (context.state.lastQRpayload === 'solicitacoes') {
+				await help.apiai.textRequest(await help.formatDialogFlow(context.state.whatWasTyped), { sessionId: context.session.user.id });
+			}
+
+
 			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
 			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
