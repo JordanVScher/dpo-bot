@@ -47,12 +47,9 @@ module.exports = async (context) => {
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
 			if (context.state.lastQRpayload === 'solicitacoes') {
-				await context.setState({ apiai: await help.apiai.textRequest(await help.formatDialogFlow('Quero fazer uma solicitação'), { sessionId: context.session.user.id }) });
-				console.log(context.state.apiai);
-			}
-
-
-			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
+				await context.setState({ whatWasTyped: 'Quero fazer uma solicitação', dialog: '' });
+				await DF.dialogFlow(context);
+			} else if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
 			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
 			} else if (context.state.lastQRpayload.slice(0, 13) === 'extraQuestion') {
