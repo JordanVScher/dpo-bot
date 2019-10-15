@@ -47,7 +47,7 @@ module.exports = async (context) => {
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
 			if (context.state.lastQRpayload === 'solicitacoes') {
-				await context.setState({ apiai: await help.apiai.textRequest(await help.formatDialogFlow(context.state.whatWasTyped), { sessionId: context.session.user.id }) });
+				await context.setState({ apiai: await help.apiai.textRequest(await help.formatDialogFlow('Quero fazer uma solicitação'), { sessionId: context.session.user.id }) });
 				console.log(context.state.apiai);
 			}
 
