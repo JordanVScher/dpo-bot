@@ -145,4 +145,8 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		textWait: 'Tudo bem, qualquer dúvida é só mandar.',
 		time: 1000 * 20,
 	},
+	notifications: {
+		on: 'Você quem manda. Não estarei mais te enviando nenhuma notificação. Se quiser voltar a receber nossas novidades, clique na opção "Ativar Notificações" no menu abaixo. ⬇️',
+		off: 'Legal! Estarei te interando das novidades! Se quiser parar de receber nossas novidades, clique na opção "Desativar Notificações" no menu abaixo. ⬇️',
+	},
 };
