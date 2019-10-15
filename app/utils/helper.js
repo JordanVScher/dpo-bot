@@ -71,12 +71,13 @@ async function getPhoneValid(phone) {
 	return result;
 }
 
+// get the types of tickets the user has opened to stop the user from creating them again
 async function getUserTicketTypes(tickets) {
 	const result = [];
 
 	tickets.forEach((element) => {
 		if (!result.includes(element.type.id)) { // dont add repeated types
-			if (element.status !== 'canceled' && element.status !== 'closed') { // add only types that are open or in_progress
+			if (element.status !== 'canceled' && element.status !== 'closed') { // add types that are open or in_progress
 				result.push(element.type.id);
 			}
 		}
@@ -95,7 +96,7 @@ async function handleErrorApi(options, res, err) {
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack}`;
 
-	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
 		if (process.env.ENV !== 'local') {
