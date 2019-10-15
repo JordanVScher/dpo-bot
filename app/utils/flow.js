@@ -35,6 +35,9 @@ module.exports = {
 			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7,
 		},
 	},
+	consumidor: {
+		text1: 'Escolha uma opção ou me faça uma pergunta.',
+	},
 	dataFail: {
 		cpf: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
 		name: 'Nome inválido! Tente novamente',

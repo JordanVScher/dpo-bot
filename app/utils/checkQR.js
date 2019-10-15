@@ -10,16 +10,12 @@ async function reloadTicket(context) {
 	await context.setState({ userTicketTypes: await getUserTicketTypes(context.state.userTickets.tickets) });
 }
 
-
-async function buildMainMenu(context) {
-	await reloadTicket(context);
+async function buildConsumidorMenu(context) {
 	const options = [];
 
 	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
-	// options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
+	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
-	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
-
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
 		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.id === 5);
 		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
@@ -29,6 +25,15 @@ async function buildMainMenu(context) {
 		if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
 	}
 
+	return { quick_replies: options };
+}
+
+async function buildMainMenu(context) {
+	await reloadTicket(context);
+	const options = [];
+
+	options.push({ content_type: 'text', title: 'Consumidor', payload: 'consumidor' });
+	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
@@ -72,5 +77,5 @@ async function buildAtendimento(context) {
 
 
 module.exports = {
-	buildMainMenu, buildAtendimento,
+	buildMainMenu, buildAtendimento, buildConsumidorMenu,
 };

@@ -96,11 +96,23 @@ async function solicitacoesMenu(context) {
 	}
 }
 
+async function consumidorMenu(context) {
+	const options = await checkQR.buildConsumidorMenu(context);
+	if (!options) {
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.consumidor.text1, options);
+	}
+}
+
 async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
 
-	if (!entities) {
+	if (context.state.apiaiResp.result && context.state.apiaiResp.result.fulfillment && context.state.apiaiResp.result.fulfillment.speech) {
+		await context.setState({ dialog: '' });
+		await context.sendText(context.state.apiaiResp.result.fulfillment.speech);
+	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
 	} else if (entities.solicitacao === '') {
 		await context.setState({ dialog: 'solicitacoes' });
@@ -182,4 +194,5 @@ module.exports = {
 	createTicket,
 	handleFiles,
 	handleSolicitacaoRequest,
+	consumidorMenu,
 };

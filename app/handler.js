@@ -127,6 +127,9 @@ module.exports = async (context) => {
 			await context.sendText(flow.solicitacoes.text1);
 			// await dialogs.solicitacoesMenu(context);
 			break;
+		case 'consumidor':
+			await dialogs.consumidorMenu(context);
+			break;
 		case 'titularNao':
 			await context.sendText(flow.CPFConfirm.revogacaoNao);
 			await dialogs.sendMainMenu(context);
