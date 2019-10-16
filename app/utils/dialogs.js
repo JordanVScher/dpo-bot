@@ -113,8 +113,9 @@ async function handleSolicitacaoRequest(context) {
 	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
 		await context.sendText(context.state.apiaiTextAnswer);
-		// if user cancels the request, send to mainMenu
-		if (context.state.apiaiTextAnswer.includes('cancelado')) { await sendMainMenu(context); }
+		if (context.state.apiaiResp.result.actionIncomplete === false) {
+			await sendMainMenu(context);	// if user cancels the request, send to mainMenu
+		}
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
 	} else if (!entities.solicitacao) {
