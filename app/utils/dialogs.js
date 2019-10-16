@@ -128,10 +128,9 @@ async function handleSolicitacaoRequest(context) {
 			} else { // no open ticket, send user to the proper solicitation flow
 				await context.setState({ dialog: `solicitacao${idSolicitation}`, onSolicitacoes: false });
 			}
-		} else { // DF found an entity but we dont have it in our dictionary
+		} else { // DF found an entity but we dont have it in our dictionary, ask again
 			await context.sendText(flow.solicitacoes.noSolicitationType);
-			await context.setState({ onSolicitacoes: false });
-			await sendMainMenu(context);
+			await context.setState({ dialog: 'solicitacoes' });
 		}
 	}
 

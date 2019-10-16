@@ -60,8 +60,9 @@ it('handleSolicitacaoRequest - error: solicitation not found', async () => {
 
 	const result = await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.sendText).toBeCalledWith(flow.solicitacoes.noSolicitationType);
-	await expect(context.setState).toBeCalledWith({ onSolicitacoes: false });
-	await expect(context.sendText).toBeCalledWith(flow.mainMenu.text1, await checkQR.buildMainMenu(context));
+	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacoes' });
+	// await expect(context.setState).toBeCalledWith({ onSolicitacoes: false });
+	// await expect(context.sendText).toBeCalledWith(flow.mainMenu.text1, await checkQR.buildMainMenu(context));
 	await expect(result.idSolicitation).toBeFalsy(undefined);
 	await expect(result.userHas).toBeFalsy();
 	await expect(result.ticket).toBe(undefined);

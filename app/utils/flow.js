@@ -24,7 +24,7 @@ module.exports = {
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
 		userHasOpenTicket: 'Você já tem uma solicitação de <TIPO_TICKET> em andamento. Você pode visualizar seus chamados na opção Meus Tickets.',
-		noSolicitationType: 'Ops, não entendi que tipo de solicitação você quer. Tente Novamente.',
+		noSolicitationType: 'Ops, não entendi que tipo de solicitação você deseja. Por favor me informe algo como "Consultar dados" ou "Alterar dados", por exemplo.',
 		// add the new type of ticket to the array below to properly include it on the menu
 		activeSolicitations: [1, 2, 3],
 		// fixed menu, for testing only
