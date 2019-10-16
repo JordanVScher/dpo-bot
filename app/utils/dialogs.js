@@ -6,6 +6,7 @@ const help = require('./helper');
 
 async function sendMainMenu(context, text) {
 	const textToSend = text || flow.mainMenu.text1;
+	await context.setState({ onSolicitacoes: false });
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
@@ -109,12 +110,14 @@ async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
 
-	if (context.state.apiaiResp.result && context.state.apiaiResp.result.fulfillment && context.state.apiaiResp.result.fulfillment.speech) {
+	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
-		await context.sendText(context.state.apiaiResp.result.fulfillment.speech);
+		await context.sendText(context.state.apiaiTextAnswer);
+		// if user cancels the request, send to mainMenu
+		if (context.state.apiaiTextAnswer.includes('cancelado')) { await sendMainMenu(context); }
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
-	} else if (entities.solicitacao === '') {
+	} else if (!entities.solicitacao) {
 		await context.setState({ dialog: 'solicitacoes' });
 	} else {
 		const idSolicitation = flow.solicitacoes.typeDic[entities.solicitacao]; data.idSolicitation = idSolicitation;
@@ -125,10 +128,11 @@ async function handleSolicitacaoRequest(context) {
 				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
 				await sendMainMenu(context);
 			} else { // no open ticket, send user to the proper solicitation flow
-				await context.setState({ dialog: `solicitacao${idSolicitation}` });
+				await context.setState({ dialog: `solicitacao${idSolicitation}`, onSolicitacoes: false });
 			}
 		} else { // DF found an entity but we dont have it in our dictionary
 			await context.sendText(flow.solicitacoes.noSolicitationType);
+			await context.setState({ onSolicitacoes: false });
 			await sendMainMenu(context);
 		}
 	}

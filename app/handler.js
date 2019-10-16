@@ -29,7 +29,7 @@ module.exports = async (context) => {
 		await timer.deleteTimers(context.session.user.id);
 
 		if (context.event.isPostback) {
-			await context.setState({ lastPBpayload: context.event.postback.payload });
+			await context.setState({ lastPBpayload: context.event.postback.payload, onSolicitacoes: false });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
@@ -46,10 +46,7 @@ module.exports = async (context) => {
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
-			if (context.state.lastQRpayload === 'solicitacoes') {
-				await context.setState({ whatWasTyped: 'Quero fazer uma solicitação', dialog: '' });
-				await DF.dialogFlow(context);
-			} else if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
+			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
 			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
 			} else if (context.state.lastQRpayload.slice(0, 13) === 'extraQuestion') {
@@ -127,7 +124,9 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'solicitacoes':
-			await context.sendText(flow.solicitacoes.text1);
+			await context.setState({ whatWasTyped: 'Quero fazer uma solicitação' });
+			await DF.dialogFlow(context);
+			// await context.sendText(flow.solicitacoes.text1);
 			// await dialogs.solicitacoesMenu(context);
 			break;
 		case 'consumidor':

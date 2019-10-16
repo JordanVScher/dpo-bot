@@ -7,9 +7,11 @@ const { handleSolicitacaoRequest } = require('./dialogs');
 
 async function checkPosition(context) {
 	await context.setState({ dialog: 'prompt' });
-	console.log('intentName', context.state.intentName);
+	// lock user on this intent until he asks out with "sair"
+	if (context.state.onSolicitacoes === true) { await context.setState({ intentName: 'Solicitação' }); }
 	switch (context.state.intentName) {
 	case 'Solicitação': {
+		await context.setState({ onSolicitacoes: true });
 		const result = await handleSolicitacaoRequest(context);
 		console.log(`\n--Solicitação--\n${JSON.stringify(result, null, 2)}`);
 		await help.sentryError('Nova Solicitação', result, true); }
@@ -41,6 +43,7 @@ async function dialogFlow(context) {
 		await context.setState({ apiaiResp: await help.apiai.textRequest(await help.formatDialogFlow(context.state.whatWasTyped), { sessionId: context.session.user.id }) });
 		await context.setState({ resultParameters: context.state.apiaiResp.result.parameters }); // getting the entities
 		await context.setState({ intentName: context.state.apiaiResp.result.metadata.intentName }); // getting the intent
+		await context.setState({ apiaiTextAnswer: context.state.apiaiResp.result.fulfillment.speech || '' });
 		await checkPosition(context);
 	} else { // not using dialogFlow
 		await context.setState({ dialog: 'createIssueDirect' });
