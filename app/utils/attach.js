@@ -145,7 +145,7 @@ async function sendTicketCards(context, tickets) {
 	const cards = [];
 	tickets.sort((a, b) => flow.ticketStatus[a.status].position - flow.ticketStatus[b.status].position);
 	tickets.forEach((element) => {
-		if (cards.length <= 10) {
+		if (cards.length < 10) {
 			let msg = '';
 			if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
 			if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
