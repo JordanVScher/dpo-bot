@@ -214,7 +214,7 @@ module.exports = async (context) => {
 			break;
 		case 'gerarTicketAnomino7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, ''));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1));
 			break;
 		case 'gerarTicket7':
 			await dialogs.createTicket(context,

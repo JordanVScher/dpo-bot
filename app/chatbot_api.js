@@ -110,9 +110,9 @@ module.exports = {
 		return handleRequestAnswer(await request.put(`${apiUri}/api/chatbot/ticket/${TicketID}?security_token=${security_token}`).query({ message }));
 	},
 
-	async postNewTicket(chatbot_id, fb_id, type_id, data, message = '') {
+	async postNewTicket(chatbot_id, fb_id, type_id, data, message = '', anonymous = 0) {
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({
-			chatbot_id, fb_id, type_id, message, data,
+			chatbot_id, fb_id, type_id, message, data, anonymous,
 		}));
 	},
 
