@@ -137,8 +137,8 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'solicitacao1': // revogar
-			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogar.text1, flow.revogar.text2, flow.revogar.text3, flow.revogar.text4]);
-			await context.sendText(flow.revogar.text5, await attach.getQR(flow.revogar));
+			await attach.sendMsgFromAssistente(context, 'ticket_type_1', [flow.revogar.text1, flow.revogar.text2]);
+			await context.sendText(flow.revogar.text3, await attach.getQR(flow.revogar));
 			break;
 		case 'revogacaoNao':
 			await context.sendText(flow.revogar.revogacaoNao);
