@@ -21,11 +21,11 @@ async function createTicket(context, ticketID) {
 }
 
 async function handleFiles(context) {
-	if (!context.state.titularFiles) { await context.setState({ titularFiles: [] }); }
+	// if (!context.state.titularFiles) { await context.setState({ titularFiles: [] }); }
 
-	console.log(context.event.message.attachments);
-	const files = await help.downloadFile(context.event.message.attachments);
-	await context.setState({ titularFiles: [...context.state.titularFiles, ...files] });
+	// console.log(context.event.message.attachments);
+	// const files = await help.downloadFile(context.event.message.attachments);
+	// await context.setState({ titularFiles: [...context.state.titularFiles, ...files] });
 
 	if (['incidenteAskFile', 'incidenteI', 'incidenteA'].includes(context.state.dialog)) {
 		if (context.state.incidenteAnonimo === true) {
