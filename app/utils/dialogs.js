@@ -10,7 +10,7 @@ async function sendMainMenu(context, text) {
 }
 
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg) {
-	if (/^[a-zA-Z\s]+$/.test(context.state.whatWasTyped)) {
+	if (/^[A-Za-zÀ-ÿ\s]+$/.test(context.state.whatWasTyped)) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
 		if (reaskMsg) await context.sendText(reaskMsg);
