@@ -201,6 +201,7 @@ module.exports = async (context) => {
 		// falls throught
 		case 'incidenteI':
 		case 'incidenteAskFile':
+			await context.setState({ titularFiles: [] }); // clean any past files
 			await context.sendText(flow.incidente.askFile);
 			break;
 		case 'incidenteAskPDF':
@@ -214,11 +215,14 @@ module.exports = async (context) => {
 			break;
 		case 'gerarTicketAnomino7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1,
+					await help.prepareFilesForm(context.state.titularFiles)));
+			await context.setState({ titularFiles: [] });
 			break;
 		case 'gerarTicket7':
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state)));
+			await context.setState({ titularFiles: [] });
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);

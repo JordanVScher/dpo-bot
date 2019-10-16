@@ -1,6 +1,8 @@
+const fs = require('fs');
 const Sentry = require('@sentry/node');
 const moment = require('moment');
 const dialogFlow = require('apiai-promise');
+const request = require('requisition');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
 
@@ -117,6 +119,26 @@ async function handleRequestAnswer(response) {
 	}
 }
 
+async function downloadFile(files) {
+	const result = [];
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		if (file.payload && file.payload.url) {
+			const aux = fs.createWriteStream(`àrquivo_${i}`, { flags: 'a' });
+			const download = await request(file.payload.url);
+
+			result.push(await request(file.payload.url));
+		}
+	}
+	return result;
+}
+
+async function prepareFilesForm(files) {
+	const result = {};
+	files.forEach((e, i) => { result[`ticket_attachment_${i}`] = e; });
+	return result;
+}
+
 module.exports = {
 	Sentry,
 	moment,
@@ -129,4 +151,6 @@ module.exports = {
 	getUserTicketTypes,
 	handleRequestAnswer,
 	sentryError,
+	downloadFile,
+	prepareFilesForm,
 };
