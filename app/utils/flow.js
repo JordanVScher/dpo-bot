@@ -90,7 +90,7 @@ module.exports = {
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
 	faleConosco: {
-		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível enviar uma mensagem.',
+		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
 		CPFNext: 'faleConoscoEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
@@ -99,7 +99,7 @@ module.exports = {
 		intro: 'Essa é uma solicitação apenas para autoridade e avisando que se for midia ou titular, deve ir para o Fale conosco. Tudo bem?',
 		menuOptions: ['Continuar', 'Voltar'],
 		menuPostback: ['atendimentoAskCPF', 'mainMenu'],
-		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível enviar uma mensagem.',
+		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
 		CPFNext: 'atendimentoEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
