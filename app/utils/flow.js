@@ -59,6 +59,10 @@ module.exports = {
 		askRevogarPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
 		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 	},
+	askCPF: {
+		menuOptions: ['Voltar'],
+		menuPostback: ['mainMenu'],
+	},
 	CPFConfirm: {
 		ask: 'Eu declaro ser o proprietário dos dados referentes ao CPF <CPF>.',
 		revogacaoNao: 'Para segurança e privacidade, apenas o titular dos dados pode fazer essa requisição.',

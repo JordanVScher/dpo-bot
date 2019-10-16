@@ -145,7 +145,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'askRevogarCPF':
-			await context.sendText(flow.revogar.askRevogarCPF);
+			await context.sendText(flow.revogar.askRevogarCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'askRevogarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
@@ -165,7 +165,7 @@ module.exports = async (context) => {
 			break;
 		case 'solicitacao2': // 'consultar'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
-			await context.sendText(flow.consultar.consultarCPF);
+			await context.sendText(flow.consultar.consultarCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'consultarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
@@ -179,7 +179,7 @@ module.exports = async (context) => {
 			break;
 		case 'solicitacao3': // 'alterar'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_3', []);
-			await context.sendText(flow.alterar.alterarCPF);
+			await context.sendText(flow.alterar.alterarCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'alterarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
@@ -205,7 +205,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.incidente.askFile);
 			break;
 		case 'incidenteAskPDF':
-			await context.sendText(flow.incidente.incidenteCPF);
+			await context.sendText(flow.incidente.incidenteCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'incidenteTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
@@ -226,7 +226,7 @@ module.exports = async (context) => {
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
-			await context.sendText(flow.faleConosco.faleConoscoCPF);
+			await context.sendText(flow.faleConosco.faleConoscoCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'faleConoscoTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
@@ -243,7 +243,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.atendimento.intro, await attach.getQR(flow.atendimento));
 			break;
 		case 'atendimentoAskCPF':
-			await context.sendText(flow.atendimento.atendimentoCPF);
+			await context.sendText(flow.atendimento.atendimentoCPF, await attach.getQR(flow.askCPF));
 			break;
 		case 'atendimentoTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));

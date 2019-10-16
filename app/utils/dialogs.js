@@ -51,7 +51,7 @@ async function checkCPF(context, stateName, successDialog, invalidDialog, reaskM
 	if (cpf) {
 		await context.setState({ [stateName]: cpf, dialog: successDialog });
 	} else {
-		if (reaskMsg) await context.sendText(reaskMsg);
+		if (reaskMsg) await context.sendText(reaskMsg, await attach.getQR(flow.askCPF));
 		await context.setState({ dialog: invalidDialog });
 	}
 }
