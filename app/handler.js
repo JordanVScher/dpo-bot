@@ -65,7 +65,7 @@ module.exports = async (context) => {
 			} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
 			} else if (['askRevogarName', 'invalidName'].includes(context.state.dialog)) {
-				await dialogs.checkFullName(context, 'titularNome', 'askRevogarPhone', 'invalidName');
+				await dialogs.checkFullName(context, 'titularNome', 'askRevogarMail', 'invalidName');
 			} else if (['askRevogarPhone', 'invalidPhone'].includes(context.state.dialog)) {
 				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
 			} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
