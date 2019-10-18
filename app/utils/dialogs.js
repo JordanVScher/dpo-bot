@@ -3,6 +3,7 @@ const flow = require('./flow');
 const attach = require('./attach');
 const checkQR = require('./checkQR');
 const help = require('./helper');
+const { createFilesTimer } = require('./timer');
 
 async function sendMainMenu(context, text) {
 	const textToSend = text || flow.mainMenu.text1;
@@ -11,6 +12,8 @@ async function sendMainMenu(context, text) {
 }
 
 async function createTicket(context, ticketID) {
+	console.log('ticketID', ticketID);
+
 	await context.sendText(flow.mainMenu.gerando);
 	if (ticketID && ticketID.id) {
 		await context.typing(1000 * 2.5);
@@ -20,20 +23,18 @@ async function createTicket(context, ticketID) {
 	}
 }
 
-async function handleFiles(context) {
-	// if (!context.state.titularFiles) { await context.setState({ titularFiles: [] }); }
+// obs: facebook may take a while to process larger files, so if the user updates multiple files, we must wait for facebook to finish them all (actually we just wait for a few seconds)
+async function handleFiles(context, dialog) {
+	await context.setState({ dialog }); // enter new waiting_for_files dialog
+	const newFiles = context.event.message.attachments; // get new files from facebook event
 
-	// console.log(context.event.message.attachments);
-	// const files = await help.downloadFile(context.event.message.attachments);
-	// await context.setState({ titularFiles: [...context.state.titularFiles, ...files] });
+	const filesToAdd = [];
+	newFiles.forEach(async (e) => {
+		if (e.payload.url) await filesToAdd.push(e.payload.url);
+	});
+	await context.setState({ titularFiles: [...context.state.titularFiles, ...filesToAdd] }); // add new files tot he files we already have
 
-	if (['incidenteAskFile', 'incidenteI', 'incidenteA'].includes(context.state.dialog)) {
-		if (context.state.incidenteAnonimo === true) {
-			await context.setState({ dialog: 'gerarTicketAnomino7' });
-		} else {
-			await context.setState({ dialog: 'incidenteAskPDF' });
-		}
-	}
+	await createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
 }
 
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.name) {
@@ -122,7 +123,7 @@ async function handleSolicitacaoRequest(context) {
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
-			if (userHas) { // if user already has an open ticket for this, warn him and go to main menu
+			if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
 				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
 				await sendMainMenu(context);
 			} else { // no open ticket, send user to the proper solicitation flow

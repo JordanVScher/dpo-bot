@@ -91,7 +91,7 @@ module.exports = async (context) => {
 			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
-			} else if (['incidenteAskPDF', 'incidenteCPF'].includes(context.state.dialog)) {
+			} else if (['incidenteAskPDF', 'incidenteCPF', 'reportarIncidente'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
@@ -111,7 +111,9 @@ module.exports = async (context) => {
 				await DF.dialogFlow(context);
 			}
 		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
-			await dialogs.handleFiles(context);
+			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'reportarIncidente'].includes(context.state.dialog)) {
+				await dialogs.handleFiles(context, 'reportarIncidente');
+			}
 		}
 		switch (context.state.dialog) {
 		case 'greetings':
@@ -204,25 +206,22 @@ module.exports = async (context) => {
 			await context.setState({ titularFiles: [] }); // clean any past files
 			await context.sendText(flow.incidente.askFile);
 			break;
-		case 'incidenteAskPDF':
-			await context.sendText(flow.incidente.incidenteCPF, await attach.getQR(flow.askCPF));
-			break;
+		// case 'incidenteAskPDF': -- not used, happens on filesTimer
+		// 	await context.sendText(flow.incidente.incidenteCPF, await attach.getQR(flow.askCPF));
+		// 	break;
 		case 'incidenteTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
 			break;
 		case 'incidenteEmail':
 			await context.sendText(flow.incidente.askMail);
 			break;
-		case 'gerarTicketAnomino7':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1,
-					await help.prepareFilesForm(context.state.titularFiles)));
-			await context.setState({ titularFiles: [] });
-			break;
+			// case 'gerarTicketAnomino7': -- not used, happens on filesTimer
+			// await dialogs.createTicket(context,
+			// await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
+			// break;
 		case 'gerarTicket7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state)));
-			await context.setState({ titularFiles: [] });
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, context.state.titularFiles));
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);

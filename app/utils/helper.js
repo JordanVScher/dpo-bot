@@ -1,8 +1,6 @@
-const fs = require('fs');
 const Sentry = require('@sentry/node');
 const moment = require('moment');
 const dialogFlow = require('apiai-promise');
-const request = require('requisition');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
 
@@ -98,7 +96,7 @@ async function handleErrorApi(options, res, err) {
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack}`;
 
-	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
 		if (process.env.ENV !== 'local') {
@@ -119,26 +117,6 @@ async function handleRequestAnswer(response) {
 	}
 }
 
-async function downloadFile(files) {
-	const result = [];
-	for (let i = 0; i < files.length; i++) {
-		const file = files[i];
-		if (file.payload && file.payload.url) {
-			const aux = fs.createWriteStream(`àrquivo_${i}`, { flags: 'a' });
-			const download = await request(file.payload.url);
-
-			result.push(await request(file.payload.url));
-		}
-	}
-	return result;
-}
-
-async function prepareFilesForm(files) {
-	const result = {};
-	files.forEach((e, i) => { result[`ticket_attachment_${i}`] = e; });
-	return result;
-}
-
 module.exports = {
 	Sentry,
 	moment,
@@ -151,6 +129,4 @@ module.exports = {
 	getUserTicketTypes,
 	handleRequestAnswer,
 	sentryError,
-	downloadFile,
-	prepareFilesForm,
 };

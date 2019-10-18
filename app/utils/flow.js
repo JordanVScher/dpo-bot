@@ -26,7 +26,7 @@ module.exports = {
 		userHasOpenTicket: 'Você já tem uma solicitação de <TIPO_TICKET> em andamento. Você pode visualizar seus chamados na opção Meus Tickets.',
 		noSolicitationType: 'Ops, não entendi que tipo de solicitação você deseja. Por favor me informe algo como "Consultar dados" ou "Alterar dados", por exemplo.',
 		// add the new type of ticket to the array below to properly include it on the menu
-		activeSolicitations: [1, 2, 3],
+		activeSolicitations: [1, 2, 3, 5, 6, 7],
 		// fixed menu, for testing only
 		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Fale com DPO', 'Incidente'],
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao6', 'solicitacao7'],
@@ -85,6 +85,7 @@ module.exports = {
 		menuPostback: ['incidenteI', 'incidenteA'],
 		askFile: 'Como preferir, agora, suba o arquivo nessa conversa e me envie.',
 		incidenteCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para reportar o incidente.',
+		time: 1000 * 30,
 		CPFNext: 'incidenteEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',

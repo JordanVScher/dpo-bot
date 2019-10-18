@@ -69,7 +69,7 @@ it('handleSolicitacaoRequest - error: solicitation not found', async () => {
 });
 
 
-it('handleSolicitacaoRequest - revogar new', async () => {
+it('handleSolicitacaoRequest - Revogar new', async () => {
 	const context = cont.quickReplyContext();
 	context.state.resultParameters = { solicitacao: 'Revogar' };
 	context.state.userTicketTypes = [2, 3];
@@ -81,7 +81,7 @@ it('handleSolicitacaoRequest - revogar new', async () => {
 	await expect(result.ticket).toBeTruthy();
 });
 
-it('handleSolicitacaoRequest - revogar ', async () => {
+it('handleSolicitacaoRequest - Revogar cant be repeated ', async () => {
 	const context = cont.quickReplyContext();
 	context.state.userTicketTypes = [1];
 
@@ -91,5 +91,31 @@ it('handleSolicitacaoRequest - revogar ', async () => {
 	await expect(context.sendText).toBeCalledWith(flow.mainMenu.text1, await checkQR.buildMainMenu(context));
 	await expect(result.idSolicitation).toBe(1);
 	await expect(result.userHas).toBeTruthy();
+	await expect(result.ticket).toBeTruthy();
+});
+
+it('handleSolicitacaoRequest - Incidente new', async () => {
+	const context = cont.quickReplyContext();
+	context.state.resultParameters = { solicitacao: 'Incidente' };
+	context.state.userTicketTypes = [2, 3];
+
+	const result = await dialogs.handleSolicitacaoRequest(context);
+	console.log(result);
+
+	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacao7', onSolicitacoes: false });
+	await expect(result.idSolicitation).toBe(7);
+	await expect(result.userHas).toBeFalsy();
+	await expect(result.ticket).toBeTruthy();
+});
+
+it('handleSolicitacaoRequest - Incidente can be repeated', async () => {
+	const context = cont.quickReplyContext();
+	context.state.resultParameters = { solicitacao: 'Incidente' };
+	context.state.userTicketTypes = [2, 7];
+
+	const result = await dialogs.handleSolicitacaoRequest(context);
+	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacao7', onSolicitacoes: false });
+	await expect(result.idSolicitation).toBe(7);
+	await expect(result.userHas).toBeTruthy(); // !
 	await expect(result.ticket).toBeTruthy();
 });

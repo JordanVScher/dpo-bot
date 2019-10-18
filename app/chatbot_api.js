@@ -8,7 +8,6 @@ const { handleRequestAnswer } = require('./utils/helper');
 const security_token = process.env.SECURITY_TOKEN_MA;
 const apiUri = process.env.MANDATOABERTO_API_URL;
 
-
 module.exports = {
 	async getPoliticianData(pageId) {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/politician?fb_page_id=${pageId}&security_token=${security_token}`));
@@ -111,58 +110,48 @@ module.exports = {
 	},
 
 	async postNewTicket(chatbot_id, fb_id, type_id, data, message = '', anonymous = 0, files = {}) {
+		const aux = {};
+		if (files) {
+			files.forEach((e, i) => {
+				aux[`ticket_attachment_${i}`] = e;
+			});
+		}
+
+		console.log('aux', aux);
+
+
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({
-			chatbot_id, fb_id, type_id, message, data, anonymous, ...files,
+			chatbot_id, fb_id, type_id, message, data, anonymous, ...aux,
 		}));
 	},
 
 	async logFlowChange(recipient_fb_id, politician_id, payload, human_name) {
 		const d = new Date();
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/log?security_token=${security_token}`).query({
-			timestamp: d.toGMTString(),
-			recipient_fb_id,
-			politician_id,
-			action_id: 1,
-			payload,
-			human_name,
+			timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 1, payload, human_name,
 		}));
 	},
 
 	async logAnsweredPoll(recipient_fb_id, politician_id, field_id) {
 		const d = new Date();
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/log?security_token=${security_token}`).query({
-			timestamp: d.toGMTString(),
-			recipient_fb_id,
-			politician_id,
-			action_id: 2,
-			field_id,
+			timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 2, field_id,
 		}));
 	},
 
 	async logAskedEntity(recipient_fb_id, politician_id, field_id) {
 		const d = new Date();
-		return handleRequestAnswer(await request
-			.post(`${apiUri}/api/chatbot/log?security_token=${security_token}&`)
-			.query({
-				timestamp: d.toGMTString(),
-				recipient_fb_id,
-				politician_id,
-				action_id: 5,
-				field_id,
-			}));
+		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/log?security_token=${security_token}`).query({
+			timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 5, field_id,
+		}));
 	},
 
 	// action_id should be 3 for ACTIVATED_NOTIFICATIONS and 4 for DEACTIVATED_NOTIFICATIONS
 	async logNotification(recipient_fb_id, politician_id, action_id) {
 		const d = new Date();
-		return handleRequestAnswer(await request
-			.post(`${apiUri}/api/chatbot/log?security_token=${security_token}&`)
-			.query({
-				timestamp: d.toGMTString(),
-				recipient_fb_id,
-				politician_id,
-				action_id,
-			}));
+		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/log?security_token=${security_token}&`).query({
+			timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id,
+		}));
 	},
 
 	async getLogAction() {
@@ -172,9 +161,7 @@ module.exports = {
 	async setIntentStatus(politician_id, recipient_fb_id, intent, entity_is_correct) {
 		if (intent && intent.id) {
 			return handleRequestAnswer(await request.post(
-				`${apiUri}/api/chatbot/politician/${politician_id}/intents/${
-					intent.id
-				}/stats?entity_is_correct=${entity_is_correct}&recipient_fb_id=${recipient_fb_id}&security_token=${security_token}`,
+				`${apiUri}/api/chatbot/politician/${politician_id}/intents/${intent.id}/stats?entity_is_correct=${entity_is_correct}&recipient_fb_id=${recipient_fb_id}&security_token=${security_token}`,
 			));
 		}
 		return false;
