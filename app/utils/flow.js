@@ -61,7 +61,8 @@ module.exports = {
 		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 	},
 	askCPF: {
-		menuOptions: ['Voltar'],
+		clickTheButton: ' Ou clique no botão abaixo para cancelar o pedido.',
+		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
 	},
 	CPFConfirm: {
