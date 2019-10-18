@@ -36,7 +36,7 @@ module.exports = {
 		},
 	},
 	files: {
-		wait: 'Aguarde um instante, estou processando os seus arquivos',
+		wait: 'Aguarde um instante, estou processando os seus arquivos.',
 	},
 	consumidor: {
 		text1: 'Escolha uma opção ou me faça uma pergunta.',

@@ -217,7 +217,6 @@ module.exports = async (context) => {
 			delete incidenteCPFAux[context.session.user.id];
 			break;
 		case 'incidenteEmail':
-			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] });
 			await context.sendText(flow.incidente.askMail);
 			break;
 			// case 'gerarTicketAnomino7': -- not used, happens on filesTimer
@@ -304,11 +303,13 @@ module.exports = async (context) => {
 			await assistenteAPI.updateBlacklistMA(context.session.user.id, 1);
 			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
 			await context.sendText(flow.notifications.on);
+			await dialogs.sendMainMenu(context);
 			break;
 		case 'notificationOff':
 			await assistenteAPI.updateBlacklistMA(context.session.user.id, 0);
 			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
 			await context.sendText(flow.notifications.off);
+			await dialogs.sendMainMenu(context);
 			break;
 		case 'createFilesTimer':
 			await timer.createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
