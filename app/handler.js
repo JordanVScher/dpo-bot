@@ -10,6 +10,8 @@ const quiz = require('./utils/quiz');
 const timer = require('./utils/timer');
 const { checkUserOnLabelName } = require('./utils/labels');
 
+const incidenteCPFAux = {}; // because the file timer stops setState from working
+
 module.exports = async (context) => {
 	try {
 		// let user = await getUser(context)
@@ -92,7 +94,7 @@ module.exports = async (context) => {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
 			} else if (['incidenteAskPDF', 'incidenteCPF', 'createFilesTimer'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
+				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
@@ -200,7 +202,7 @@ module.exports = async (context) => {
 			break;
 		case 'incidenteA':
 			await context.setState({ incidenteAnonimo: true });
-		// falls throught
+			// falls throught
 		case 'incidenteI':
 		case 'incidenteAskFile':
 			await context.setState({ titularFiles: [] }); // clean any past files
@@ -210,9 +212,12 @@ module.exports = async (context) => {
 		// 	await context.sendText(flow.incidente.incidenteCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 		// 	break;
 		case 'incidenteTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', incidenteCPFAux[context.session.user.id]), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
+			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] }); // passing memory data to state
+			delete incidenteCPFAux[context.session.user.id];
 			break;
 		case 'incidenteEmail':
+			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] });
 			await context.sendText(flow.incidente.askMail);
 			break;
 			// case 'gerarTicketAnomino7': -- not used, happens on filesTimer
@@ -221,7 +226,7 @@ module.exports = async (context) => {
 			// break;
 		case 'gerarTicket7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 0, context.state.titularFiles));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
