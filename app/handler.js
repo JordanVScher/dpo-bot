@@ -221,7 +221,7 @@ module.exports = async (context) => {
 			// break;
 		case 'gerarTicket7':
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, context.state.titularFiles));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 0, context.state.titularFiles));
 			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
