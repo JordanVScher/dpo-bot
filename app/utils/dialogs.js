@@ -36,6 +36,7 @@ async function handleFiles(context, dialog) {
 	});
 	await context.setState({ titularFiles: [...context.state.titularFiles, ...filesToAdd] }); // add new files tot he files we already have
 	await context.setState({ dialog }); // send to specific timer dialog
+	await context.typingOn();
 }
 
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.name) {
