@@ -91,7 +91,7 @@ module.exports = async (context) => {
 			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
-			} else if (['incidenteAskPDF', 'incidenteCPF', 'reportarIncidente'].includes(context.state.dialog)) {
+			} else if (['incidenteAskPDF', 'incidenteCPF', 'createFilesTimer'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');

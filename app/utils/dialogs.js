@@ -27,6 +27,9 @@ async function createTicket(context, ticketID) {
 async function handleFiles(context, dialog) {
 	const newFiles = context.event.message.attachments; // get new files from facebook event
 
+	// send a message after first file enters as event
+	if (context.state.dialog !== dialog) await context.sendText(flow.files.wait);
+
 	const filesToAdd = [];
 	newFiles.forEach(async (e) => {
 		if (e.payload.url) await filesToAdd.push(e.payload.url);

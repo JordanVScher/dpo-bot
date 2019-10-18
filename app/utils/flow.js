@@ -35,6 +35,9 @@ module.exports = {
 			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7,
 		},
 	},
+	files: {
+		wait: 'Aguarde um instante, estou processando os seus arquivos',
+	},
 	consumidor: {
 		text1: 'Escolha uma opção ou me faça uma pergunta.',
 	},
