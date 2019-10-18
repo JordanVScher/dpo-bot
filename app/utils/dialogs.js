@@ -3,7 +3,7 @@ const flow = require('./flow');
 const attach = require('./attach');
 const checkQR = require('./checkQR');
 const help = require('./helper');
-const { createFilesTimer } = require('./timer');
+// const { createFilesTimer } = require('./timer');
 
 async function sendMainMenu(context, text) {
 	const textToSend = text || flow.mainMenu.text1;
@@ -25,7 +25,6 @@ async function createTicket(context, ticketID) {
 
 // obs: facebook may take a while to process larger files, so if the user updates multiple files, we must wait for facebook to finish them all (actually we just wait for a few seconds)
 async function handleFiles(context, dialog) {
-	await context.setState({ dialog }); // enter new waiting_for_files dialog
 	const newFiles = context.event.message.attachments; // get new files from facebook event
 
 	const filesToAdd = [];
@@ -33,8 +32,7 @@ async function handleFiles(context, dialog) {
 		if (e.payload.url) await filesToAdd.push(e.payload.url);
 	});
 	await context.setState({ titularFiles: [...context.state.titularFiles, ...filesToAdd] }); // add new files tot he files we already have
-
-	await createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
+	await context.setState({ dialog }); // send to specific timer dialog
 }
 
 async function checkFullName(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.name) {

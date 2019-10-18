@@ -111,8 +111,8 @@ module.exports = async (context) => {
 				await DF.dialogFlow(context);
 			}
 		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
-			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'reportarIncidente'].includes(context.state.dialog)) {
-				await dialogs.handleFiles(context, 'reportarIncidente');
+			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'createFilesTimer'].includes(context.state.dialog)) {
+				await dialogs.handleFiles(context, 'createFilesTimer');
 			}
 		}
 		switch (context.state.dialog) {
@@ -304,6 +304,9 @@ module.exports = async (context) => {
 			await assistenteAPI.updateBlacklistMA(context.session.user.id, 0);
 			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
 			await context.sendText(flow.notifications.off);
+			break;
+		case 'createFilesTimer':
+			await timer.createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
 			break;
 		} // end switch case
 	} catch (error) {

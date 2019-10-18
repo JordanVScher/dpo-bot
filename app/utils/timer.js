@@ -20,7 +20,7 @@ async function createFilesTimer(userID, context) {
 	if (filesTimer[userID]) { clearTimeout(filesTimer[userID]); delete filesTimer[userID]; }
 
 	filesTimer[userID] = setTimeout(async () => {
-		if (context.state.dialog === 'reportarIncidente') {
+		if (context.state.dialog === 'createFilesTimer') {
 			if (context.state.incidenteAnonimo === true) {
 				await createTicket(context,
 					await postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
@@ -41,11 +41,3 @@ async function deleteTimers(userID) {
 module.exports = {
 	deleteTimers, createInformacoesTimer, createFilesTimer,
 };
-
-// sendFiles(payload = {}, config = {}) {
-// 	config.headers = { 'Content-Type': 'multipart/form-data' };
-
-// 	return payload.teamId
-// 		? apiClient.post(`/teams/${payload.teamId}/contacts/upload`, payload, config)
-// 		: Promise.reject(new Error('{teamId} is missing'));
-// },
