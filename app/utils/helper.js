@@ -1,6 +1,5 @@
 const Sentry = require('@sentry/node');
 const moment = require('moment');
-const dialogFlow = require('apiai-promise');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
 
@@ -9,7 +8,7 @@ Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, capture
 moment.locale('pt-BR');
 
 function sentryError(msg, err, override) {
-	console.log(msg, err || '');
+	console.log(msg, JSON.stringify(err, null, 2) || '');
 	if (override || process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
 	return false;
 }
@@ -120,7 +119,6 @@ async function handleRequestAnswer(response) {
 module.exports = {
 	Sentry,
 	moment,
-	apiai: dialogFlow(process.env.DIALOGFLOW_TOKEN),
 	separateString,
 	formatDialogFlow,
 	buildTicket,

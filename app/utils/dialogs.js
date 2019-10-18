@@ -109,7 +109,7 @@ async function handleSolicitacaoRequest(context) {
 	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
 		await context.sendText(context.state.apiaiTextAnswer);
-		if (context.state.apiaiResp.result.actionIncomplete === false) {
+		if (context.state.apiaiTextAnswer.includes('cancelado')) {
 			await sendMainMenu(context);	// if user cancels the request, send to mainMenu
 		}
 	} else if (!entities) {
@@ -117,7 +117,9 @@ async function handleSolicitacaoRequest(context) {
 	} else if (!entities.solicitacao) {
 		await context.setState({ dialog: 'solicitacoes' });
 	} else {
-		const idSolicitation = flow.solicitacoes.typeDic[entities.solicitacao]; data.idSolicitation = idSolicitation;
+		let idSolicitation = '';
+		// run through all entities until we find one that is a valid solicitation
+		entities.solicitacao.forEach((e) => { if (!idSolicitation) idSolicitation = flow.solicitacoes.typeDic[e]; }); data.idSolicitation = idSolicitation;
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
