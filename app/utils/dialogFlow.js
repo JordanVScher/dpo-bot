@@ -23,35 +23,10 @@ async function textRequestDF(text, sessionId) {
 	return responses;
 }
 
-
-async function checkPosition(context) {
-	await context.setState({ dialog: 'prompt' });
-	// lock user on this intent until he asks out with "sair"
-	if (context.state.onSolicitacoes === true) { await context.setState({ intentName: 'Solicitação' }); }
-	switch (context.state.intentName) {
-	case 'Solicitação': {
-		await context.setState({ onSolicitacoes: true });
-		const result = await handleSolicitacaoRequest(context);
-		await help.sentryError('Nova Solicitação', result, true);
-	}
-		break;
-	case 'Fallback': // didn't understand what was typed
-		await createIssue(context);
-		break;
-	default: // default acts for every intent - position on MA
-		// getting knowledge base. We send the complete answer from dialogflow
-		await context.setState({ knowledge: await MaAPI.getknowledgeBase(context.state.politicianData.user_id, context.state.apiaiResp, context.session.user.id) });
-		console.log('knowledge', context.state.knowledge);
-
-		// check if there's at least one answer in knowledge_base
-		if (context.state.knowledge && context.state.knowledge.knowledge_base && context.state.knowledge.knowledge_base.length >= 1) {
-			await sendAnswer(context);
-		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
-			await createIssue(context);
-		}
-		await sendMainMenu(context);
-		break;
-	}
+async function getExistingRes(res) {
+	let result = null;
+	res.forEach((e) => { if (e !== null && result === null) result = e; });
+	return result;
 }
 
 /**
@@ -72,6 +47,38 @@ async function getEntity(res) {
 	}
 
 	return result || {};
+}
+
+async function checkPosition(context) {
+	await context.setState({ dialog: 'prompt' });
+	// lock user on this intent until he asks out with "sair"
+	if (context.state.onSolicitacoes === true) { await context.setState({ intentName: 'Solicitação' }); }
+	switch (context.state.intentName) {
+	case 'Solicitação': {
+		await context.setState({ onSolicitacoes: true });
+		const result = await handleSolicitacaoRequest(context);
+		await help.sentryError('Nova Solicitação', result, true);
+	}
+		break;
+	case 'Fallback': // didn't understand what was typed
+		await createIssue(context);
+		break;
+	default: // default acts for every intent - position on MA
+		// getting knowledge base. We send the complete answer from dialogflow
+		await context.setState(
+			{ knowledge: await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.session.user.id) },
+		);
+		console.log('knowledge', context.state.knowledge);
+
+		// check if there's at least one answer in knowledge_base
+		if (context.state.knowledge && context.state.knowledge.knowledge_base && context.state.knowledge.knowledge_base.length >= 1) {
+			await sendAnswer(context);
+		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
+			await createIssue(context);
+		}
+		await sendMainMenu(context);
+		break;
+	}
 }
 
 async function dialogFlow(context) {
