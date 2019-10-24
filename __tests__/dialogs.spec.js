@@ -22,7 +22,7 @@ it('handleSolicitacaoRequest - with apiaiTextAnswer', async () => {
 it('handleSolicitacaoRequest - with apiaiTextAnswer - cancelado', async () => {
 	const context = cont.quickReplyContext();
 	context.state.apiaiResp = { result: { actionIncomplete: false } };
-	context.state.apiaiTextAnswer = 'foobar2';
+	context.state.apiaiTextAnswer = 'ok, está Cancelado.';
 
 	await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.setState).toBeCalledWith({ dialog: '' });
@@ -40,7 +40,7 @@ it('handleSolicitacaoRequest - no entites', async () => {
 
 it('handleSolicitacaoRequest - empty solicitacao entity', async () => {
 	const context = cont.quickReplyContext();
-	context.state.resultParameters = { solicitacao: '' };
+	context.state.resultParameters = { solicitacao: [] };
 
 	await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacoes' });
@@ -56,12 +56,12 @@ it('handleSolicitacaoRequest - no solicitacao entity', async () => {
 
 it('handleSolicitacaoRequest - error: solicitation not found', async () => {
 	const context = cont.quickReplyContext();
-	context.state.resultParameters = { solicitacao: 'foobar' };
+	context.state.resultParameters = { solicitacao: ['foobar'] };
 
 	const result = await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.sendText).toBeCalledWith(flow.solicitacoes.noSolicitationType);
 	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacoes' });
-	// await expect(context.setState).toBeCalledWith({ onSolicitacoes: false });
+
 	// await expect(context.sendText).toBeCalledWith(flow.mainMenu.text1, await checkQR.buildMainMenu(context));
 	await expect(result.idSolicitation).toBeFalsy(undefined);
 	await expect(result.userHas).toBeFalsy();
@@ -71,7 +71,7 @@ it('handleSolicitacaoRequest - error: solicitation not found', async () => {
 
 it('handleSolicitacaoRequest - Revogar new', async () => {
 	const context = cont.quickReplyContext();
-	context.state.resultParameters = { solicitacao: 'Revogar' };
+	context.state.resultParameters = { solicitacao: ['Revogar'] };
 	context.state.userTicketTypes = [2, 3];
 
 	const result = await dialogs.handleSolicitacaoRequest(context);
@@ -85,7 +85,7 @@ it('handleSolicitacaoRequest - Revogar cant be repeated ', async () => {
 	const context = cont.quickReplyContext();
 	context.state.userTicketTypes = [1];
 
-	context.state.resultParameters = { solicitacao: 'Revogar' };
+	context.state.resultParameters = { solicitacao: ['Revogar'] };
 	const result = await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.sendText).toBeCalledWith(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', 'Teste 1'));
 	await expect(context.sendText).toBeCalledWith(flow.mainMenu.text1, await checkQR.buildMainMenu(context));
@@ -96,12 +96,10 @@ it('handleSolicitacaoRequest - Revogar cant be repeated ', async () => {
 
 it('handleSolicitacaoRequest - Incidente new', async () => {
 	const context = cont.quickReplyContext();
-	context.state.resultParameters = { solicitacao: 'Incidente' };
+	context.state.resultParameters = { solicitacao: ['Incidente'] };
 	context.state.userTicketTypes = [2, 3];
 
 	const result = await dialogs.handleSolicitacaoRequest(context);
-	console.log(result);
-
 	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacao7', onSolicitacoes: false });
 	await expect(result.idSolicitation).toBe(7);
 	await expect(result.userHas).toBeFalsy();
@@ -110,12 +108,25 @@ it('handleSolicitacaoRequest - Incidente new', async () => {
 
 it('handleSolicitacaoRequest - Incidente can be repeated', async () => {
 	const context = cont.quickReplyContext();
-	context.state.resultParameters = { solicitacao: 'Incidente' };
+	context.state.resultParameters = { solicitacao: ['Incidente'] };
 	context.state.userTicketTypes = [2, 7];
 
 	const result = await dialogs.handleSolicitacaoRequest(context);
 	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacao7', onSolicitacoes: false });
 	await expect(result.idSolicitation).toBe(7);
 	await expect(result.userHas).toBeTruthy(); // !
+	await expect(result.ticket).toBeTruthy();
+});
+
+
+it('handleSolicitacaoRequest - two entities, uses the first one', async () => {
+	const context = cont.quickReplyContext();
+	context.state.resultParameters = { solicitacao: ['Revogar', 'Consulta'] };
+	context.state.userTicketTypes = [2, 3];
+
+	const result = await dialogs.handleSolicitacaoRequest(context);
+	await expect(context.setState).toBeCalledWith({ dialog: 'solicitacao1', onSolicitacoes: false });
+	await expect(result.idSolicitation).toBe(1);
+	await expect(result.userHas).toBeFalsy();
 	await expect(result.ticket).toBeTruthy();
 });

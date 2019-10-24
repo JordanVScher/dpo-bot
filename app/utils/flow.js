@@ -21,6 +21,7 @@ module.exports = {
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".\nO Número de protocolo do seu chamado é: <TICKET>.',
 	},
 	solicitacoes: {
+		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
 		waitQuestion: 'Legal! Me conta, o que você gostaria de saber?',
 		userHasOpenTicket: 'Você já tem uma solicitação de <TIPO_TICKET> em andamento. Você pode visualizar seus chamados na opção Meus Tickets.',

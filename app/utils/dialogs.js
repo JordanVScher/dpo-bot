@@ -12,8 +12,6 @@ async function sendMainMenu(context, text) {
 }
 
 async function createTicket(context, ticketID) {
-	console.log('ticketID', ticketID);
-
 	await context.sendText(flow.mainMenu.gerando);
 	if (ticketID && ticketID.id) {
 		await context.typing(1000 * 2.5);
@@ -111,12 +109,12 @@ async function consumidorMenu(context) {
 async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
-
 	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
 		await context.sendText(context.state.apiaiTextAnswer);
-		if (context.state.apiaiTextAnswer.includes('cancelado')) {
-			await sendMainMenu(context);	// if user cancels the request, send to mainMenu
+		// if user cancels the request, send to mainMenu (check if one of the built-in response texts contains our mapped keywords)
+		if (flow.solicitacoes.builtInSairResponse.some((x) => context.state.apiaiTextAnswer.toLowerCase().includes(x)))	{
+			await sendMainMenu(context);
 		}
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
