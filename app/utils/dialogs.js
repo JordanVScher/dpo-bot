@@ -109,6 +109,8 @@ async function consumidorMenu(context) {
 async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
+	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
+
 	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
 		await context.sendText(context.state.apiaiTextAnswer);
@@ -118,7 +120,7 @@ async function handleSolicitacaoRequest(context) {
 		}
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
-	} else if (!entities.solicitacao) {
+	} else if (!entities.solicitacao || entities.solicitacao.length === 0) {
 		await context.setState({ dialog: 'solicitacoes' });
 	} else {
 		let idSolicitation = '';
