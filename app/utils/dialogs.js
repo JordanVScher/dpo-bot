@@ -114,7 +114,7 @@ async function handleSolicitacaoRequest(context) {
 		await context.sendText(context.state.apiaiTextAnswer);
 		// if user cancels the request, send to mainMenu (check if one of the built-in response texts contains our mapped keywords)
 		if (flow.solicitacoes.builtInSairResponse.some((x) => context.state.apiaiTextAnswer.toLowerCase().includes(x)))	{
-			await sendMainMenu(context);
+			await context.setState({ dialog: 'mainMenu' });
 		}
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
