@@ -46,7 +46,7 @@ module.exports = {
 
 	async postIssue(politician_id, fb_id, message, entities = {}, issue_active) {
 		if (issue_active === 1 || issue_active === true) {
-			message = encodeURI(message);
+			// message = encodeURI(message);
 			entities = JSON.stringify(entities);
 			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?&security_token=${security_token}`).query({
 				politician_id,
@@ -60,7 +60,7 @@ module.exports = {
 
 	async postIssueWithoutEntities(politician_id, fb_id, message, issue_active) {
 		if (issue_active === 1 || issue_active === true) {
-			message = encodeURI(message);
+			// message = encodeURI(message);
 			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?politician_id=${politician_id}&fb_id=${fb_id}&message=${message}&security_token=${security_token}`));
 		}
 		return false;
