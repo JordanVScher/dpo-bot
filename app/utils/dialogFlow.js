@@ -95,5 +95,5 @@ async function dialogFlow(context) {
 }
 
 module.exports = {
-	checkPosition, dialogFlow,
+	checkPosition, dialogFlow, textRequestDF,
 };

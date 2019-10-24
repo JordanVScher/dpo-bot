@@ -31,6 +31,7 @@ module.exports = async (context) => {
 		await timer.deleteTimers(context.session.user.id);
 
 		if (context.event.isPostback) {
+			if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
 			await context.setState({ lastPBpayload: context.event.postback.payload, onSolicitacoes: false });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
@@ -47,7 +48,8 @@ module.exports = async (context) => {
 			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
-			await context.setState({ lastQRpayload: context.event.quickReply.payload });
+			// if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
+			await context.setState({ lastQRpayload: context.event.quickReply.payload, onSolicitacoes: false });
 			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
 			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
