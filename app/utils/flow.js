@@ -36,6 +36,10 @@ module.exports = {
 			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7,
 		},
 	},
+	solicitacaoVoltar: {
+		menuOptions: ['Voltar'],
+		menuPostback: ['mainMenu'],
+	},
 	files: {
 		wait: 'Aguarde um instante, estou processando os seus arquivos.',
 	},

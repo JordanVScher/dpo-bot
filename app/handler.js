@@ -32,7 +32,7 @@ module.exports = async (context) => {
 
 		if (context.event.isPostback) {
 			if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
-			await context.setState({ lastPBpayload: context.event.postback.payload, onSolicitacoes: false });
+			await context.setState({ lastPBpayload: context.event.postback.payload, onSolicitacoes: false, solicitacaoCounter: 0 });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
@@ -49,7 +49,7 @@ module.exports = async (context) => {
 				context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			// if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
-			await context.setState({ lastQRpayload: context.event.quickReply.payload, onSolicitacoes: false });
+			await context.setState({ lastQRpayload: context.event.quickReply.payload, onSolicitacoes: false, solicitacaoCounter: 0 });
 			if (context.state.lastQRpayload.slice(0, 4) === 'quiz') {
 			// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));

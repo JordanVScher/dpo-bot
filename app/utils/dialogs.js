@@ -106,16 +106,28 @@ async function consumidorMenu(context) {
 	}
 }
 
+async function checkSairMsg(message, keywords) {
+	if (message.includes('"Cancelar"')) return false;
+	if (keywords.some((x) => message.toLowerCase().includes(x))) return true;
+	return false;
+}
+
 async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
 	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
 
+	if (!context.state.solicitacaoCounter) { await context.setState({ solicitacaoCounter: 0 }); } // setting up or the first time
+	await context.setState({ solicitacaoCounter: context.state.solicitacaoCounter + 1 });
 	if (context.state.apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
-		await context.sendText(context.state.apiaiTextAnswer);
+		if (context.state.solicitacaoCounter >= 3) {
+			await context.sendText(context.state.apiaiTextAnswer, await attach.getQR(flow.solicitacaoVoltar));
+		} else {
+			await context.sendText(context.state.apiaiTextAnswer);
+		}
 		// if user cancels the request, send to mainMenu (check if one of the built-in response texts contains our mapped keywords)
-		if (flow.solicitacoes.builtInSairResponse.some((x) => context.state.apiaiTextAnswer.toLowerCase().includes(x)))	{
+		if (await checkSairMsg(context.state.apiaiTextAnswer, flow.solicitacoes.builtInSairResponse))	{
 			await context.setState({ dialog: 'mainMenu' });
 		}
 	} else if (!entities) {
@@ -129,6 +141,7 @@ async function handleSolicitacaoRequest(context) {
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
+			await context.setState({ solicitacaoCounter: 0 });
 			if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
 				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
 				await sendMainMenu(context);
