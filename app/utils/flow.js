@@ -66,7 +66,7 @@ module.exports = {
 	revogar: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
 		text2: 'Cuidamos dos seus dados com muito carinho e caso você queira consultar seus dados antes de revoga-los é só fazer uma solicitação de Consulta de dados.',
-		text3: 'Você gostaria de continuar a revogação?',
+		text3: 'Gostaria de continuar?',
 		CPFNext: 'askRevogarName',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['askRevogarCPF', 'revogacaoNao'],
