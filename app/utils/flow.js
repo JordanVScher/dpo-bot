@@ -40,6 +40,17 @@ module.exports = {
 		menuOptions: ['Voltar'],
 		menuPostback: ['mainMenu'],
 	},
+	confirmaSolicitacao: {
+		text1: 'Você tem certeza que deseja <TIPO>?',
+		typeDic: {
+			1: 'solicitar uma revogação',
+			2: 'solicitar uma consulta',
+			3: 'solicitar uma alteração',
+			7: 'reportar um incidente',
+		},
+		menuOptions: ['Sim', 'Não'],
+		menuPostback: [null, 'mainMenu'],
+	},
 	files: {
 		wait: 'Aguarde um instante, estou processando os seus arquivos.',
 	},

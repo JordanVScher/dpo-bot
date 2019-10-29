@@ -135,6 +135,9 @@ module.exports = async (context) => {
 			// await context.sendText(flow.solicitacoes.text1);
 			// await dialogs.solicitacoesMenu(context);
 			break;
+		case 'confirmaSolicitacao':
+			await dialogs.confirmaSolicitacao(context);
+			break;
 		case 'consumidor':
 			await dialogs.consumidorMenu(context);
 			break;

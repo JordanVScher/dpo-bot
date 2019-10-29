@@ -141,12 +141,13 @@ async function handleSolicitacaoRequest(context) {
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
+			ticket.name = ticket.name.toLowerCase();
 			await context.setState({ solicitacaoCounter: 0 });
 			if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
 				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
 				await sendMainMenu(context);
 			} else { // no open ticket, send user to the proper solicitation flow
-				await context.setState({ dialog: `solicitacao${idSolicitation}`, onSolicitacoes: false });
+				await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
 			}
 		} else { // DF found an entity but we dont have it in our dictionary, ask again
 			await context.sendText(flow.solicitacoes.noSolicitationType);
@@ -155,6 +156,13 @@ async function handleSolicitacaoRequest(context) {
 	}
 
 	return data;
+}
+
+async function confirmaSolicitacao(context) {
+	const QR = JSON.parse(JSON.stringify(flow.confirmaSolicitacao));
+	QR.menuPostback[0] = `solicitacao${context.state.idSolicitation}`;
+	const text = flow.confirmaSolicitacao.text1.replace('<TIPO>', flow.confirmaSolicitacao.typeDic[context.state.idSolicitation]);
+	await context.sendText(text, await attach.getQR(QR));
 }
 
 async function cancelTicket(context) {
@@ -216,4 +224,5 @@ module.exports = {
 	handleFiles,
 	handleSolicitacaoRequest,
 	consumidorMenu,
+	confirmaSolicitacao,
 };
