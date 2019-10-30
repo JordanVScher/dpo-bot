@@ -177,7 +177,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.consultar.consultarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
 		case 'consultarTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
 			break;
 		case 'consultarEmail':
 			await context.sendText(flow.consultar.askMail);
@@ -191,7 +191,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.alterar.alterarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
 		case 'alterarTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
 			break;
 		case 'alterarEmail':
 			await context.sendText(flow.alterar.askMail);
@@ -237,7 +237,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.faleConosco.faleConoscoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
 		case 'faleConoscoTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
 			break;
 		case 'faleConoscoEmail':
 			await context.sendText(flow.faleConosco.askMail);
@@ -254,7 +254,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.atendimento.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
 		case 'atendimentoTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.dadosCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
 			break;
 		case 'atendimentoEmail':
 			await context.sendText(flow.atendimento.askMail);
