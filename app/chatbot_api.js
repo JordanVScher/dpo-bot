@@ -114,7 +114,7 @@ module.exports = {
 		if (files) files.forEach((e, i) => { aux[`ticket_attachment_${i}`] = e; });
 
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/ticket?security_token=${security_token}`).query({
-			chatbot_id, fb_id, type_id, message, data, anonymous, ...aux,
+			chatbot_id, fb_id, type_id, message, data: JSON.stringify(data), anonymous, ...aux,
 		}));
 	},
 
