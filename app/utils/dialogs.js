@@ -6,7 +6,7 @@ const help = require('./helper');
 // const { createFilesTimer } = require('./timer');
 
 async function sendMainMenu(context, text) {
-	const textToSend = text || flow.mainMenu.text1;
+	const textToSend = text || help.getRandomArray(flow.mainMenu.text1);
 	await context.setState({ onSolicitacoes: false });
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }

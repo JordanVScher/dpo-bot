@@ -55,6 +55,8 @@ module.exports = async (context) => {
 				await quiz.handleAnswer(context, context.state.lastQRpayload.charAt(4));
 			} else if (context.state.lastQRpayload.slice(0, 13) === 'extraQuestion') {
 				await quiz.answerExtraQuestion(context);
+			} else if (context.state.lastQRpayload.slice(0, 7) === 'InfoRes') {
+				await context.setState({ dialog: 'infoRes', infoChoice: context.state.lastQRpayload.replace('InfoRes', '') });
 			} else {
 				await context.setState({ dialog: context.state.lastQRpayload });
 			}
@@ -265,6 +267,7 @@ module.exports = async (context) => {
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
+			await context.sendVideo(flow.sobreLGPD.videoLink);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreDipiou':
@@ -297,9 +300,22 @@ module.exports = async (context) => {
 		case 'startQuiz':
 			await quiz.answerQuiz(context);
 			break;
-		case 'informacoes':
-			await context.sendText(flow.informacoes.text1);
-			await timer.createInformacoesTimer(context.session.user.id, context);
+		case 'informacoes': {
+			const buttons = await DF.buildInformacoesMenu(context);
+			if (buttons) {
+				await context.sendText(flow.informacoes.text1, buttons);
+			} else {
+				await context.sendText(flow.informacoes.text2, buttons);
+				await timer.createInformacoesTimer(context.session.user.id, context);
+			} }
+			break;
+		case 'infoRes': {
+			const answer = context.state.infoRes[context.state.infoChoice];
+			if (answer) {
+				await help.sendTextAnswer(context, answer);
+				await help.sendAttachment(context, answer);
+			}
+			await dialogs.sendMainMenu(context); }
 			break;
 		case 'testeAtendimento':
 			await context.sendText(flow.solicitacoes.text1, await attach.getQR(flow.solicitacoes));

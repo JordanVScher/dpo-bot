@@ -94,6 +94,30 @@ async function dialogFlow(context) {
 	}
 }
 
+async function buildInformacoesMenu(context) {
+	const options = [];
+	const answer = [];
+	const intents = [
+		{ df: 'O que é coleta de dados?', btn: 'Coleta de Dados' },
+		{ df: 'O que é abrangencia da lei?', btn: ' Abrangência da Lei' },
+		{ df: 'O que é DPO', btn: 'O que é DPO' },
+	];
+
+	for (let i = 0; i < intents.length; i++) {
+		const e = intents[i];
+		let aux = await textRequestDF(e.df, context.session.user.id);
+		aux = await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(aux), context.session.user.id);
+
+		if (aux && aux.knowledge_base && aux.knowledge_base.length > 0) {
+			options.push({ content_type: 'text', title: e.btn, payload: `InfoRes${answer.length}` });
+			answer.push(aux.knowledge_base[0]);
+		}
+	}
+
+	await context.setState({ infoRes: answer });
+	return options.length > 0 ? { quick_replies: options } : false;
+}
+
 module.exports = {
-	checkPosition, dialogFlow, textRequestDF,
+	checkPosition, dialogFlow, textRequestDF, getExistingRes, buildInformacoesMenu,
 };

@@ -15,7 +15,7 @@ module.exports = {
 		text2: 'Sou o assistente digital e estou aqui para te ajudar sobre a Lei Geral de Proteção de Dados (LGPD) 🤓',
 	},
 	mainMenu: {
-		text1: 'Ajudo em algo mais?',
+		text1: ['Ajudo em algo mais?', 'Como posso te ajudar?', 'Em que posso ser útil?'],
 		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 		gerando: 'Gerando seu ticket...',
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".\nO Número de protocolo do seu chamado é: <TICKET>.',
@@ -65,8 +65,8 @@ module.exports = {
 	},
 	revogar: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
-		text2: 'Cuidamos dos seus dados com muito carinho e caso você queira consultar seus dados antes de revoga-los é só fazer uma solicitação de Consulta de dados.',
-		text3: 'Gostaria de continuar?',
+		text2: 'Lembre-se, cuidamos dos seus dados com muito carinho. Caso você queira consultar seus dados antes de revogar o seu consentimento é só fazer uma solicitação de Consulta de dados.',
+		text3: 'Gostaria de continuar com a revogação?',
 		CPFNext: 'askRevogarName',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: ['askRevogarCPF', 'revogacaoNao'],
@@ -129,13 +129,17 @@ module.exports = {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
 
 A legislação se fundamenta em diversos valores, como o respeito à privacidade; à autodeterminação informativa; à liberdade de expressão, de informação, de comunicação e de opinião; à inviolabilidade da intimidade, da honra e da imagem; ao desenvolvimento econômico e tecnológico e a inovação; à livre iniciativa, livre concorrência e defesa do consumidor e aos direitos humanos liberdade e dignidade das pessoas. `,
+		videoLink: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/files/d3f121c6-ac3e-4881-a484-9fa33c272bd0/y2mate.com_patricia_peck_fala_sobre_protecao_dos_dados_pessoais_duLAb_PQuMw_360p.mp4',
 	},
 	sobreDipiou: {
-		text1: 'Sou um chatbot, um robô conversacional, para harmozinar sua comunição com as empresas, sempre pensando em valorizar a sua privacidade.',
+		text1: 'Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua comunição com as empresas, sempre pensando em valorizar a sua privacidade.',
 	},
 	issueText: {
-		success: 'Você me pegou. Preciso pensar e te retorno em breve.',
-		failure: 'Não consegui salvar a mensagem',
+		success: ['Você me pegou. Preciso pensar e te retorno em breve.',
+			'Não te entendi mas pesquisarei e logo te trarei a resposta.',
+			'Não captei a mensagem mas logo um humano vai te responder.',
+		],
+		failure: 'Não te entendi, tente novamente.',
 	},
 	titularNao: {
 		text1: 'Nesse caso, não será possível continuar com a operação.',
@@ -167,7 +171,8 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		menuPostback: ['meuTicket'],
 	},
 	informacoes: {
-		text1: 'Digite sua mensagem que vamos te responder o quanto antes.',
+		text1: 'Você pode escolher um dos assuntos abaixo ou me fazer uma pergunta ;)',
+		text2: 'Digite sua mensagem que vamos te responder o quanto antes.',
 		textWait: 'Tudo bem, qualquer dúvida é só mandar.',
 		time: 1000 * 20,
 	},

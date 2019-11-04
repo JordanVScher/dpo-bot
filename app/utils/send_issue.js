@@ -1,6 +1,7 @@
 const accents = require('remove-accents');
 const chatbotAPI = require('../chatbot_api.js');
 const { issueText } = require('./flow.js');
+const { getRandomArray } = require('./helper.js');
 
 const blacklist = ['sim', 'nao'];
 
@@ -22,7 +23,7 @@ async function createIssue(context) {
 			context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 
 		if (issueResponse && issueResponse.id) {
-			await context.sendText(issueText.success);
+			await context.sendText(getRandomArray(issueText.success));
 			console.log('created issue? true');
 			return true;
 		}

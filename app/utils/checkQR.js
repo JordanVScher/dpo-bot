@@ -39,7 +39,7 @@ async function buildMainMenu(context) {
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
 
-	options.push({ content_type: 'text', title: 'Sobre LGPD️', payload: 'sobreLGPD' });
+	options.push({ content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
 

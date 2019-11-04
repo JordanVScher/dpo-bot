@@ -32,6 +32,31 @@ async function separateString(someString) {
 	return { firstString, secondString };
 }
 
+async function sendTextAnswer(context, knowledge) {
+	if (knowledge && knowledge.answer) {
+		await context.setState({ resultTexts: await separateString(knowledge.answer) });
+		if (context.state.resultTexts && context.state.resultTexts.firstString) {
+			await context.sendText(context.state.resultTexts.firstString);
+			if (context.state.resultTexts.secondString) {
+				await context.sendText(context.state.resultTexts.secondString);
+			}
+		}
+	}
+}
+
+async function sendAttachment(context, knowledge) {
+	if (knowledge.saved_attachment_type === 'image') { // if attachment is image
+		await context.sendImage({ attachment_id: knowledge.saved_attachment_id });
+	}
+	if (knowledge.saved_attachment_type === 'video') { // if attachment is video
+		await context.sendVideo({ attachment_id: knowledge.saved_attachment_id });
+	}
+	if (knowledge.saved_attachment_type === 'audio') { // if attachment is audio
+		await context.sendAudio({ attachment_id: knowledge.saved_attachment_id });
+	}
+}
+
+
 async function formatDialogFlow(text) {
 	let result = text.toLowerCase();
 	result = await result.replace(/([\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2580-\u27BF]|\uD83E[\uDD10-\uDDFF])/g, '');
@@ -46,7 +71,7 @@ async function buildTicket(state) {
 	const result = {};
 	if (state.titularNome) { result.titularNome = state.titularNome;	}
 	if (state.titularCPF) { result.cpf = state.titularCPF;	}
-	if (state.titularPhone) { result.telefone = state.titularPhone;	}
+	// if (state.titularPhone) { result.telefone = state.titularPhone;	}
 	if (state.titularMail) { result.mail = state.titularMail;	}
 
 	return result;
@@ -95,7 +120,7 @@ async function handleErrorApi(options, res, err) {
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack}`;
 
-	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
 		if (process.env.ENV !== 'local') {
@@ -116,6 +141,10 @@ async function handleRequestAnswer(response) {
 	}
 }
 
+function getRandomArray(array) {
+	return array[Math.floor((Math.random() * array.length))];
+}
+
 module.exports = {
 	Sentry,
 	moment,
@@ -127,4 +156,7 @@ module.exports = {
 	getUserTicketTypes,
 	handleRequestAnswer,
 	sentryError,
+	getRandomArray,
+	sendTextAnswer,
+	sendAttachment,
 };
