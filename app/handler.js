@@ -17,7 +17,7 @@ module.exports = async (context) => {
 		// let user = await getUser(context)
 		// we reload politicianData on every useful event
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
-		// console.log(context.state.politicianData);
+		// console.log(context.state.ticketTypes);
 
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
@@ -57,6 +57,9 @@ module.exports = async (context) => {
 				await quiz.answerExtraQuestion(context);
 			} else if (context.state.lastQRpayload.slice(0, 7) === 'InfoRes') {
 				await context.setState({ dialog: 'infoRes', infoChoice: context.state.lastQRpayload.replace('InfoRes', '') });
+			} else if (context.state.lastQRpayload.slice(0, 9) === 'leaveTMsg') {
+				await context.setState({ dialog: 'leaveTMsg', ticketID: context.state.lastQRpayload.replace('leaveTMsg', '') });
+				await context.sendText(flow.leaveTMsg.text1, await attach.getQR(flow.leaveTMsg));
 			} else {
 				await context.setState({ dialog: context.state.lastQRpayload });
 			}
@@ -97,10 +100,15 @@ module.exports = async (context) => {
 			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
-			} else if (['incidenteAskPDF', 'incidenteCPF', 'createFilesTimer'].includes(context.state.dialog)) {
+			} else if (['incidenteAskPDF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
+				// -- 8
+			} else if (['avançadoAskPDF', 'avançadoCPF', 'avançadoFilesTimer'].includes(context.state.dialog)) {
+				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'avançadoTitular', 'avançadoCPF');
+			} else if (['avançadoEmail', 'avançadoEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket8', 'avançadoEmailReAsk');
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -117,8 +125,10 @@ module.exports = async (context) => {
 				await DF.dialogFlow(context);
 			}
 		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
-			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'createFilesTimer'].includes(context.state.dialog)) {
-				await dialogs.handleFiles(context, 'createFilesTimer');
+			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'incidenteFilesTimer'].includes(context.state.dialog)) {
+				await dialogs.handleFiles(context, 'incidenteFilesTimer');
+			} else if (['avançadoAskFile', 'avançadoM', 'avançadoA', 'avançadoFilesTimer'].includes(context.state.dialog)) {
+				await dialogs.handleFiles(context, 'avançadoFilesTimer');
 			}
 		}
 		switch (context.state.dialog) {
@@ -202,38 +212,6 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
 			break;
-		case 'solicitacao7': // 'incidente'
-			await context.setState({ incidenteAnonimo: false, titularFiles: [] });
-			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
-			await context.sendText(flow.incidente.intro, await attach.getQR(flow.incidente));
-			break;
-		case 'incidenteA':
-			await context.setState({ incidenteAnonimo: true });
-			// falls throught
-		case 'incidenteI':
-		case 'incidenteAskFile':
-			await context.setState({ titularFiles: [] }); // clean any past files
-			await context.sendText(flow.incidente.askFile);
-			break;
-		// case 'incidenteAskPDF': -- not used, happens on filesTimer
-		// 	await context.sendText(flow.incidente.incidenteCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-		// 	break;
-		case 'incidenteTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', incidenteCPFAux[context.session.user.id]), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
-			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] }); // passing memory data to state
-			delete incidenteCPFAux[context.session.user.id];
-			break;
-		case 'incidenteEmail':
-			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
-			break;
-			// case 'gerarTicketAnomino7': -- not used, happens on filesTimer
-			// await dialogs.createTicket(context,
-			// await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
-			// break;
-		case 'gerarTicket7':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
-			break;
 		case 'solicitacao5': // 'fale conosco'
 			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
 			await context.sendText(flow.faleConosco.faleConoscoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
@@ -264,6 +242,54 @@ module.exports = async (context) => {
 		case 'gerarTicket6':
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 6, await help.buildTicket(context.state)));
+			break;
+		case 'solicitacao7': // 'incidente'
+			await context.setState({ incidenteAnonimo: false, titularFiles: [], fileTimerType: 7 });
+			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
+			await context.sendText(flow.incidente.intro, await attach.getQR(flow.incidente));
+			break;
+		case 'incidenteA':
+			await context.setState({ incidenteAnonimo: true });
+			// falls throught
+		case 'incidenteI':
+		case 'incidenteAskFile':
+			await context.setState({ titularFiles: [] }); // clean any past files
+			await context.sendText(flow.incidente.askFile);
+			break;
+		case 'incidenteTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', incidenteCPFAux[context.session.user.id]), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
+			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] }); // passing memory data to state
+			delete incidenteCPFAux[context.session.user.id];
+			break;
+		case 'incidenteEmail':
+			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
+			break;
+		case 'gerarTicket7':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
+			break;
+		case 'solicitacao8': // 'atendimento avançado'
+			await context.setState({ titularFiles: [], fileTimerType: 8 });
+			await attach.sendMsgFromAssistente(context, 'ticket_type_8', []);
+			await context.sendText(flow.avançado.intro, await attach.getQR(flow.avançado));
+			break;
+		case 'avançadoM':
+		case 'avançadoA':
+		case 'AvançadoAskFile':
+			await context.setState({ titularFiles: [] }); // clean any past files
+			await context.sendText(flow.avançado.askFile);
+			break;
+		case 'avançadoTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', incidenteCPFAux[context.session.user.id]), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
+			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] }); // passing memory data to state
+			delete incidenteCPFAux[context.session.user.id];
+			break;
+		case 'avançadoEmail':
+			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
+			break;
+		case 'gerarTicket8':
+			await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 8, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
@@ -332,6 +358,8 @@ module.exports = async (context) => {
 			await context.sendText(flow.notifications.off);
 			await dialogs.sendMainMenu(context);
 			break;
+		case 'incidenteFilesTimer':
+		case 'avançadoFilesTimer':
 		case 'createFilesTimer':
 			await timer.createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
 			break;

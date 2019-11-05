@@ -41,6 +41,7 @@ async function buildMainMenu(context) {
 
 	options.push({ content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
+	// options.push({ content_type: 'text', title: 'Atendimento Avançado', payload: 'solicitacao8' });
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
 
 	return { quick_replies: options };

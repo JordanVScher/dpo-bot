@@ -20,13 +20,15 @@ async function createFilesTimer(userID, context) {
 	if (filesTimer[userID]) { clearTimeout(filesTimer[userID]); delete filesTimer[userID]; }
 
 	filesTimer[userID] = setTimeout(async () => {
-		if (context.state.dialog === 'createFilesTimer') {
+		if (context.state.dialog === 'incidenteFilesTimer') {
 			if (context.state.incidenteAnonimo === true) {
 				await createTicket(context,
 					await postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
 			} else {
 				await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.askCPF));
 			}
+		} else if (context.state.dialog === 'avançadoFilesTimer') {
+			await context.sendText(flow.avançado.incidenteCPF, await getQR(flow.askCPF));
 		}
 		delete filesTimer[userID];
 	}, flow.incidente.time); // waiting for facebook to process all the files
