@@ -110,17 +110,26 @@ module.exports = {
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
-	avançado: {
-		intro: 'Você pode reportar o incidente de com uma mídia ou como ANPD. Como prefere?',
-		askFile: 'Como preferir, agora, suba o arquivo nessa conversa e me envie.',
-		incidenteCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para reportar o incidente.',
-		time: 1000 * 20,
-		CPFNext: 'avançadoEmail',
+	atendimentoAvançado: {
+		intro: 'Você pode entrar em contato como Mídia ou como ANPD. Como prefere?',
+		menuOptions: ['Mídia', 'ANPD'],
+		menuPostback: ['solicitacao9', 'solicitacao10'],
+		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
+		CPFNext: 'avançadoMEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
-		menuOptions: ['Mídia', 'ANPD'],
-		menuPostback: ['avançadoM', 'avançadoA'],
-
+	},
+	avançadoMidia: {
+		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
+		CPFNext: 'avançadoMEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
+	avançadoANDP: {
+		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
+		CPFNext: 'avançadoAEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
 	faleConosco: {
 		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
