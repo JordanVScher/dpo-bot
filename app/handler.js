@@ -162,13 +162,13 @@ module.exports = async (context) => {
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
 		case 'askRevogarName':
-			await context.sendText(flow.revogar.askRevogarName);
+			await context.sendText(flow.revogar.askRevogarName, await attach.getQR(flow.askCPF));
 			break;
 		case 'askRevogarPhone':
-			await context.sendText(flow.revogar.askRevogarPhone);
+			await context.sendText(flow.revogar.askRevogarPhone, await attach.getQR(flow.askCPF));
 			break;
 		case 'askRevogarMail':
-			await context.sendText(flow.revogar.askRevogarMail);
+			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket1':
 			await dialogs.createTicket(context,
@@ -182,7 +182,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
 			break;
 		case 'consultarEmail':
-			await context.sendText(flow.consultar.askMail);
+			await context.sendText(flow.consultar.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket2':
 			await dialogs.createTicket(context,
@@ -196,7 +196,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
 			break;
 		case 'alterarEmail':
-			await context.sendText(flow.alterar.askMail);
+			await context.sendText(flow.alterar.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket3':
 			await dialogs.createTicket(context,
@@ -224,7 +224,7 @@ module.exports = async (context) => {
 			delete incidenteCPFAux[context.session.user.id];
 			break;
 		case 'incidenteEmail':
-			await context.sendText(flow.incidente.askMail);
+			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
 			break;
 			// case 'gerarTicketAnomino7': -- not used, happens on filesTimer
 			// await dialogs.createTicket(context,
@@ -242,7 +242,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
 			break;
 		case 'faleConoscoEmail':
-			await context.sendText(flow.faleConosco.askMail);
+			await context.sendText(flow.faleConosco.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket5':
 			await dialogs.createTicket(context,
@@ -259,7 +259,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
 			break;
 		case 'atendimentoEmail':
-			await context.sendText(flow.atendimento.askMail);
+			await context.sendText(flow.atendimento.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket6':
 			await dialogs.createTicket(context,
