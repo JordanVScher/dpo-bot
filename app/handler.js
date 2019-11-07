@@ -105,6 +105,11 @@ module.exports = async (context) => {
 				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
+				// -- 8
+			} else if (['solicitacao3', 'portabilidadeCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'portabilidadeTitular', 'portabilidadeCPF');
+			} else if (['portabilidadeEmail', 'portabilidadeEmailReAsk'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket8', 'portabilidadeEmailReAsk');
 				// -- 9
 			} else if (['solicitacao9', 'avançadoMAskCPF', 'avançadoMCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'avançadoMTitular', 'avançadoMCPF');
