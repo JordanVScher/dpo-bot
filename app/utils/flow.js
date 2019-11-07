@@ -27,13 +27,13 @@ module.exports = {
 		userHasOpenTicket: 'Você já tem uma solicitação de <TIPO_TICKET> em andamento. Você pode visualizar seus chamados na opção Meus Tickets.',
 		noSolicitationType: 'Ops, não entendi que tipo de solicitação você deseja. Por favor me informe algo como "Consultar dados" ou "Alterar dados", por exemplo.',
 		// add the new type of ticket to the array below to properly include it on the menu
-		activeSolicitations: [1, 2, 3, 5, 6, 7],
+		activeSolicitations: [1, 2, 3, 5, 6, 7, 8],
 		// fixed menu, for testing only
 		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Fale com DPO', 'Incidente'],
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao6', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
-			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7,
+			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7, Portabilidade: 8,
 		},
 	},
 	solicitacaoVoltar: {
