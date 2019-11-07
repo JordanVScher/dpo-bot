@@ -194,7 +194,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	},
 	leaveTMsg: {
 		text1: 'Digite sua mensagem!',
-		cancelSuccess: 'Conseguimos salvar sua mensagem.',
+		cancelSuccess: 'Salvamos sua mensagem com sucesso.',
 		cancelFailure: 'Houve um erro na hora de salvar sua mensagem. Tente novamente.',
 		menuOptions: ['Voltar'],
 		menuPostback: ['meuTicket'],
