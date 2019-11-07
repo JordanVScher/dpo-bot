@@ -276,15 +276,15 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
 			break;
-		case 'solicitacao8': // 'Portabilidade'
-		case 'PortabilidadeAskCPF':
-			await context.sendText(flow.Portabilidade.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
+		case 'solicitacao8': // 'portabilidade'
+		case 'portabilidadeAskCPF':
+			await context.sendText(flow.portabilidade.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
-		case 'PortabilidadeTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.Portabilidade.CPFNext));
+		case 'portabilidadeTitular':
+			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.portabilidade.CPFNext));
 			break;
-		case 'PortabilidadeEmail':
-			await context.sendText(flow.Portabilidade.askMail, await attach.getQR(flow.askCPF));
+		case 'portabilidadeEmail':
+			await context.sendText(flow.portabilidade.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket8':
 			await dialogs.createTicket(context,

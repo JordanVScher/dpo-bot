@@ -101,6 +101,12 @@ module.exports = {
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
+	portabilidade: {
+		alterarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para alterar ou apagar seus dados.',
+		CPFNext: 'alterarEmail',
+		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMailFail: 'E-mail inválido! Tente Novamente',
+	},
 	incidente: {
 		intro: 'Você pode reportar o incidente de forma anônima ou se indentificar. Como prefere?',
 		menuOptions: ['Identificado', 'Anônimo'],
