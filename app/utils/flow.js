@@ -33,12 +33,8 @@ module.exports = {
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao6', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
-			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7, Portabilidade: 8,
+			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7, Portabilidade: 8, // ADD TEXT TO typeDic on confirmaSolicitacao
 		},
-	},
-	solicitacaoVoltar: {
-		menuOptions: ['Voltar'],
-		menuPostback: ['mainMenu'],
 	},
 	confirmaSolicitacao: {
 		text1: 'Você tem certeza que deseja <TIPO>?',
@@ -47,9 +43,15 @@ module.exports = {
 			2: 'solicitar uma consulta',
 			3: 'solicitar uma alteração',
 			7: 'reportar um incidente',
+			8: 'abrir uma solicitação de portabilidade',
 		},
+		default: 'abrir uma nova solicitação',
 		menuOptions: ['Sim', 'Não'],
 		menuPostback: [null, 'mainMenu'],
+	},
+	solicitacaoVoltar: {
+		menuOptions: ['Voltar'],
+		menuPostback: ['mainMenu'],
 	},
 	files: {
 		wait: 'Aguarde um instante, estou processando os seus arquivos.',

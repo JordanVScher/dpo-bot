@@ -161,7 +161,7 @@ async function handleSolicitacaoRequest(context) {
 async function confirmaSolicitacao(context) {
 	const QR = JSON.parse(JSON.stringify(flow.confirmaSolicitacao));
 	QR.menuPostback[0] = `solicitacao${context.state.idSolicitation}`;
-	const text = flow.confirmaSolicitacao.text1.replace('<TIPO>', flow.confirmaSolicitacao.typeDic[context.state.idSolicitation]);
+	const text = flow.confirmaSolicitacao.text1.replace('<TIPO>', flow.confirmaSolicitacao.typeDic[context.state.idSolicitation] || flow.confirmaSolicitacao.default);
 	await context.sendText(text, await attach.getQR(QR));
 }
 
