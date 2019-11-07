@@ -278,7 +278,7 @@ module.exports = async (context) => {
 			break;
 		case 'solicitacao8': // 'portabilidade'
 		case 'portabilidadeAskCPF':
-			await context.sendText(flow.portabilidade.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
+			await context.sendText(flow.portabilidade.alterarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
 			break;
 		case 'portabilidadeTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.portabilidade.CPFNext));
