@@ -29,8 +29,8 @@ module.exports = {
 		// add the new type of ticket to the array below to properly include it on the menu
 		activeSolicitations: [1, 2, 3, 5, 6, 7, 8],
 		// fixed menu, for testing only
-		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Fale com DPO', 'Incidente'],
-		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao6', 'solicitacao7'],
+		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Incidente'],
+		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
 			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7, Portabilidade: 8, // ADD TEXT TO typeDic on confirmaSolicitacao
@@ -119,9 +119,10 @@ module.exports = {
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
 	atendimentoAvançado: {
-		intro: 'Você pode entrar em contato como Mídia ou como ANPD. Como prefere?',
-		menuOptions: ['Mídia', 'ANPD'],
-		menuPostback: ['solicitacao9', 'solicitacao10'],
+		intro1: 'Essa área é destinada para Autoridade e para Mídia. Vou pedir alguns dados de identificação para solicitar que o nosso DPO entre em contato com você.',
+		intro2: 'Você é da Mídia ou uma Autoridade nacional de proteção de dados? Mas caso você seja um titular de dados, vá em consumidor, que consigo te atender melhor ;)',
+		menuOptions: ['Mídia', 'ANPD', 'Voltar'],
+		menuPostback: ['solicitacao9', 'solicitacao10', 'mainMenu'],
 		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
 		CPFNext: 'avançadoMEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
@@ -145,15 +146,15 @@ module.exports = {
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
-	atendimento: {
-		intro: 'Essa é uma solicitação apenas para autoridade e avisando que se for midia ou titular, deve ir para o Fale conosco. Tudo bem?',
-		menuOptions: ['Continuar', 'Voltar'],
-		menuPostback: ['atendimentoAskCPF', 'mainMenu'],
-		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-		CPFNext: 'atendimentoEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
-	},
+	// atendimento: { // Fale com DPO - solicitacao6
+	// 	intro: 'Essa é uma solicitação apenas para autoridade e avisando que se for midia ou titular, deve ir para o Fale conosco. Tudo bem?',
+	// 	menuOptions: ['Continuar', 'Voltar'],
+	// 	menuPostback: ['atendimentoAskCPF', 'mainMenu'],
+	// 	atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
+	// 	CPFNext: 'atendimentoEmail',
+	// 	askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+	// 	askMailFail: 'E-mail inválido! Tente Novamente',
+	// },
 	sobreLGPD: {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
 

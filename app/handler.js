@@ -96,10 +96,10 @@ module.exports = async (context) => {
 			} else if (['faleConoscoEmail', 'faleConoscoEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket5', 'faleConoscoEmailReAsk');
 				// -- 6
-			} else if (['solicitacao6', 'atendimentoAskCPF', 'atendimentoCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'atendimentoTitular', 'atendimentoCPF');
-			} else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
+				// } else if (['solicitacao6', 'atendimentoAskCPF', 'atendimentoCPF'].includes(context.state.dialog)) {
+				// 	await dialogs.checkCPF(context, 'titularCPF', 'atendimentoTitular', 'atendimentoCPF');
+				// } else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
+				// 	await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
 			} else if (['incidenteAskPDF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
@@ -239,23 +239,23 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 5, await help.buildTicket(context.state)));
 			break;
-		case 'solicitacao6': // 'atendimento'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_6', []);
-			await context.sendText(flow.atendimento.intro, await attach.getQR(flow.atendimento));
-			break;
-		case 'atendimentoAskCPF':
-			await context.sendText(flow.atendimento.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'atendimentoTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
-			break;
-		case 'atendimentoEmail':
-			await context.sendText(flow.atendimento.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket6':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 6, await help.buildTicket(context.state)));
-			break;
+		// case 'solicitacao6': // 'atendimento' - fale com dpo
+		// 	await attach.sendMsgFromAssistente(context, 'ticket_type_6', []);
+		// 	await context.sendText(flow.atendimento.intro, await attach.getQR(flow.atendimento));
+		// 	break;
+		// case 'atendimentoAskCPF':
+		// 	await context.sendText(flow.atendimento.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
+		// 	break;
+		// case 'atendimentoTitular':
+		// 	await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
+		// 	break;
+		// case 'atendimentoEmail':
+		// 	await context.sendText(flow.atendimento.askMail, await attach.getQR(flow.askCPF));
+		// 	break;
+		// case 'gerarTicket6':
+		// 	await dialogs.createTicket(context,
+		// 		await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 6, await help.buildTicket(context.state)));
+		// 	break;
 		case 'solicitacao7': // 'incidente'
 			await context.setState({ incidenteAnonimo: false, titularFiles: [], fileTimerType: 7 });
 			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
@@ -296,7 +296,8 @@ module.exports = async (context) => {
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 8, await help.buildTicket(context.state)));
 			break;
 		case 'atendimentoAvançado':
-			await context.sendText(flow.atendimentoAvançado.intro, await attach.getQR(flow.atendimentoAvançado));
+			await context.sendText(flow.atendimentoAvançado.intro1);
+			await context.sendText(flow.atendimentoAvançado.intro2, await attach.getQR(flow.atendimentoAvançado));
 			break;
 		case 'solicitacao9': // 'Avançado Mídia'
 		case 'avançadoMAskCPF':

@@ -20,9 +20,9 @@ async function buildConsumidorMenu(context) {
 		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.id === 5);
 		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
 
-		const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.id === 6) || {};
-		getFaleDPO.name = 'Fale com DPO';
-		if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
+		// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.id === 6) || {};
+		// getFaleDPO.name = 'Fale com DPO';
+		// if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
 	}
 
 	return { quick_replies: options };

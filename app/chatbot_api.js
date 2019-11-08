@@ -68,11 +68,15 @@ module.exports = {
 
 	async getknowledgeBase(politician_id, entities, fb_id) {
 		entities = JSON.stringify(entities);
-		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/knowledge-base?politician_id=${politician_id}&entities=${entities}&fb_id=${fb_id}&security_token=${security_token}`));
+		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/knowledge-base?`).query({
+			politician_id, entities, fb_id, security_token,
+		}));
 	},
 
-	async getknowledgeBaseByName(politician_id, entities) {
-		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/knowledge-base?politician_id=${politician_id}&entities=${entities}&security_token=${security_token}`));
+	async getknowledgeBaseByName(politician_id, intentName, fb_id) {
+		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/knowledge-base?`).query({
+			politician_id, entities: intentName, security_token, fb_id,
+		}));
 	},
 
 	async postPrivateReply(item, page_id, post_id, comment_id, permalink, user_id) {

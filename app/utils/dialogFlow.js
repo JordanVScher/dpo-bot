@@ -98,16 +98,15 @@ async function buildInformacoesMenu(context) {
 	const options = [];
 	const answer = [];
 	const intents = [
-		{ df: 'O que é coleta de dados?', btn: 'Coleta de Dados' },
-		{ df: 'O que é abrangencia da lei?', btn: ' Abrangência da Lei' },
-		{ df: 'O que é DPO', btn: 'O que é DPO' },
+		{ intent: 'Sobre DPO', btn: 'O que é DPO' },
+		{ intent: 'Sobre abrangência da lei', btn: ' Abrangência da Lei' },
+		{ intent: 'Sobre a vigência da lei', btn: 'Vigência da Lei' },
+		{ intent: 'Processo de coleta de dados', btn: 'Coleta de Dados' },
 	];
 
 	for (let i = 0; i < intents.length; i++) {
 		const e = intents[i];
-		let aux = await textRequestDF(e.df, context.session.user.id);
-		aux = await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(aux), context.session.user.id);
-
+		const aux = await MaAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.session.user.id);
 		if (aux && aux.knowledge_base && aux.knowledge_base.length > 0) {
 			options.push({ content_type: 'text', title: e.btn, payload: `InfoRes${answer.length}` });
 			answer.push(aux.knowledge_base[0]);
