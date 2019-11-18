@@ -169,22 +169,22 @@ module.exports = async (context) => {
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
 		} break;
-			case 'solicitacao':
-				await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
-				await context.sendText(`${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
-				await context.setState({ dialog: 'askCPF' });
+		case 'solicitacao':
+			await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
+			await context.sendText(`${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
+			await context.setState({ dialog: 'askCPF' });
 			break;
-			case 'askTitular':
-				await context.sendText(flow.askTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.askTitular));
+		case 'askTitular':
+			await context.sendText(flow.askTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.askTitular));
 			break;
-			case 'askMail':
-				await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
+		case 'askMail':
+			await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
 			break;
-			case 'gerarTicket': {
-				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === context.state.ticketID);
-				await dialogs.createTicket(context,
+		case 'gerarTicket': {
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === context.state.ticketID);
+			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
-			}	break;
+		}	break;
 		case 'solicitacao7': // 'incidente'
 			await context.setState({ incidenteAnonimo: false, titularFiles: [], fileTimerType: 7 });
 			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
