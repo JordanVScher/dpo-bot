@@ -46,7 +46,7 @@ async function checkFullName(context, stateName, successDialog, invalidDialog, r
 	}
 }
 
-async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.cpf) {
+async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.solicitacao.fail) {
 	const cpf = await help.getCPFValid(context.state.whatWasTyped);
 
 	if (cpf) {
@@ -70,7 +70,7 @@ async function checkPhone(context, stateName, successDialog, invalidDialog, reas
 	}
 }
 
-async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.mail) {
+async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg = flow.askMail.fail) {
 	if (context.state.whatWasTyped.includes('@')) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
@@ -139,7 +139,8 @@ async function handleSolicitacaoRequest(context) {
 		// run through all entities until we find one that is a valid solicitation
 		entities.solicitacao.forEach((e) => { if (!idSolicitation) idSolicitation = flow.solicitacoes.typeDic[e]; }); data.idSolicitation = idSolicitation;
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
-		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.id === idSolicitation); data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
+		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === idSolicitation);
+		data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
 			ticket.name = ticket.name.toLowerCase();
 			await context.setState({ solicitacaoCounter: 0 });

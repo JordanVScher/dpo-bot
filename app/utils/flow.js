@@ -89,23 +89,36 @@ module.exports = {
 		menuOptions: ['Aceitar', 'Recusar'],
 		menuPostback: ['askRevogarCPF', 'titularNao'],
 	},
-	consultar: {
-		consultarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para consultar seus dados.',
-		CPFNext: 'consultarEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
+	solicitacao: {
+		consultarCPF: {
+			base: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para ',
+			2: 'consultar seus dados.',
+			3: 'alterar ou apagar seus dados.',
+			4: 'transferir seus dados.',
+			5: 'o DPO entrar em contato.',
+			6: 'o DPO entrar em contato.',
+			7: 'que seja possível abrir um chamado para reportar o incidente.',
+			8: 'que seja possível abrir um chamado para alterar ou apagar seus dados.',
+			9: 'o DPO entrar em contato.',
+			10: 'o DPO entrar em contato.',
+
+		},
+		clickTheButton: ' Ou clique no botão abaixo para cancelar o pedido.',
+		fail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
+		menuOptions: ['Cancelar'],
+		menuPostback: ['mainMenu'],
 	},
-	alterar: {
-		alterarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para alterar ou apagar seus dados.',
-		CPFNext: 'alterarEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
+	askTitular: {
+		ask: 'Eu declaro ser o proprietário dos dados referentes ao CPF <CPF>.',
+		revogacaoNao: 'Para segurança e privacidade, apenas o titular dos dados pode fazer essa requisição.',
+		menuOptions: ['Aceitar', 'Recusar'],
+		menuPostback: ['askMail', 'titularNao'],
 	},
-	portabilidade: {
-		alterarCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para alterar ou apagar seus dados.',
-		CPFNext: 'portabilidadeEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
+	askMail: {
+		ask: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		fail: 'E-mail inválido! Tente Novamente',
+		menuOptions: ['Cancelar'],
+		menuPostback: ['mainMenu'],
 	},
 	incidente: {
 		intro: 'Você pode reportar o incidente de forma anônima ou se indentificar. Como prefere?',
@@ -123,38 +136,7 @@ module.exports = {
 		intro2: 'Você é da Mídia ou uma Autoridade nacional de proteção de dados? Mas caso você seja um titular de dados, vá em consumidor, que consigo te atender melhor ;)',
 		menuOptions: ['Mídia', 'ANPD', 'Voltar'],
 		menuPostback: ['solicitacao9', 'solicitacao10', 'mainMenu'],
-		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-		CPFNext: 'avançadoMEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
 	},
-	avançadoMidia: {
-		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-		CPFNext: 'avançadoMEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
-	},
-	avançadoANDP: {
-		atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-		CPFNext: 'avançadoAEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
-	},
-	faleConosco: {
-		faleConoscoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-		CPFNext: 'faleConoscoEmail',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
-	},
-	// atendimento: { // Fale com DPO - solicitacao6
-	// 	intro: 'Essa é uma solicitação apenas para autoridade e avisando que se for midia ou titular, deve ir para o Fale conosco. Tudo bem?',
-	// 	menuOptions: ['Continuar', 'Voltar'],
-	// 	menuPostback: ['atendimentoAskCPF', 'mainMenu'],
-	// 	atendimentoCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para o DPO entrar em contato.',
-	// 	CPFNext: 'atendimentoEmail',
-	// 	askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-	// 	askMailFail: 'E-mail inválido! Tente Novamente',
-	// },
 	sobreLGPD: {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
 

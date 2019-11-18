@@ -61,6 +61,9 @@ module.exports = async (context) => {
 			} else if (context.state.lastQRpayload.slice(0, 9) === 'leaveTMsg') {
 				await context.setState({ dialog: 'leaveTMsg', ticketID: context.state.lastQRpayload.replace('leaveTMsg', '') });
 				await context.sendText(flow.leaveTMsg.text1, await attach.getQR(flow.leaveTMsg));
+			} else if (['solicitacao2', 'solicitacao3', 'solicitacao4', 'solicitacao5', 'solicitacao6', 'solicitacao8', 'solicitacao9', 'solicitacao10'].includes(context.state.lastQRpayload)) {
+				await context.setState({ ticketID: context.state.lastQRpayload.replace('solicitacao', '') });
+				await context.setState({ dialog: 'solicitacao', ticketID: await parseInt(context.state.ticketID, 10) });
 			} else {
 				await context.setState({ dialog: context.state.lastQRpayload });
 			}
@@ -71,6 +74,10 @@ module.exports = async (context) => {
 
 			if (context.state.whatWasTyped === process.env.TESTEKEYWORD) {
 				await context.setState({ dialog: 'testeAtendimento' });
+			} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
+				await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
+			} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
+				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
 				// -- 1
 			} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
@@ -80,47 +87,11 @@ module.exports = async (context) => {
 				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
 			} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
-				// -- 2
-			} else if (['solicitacao2', 'consultarCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'consultarTitular', 'consultarCPF');
-			} else if (['consultarEmail', 'consultarEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket2', 'consultarEmailReAsk');
-				// -- 3
-			} else if (['solicitacao3', 'alterarCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'alterarTitular', 'alterarCPF');
-			} else if (['alterarEmail', 'alterarEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket3', 'alterarEmailReAsk');
-				// -- 5
-			} else if (['solicitacao5', 'faleConoscoCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'faleConoscoTitular', 'faleConoscoCPF');
-			} else if (['faleConoscoEmail', 'faleConoscoEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket5', 'faleConoscoEmailReAsk');
-				// -- 6
-				// } else if (['solicitacao6', 'atendimentoAskCPF', 'atendimentoCPF'].includes(context.state.dialog)) {
-				// 	await dialogs.checkCPF(context, 'titularCPF', 'atendimentoTitular', 'atendimentoCPF');
-				// } else if (['atendimentoEmail', 'atendimentoEmailReAsk'].includes(context.state.dialog)) {
-				// 	await dialogs.checkEmail(context, 'titularMail', 'gerarTicket6', 'atendimentoEmailReAsk');
 				// -- 7
 			} else if (['incidenteAskPDF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 				incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 			} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
-				// -- 8
-			} else if (['solicitacao8', 'portabilidadeCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'portabilidadeTitular', 'portabilidadeCPF');
-			} else if (['portabilidadeEmail', 'portabilidadeEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket8', 'portabilidadeEmailReAsk');
-				// -- 9
-			} else if (['solicitacao9', 'avançadoMAskCPF', 'avançadoMCPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'avançadoMTitular', 'avançadoMCPF');
-			} else if (['avançadoMEmail', 'avançadoMEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket9', 'avançadoMEmailReAsk');
-				// -- 10
-			} else if (['solicitacao10', 'avançadoAAskCPF', 'avançadoACPF'].includes(context.state.dialog)) {
-				await dialogs.checkCPF(context, 'titularCPF', 'avançadoATitular', 'avançadoACPF');
-			} else if (['avançadoAEmail', 'avançadoAEmailReAsk'].includes(context.state.dialog)) {
-				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket10', 'avançadoMEmailReAsk');
-				// --
 			} else if (context.state.onTextQuiz === true) {
 				await context.setState({ whatWasTyped: parseInt(context.state.whatWasTyped, 10) });
 				if (Number.isInteger(context.state.whatWasTyped, 10) === true) {
@@ -193,69 +164,27 @@ module.exports = async (context) => {
 		case 'askRevogarMail':
 			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
-		case 'gerarTicket1':
+		case 'gerarTicket1': {
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === '1');
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 1, await help.buildTicket(context.state)));
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
+		} break;
+			case 'solicitacao':
+				await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
+				await context.sendText(`${flow.solicitacao.consultarCPF.base}${flow.solicitacao.consultarCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
+				await context.setState({ dialog: 'askCPF' });
 			break;
-		case 'solicitacao2': // 'consultar'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_2', []);
-			await context.sendText(flow.consultar.consultarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
+			case 'askTitular':
+				await context.sendText(flow.askTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.askTitular));
 			break;
-		case 'consultarTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.consultar.CPFNext));
+			case 'askMail':
+				await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
 			break;
-		case 'consultarEmail':
-			await context.sendText(flow.consultar.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket2':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 2, await help.buildTicket(context.state)));
-			break;
-		case 'solicitacao3': // 'alterar'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_3', []);
-			await context.sendText(flow.alterar.alterarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'alterarTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.alterar.CPFNext));
-			break;
-		case 'alterarEmail':
-			await context.sendText(flow.alterar.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket3':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 3, await help.buildTicket(context.state)));
-			break;
-		case 'solicitacao5': // 'fale conosco'
-			await attach.sendMsgFromAssistente(context, 'ticket_type_5', []);
-			await context.sendText(flow.faleConosco.faleConoscoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'faleConoscoTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.faleConosco.CPFNext));
-			break;
-		case 'faleConoscoEmail':
-			await context.sendText(flow.faleConosco.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket5':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 5, await help.buildTicket(context.state)));
-			break;
-		// case 'solicitacao6': // 'atendimento' - fale com dpo
-		// 	await attach.sendMsgFromAssistente(context, 'ticket_type_6', []);
-		// 	await context.sendText(flow.atendimento.intro, await attach.getQR(flow.atendimento));
-		// 	break;
-		// case 'atendimentoAskCPF':
-		// 	await context.sendText(flow.atendimento.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-		// 	break;
-		// case 'atendimentoTitular':
-		// 	await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.atendimento.CPFNext));
-		// 	break;
-		// case 'atendimentoEmail':
-		// 	await context.sendText(flow.atendimento.askMail, await attach.getQR(flow.askCPF));
-		// 	break;
-		// case 'gerarTicket6':
-		// 	await dialogs.createTicket(context,
-		// 		await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 6, await help.buildTicket(context.state)));
-		// 	break;
+			case 'gerarTicket': {
+				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === context.state.ticketID);
+				await dialogs.createTicket(context,
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
+			}	break;
 		case 'solicitacao7': // 'incidente'
 			await context.setState({ incidenteAnonimo: false, titularFiles: [], fileTimerType: 7 });
 			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
@@ -277,55 +206,14 @@ module.exports = async (context) => {
 		case 'incidenteEmail':
 			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
 			break;
-		case 'gerarTicket7':
+		case 'gerarTicket7': {
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === '7');
 			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
-			break;
-		case 'solicitacao8': // 'portabilidade'
-		case 'portabilidadeAskCPF':
-			await context.sendText(flow.portabilidade.alterarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'portabilidadeTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.portabilidade.CPFNext));
-			break;
-		case 'portabilidadeEmail':
-			await context.sendText(flow.portabilidade.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket8':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 8, await help.buildTicket(context.state)));
-			break;
+				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
+		} break;
 		case 'atendimentoAvançado':
 			await context.sendText(flow.atendimentoAvançado.intro1);
 			await context.sendText(flow.atendimentoAvançado.intro2, await attach.getQR(flow.atendimentoAvançado));
-			break;
-		case 'solicitacao9': // 'Avançado Mídia'
-		case 'avançadoMAskCPF':
-			await context.sendText(flow.avançadoMidia.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'avançadoMTitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.avançadoMidia.CPFNext));
-			break;
-		case 'avançadoMEmail':
-			await context.sendText(flow.avançadoMidia.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket9':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 9, await help.buildTicket(context.state)));
-			break;
-		case 'solicitacao10': // 'Avançado ANDP'
-		case 'avançadoAAskCPF':
-			await context.sendText(flow.avançadoANDP.atendimentoCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
-			break;
-		case 'avançadoATitular':
-			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.avançadoANDP.CPFNext));
-			break;
-		case 'avançadoAEmail':
-			await context.sendText(flow.avançadoANDP.askMail, await attach.getQR(flow.askCPF));
-			break;
-		case 'gerarTicket10':
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 10, await help.buildTicket(context.state)));
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);

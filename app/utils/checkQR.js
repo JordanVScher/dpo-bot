@@ -5,7 +5,7 @@ const { checkUserOnLabelName } = require('./labels');
 const flow = require('./flow');
 
 async function reloadTicket(context) {
-	await context.setState({ ticketTypes: await getTicketTypes() });
+	await context.setState({ ticketTypes: await getTicketTypes(context.state.politicianData.organization_chatbot_id) });
 	await context.setState({ userTickets: await getUserTickets(context.session.user.id) });
 	await context.setState({ userTicketTypes: await getUserTicketTypes(context.state.userTickets.tickets) });
 }
@@ -17,10 +17,10 @@ async function buildConsumidorMenu(context) {
 	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
-		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.id === 5);
+		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
 		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
 
-		// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.id === 6) || {};
+		// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 6) || {};
 		// getFaleDPO.name = 'Fale com DPO';
 		// if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
 	}
@@ -38,7 +38,6 @@ async function buildMainMenu(context) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 		if (context.state.isFuncionario && context.state.isFuncionario.name) options.push({ content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' });
 	}
-
 	options.push({ content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
 	options.push({ content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' });
@@ -51,14 +50,14 @@ async function buildAtendimento(context) {
 	await reloadTicket(context);
 	const options = [];
 
-	context.state.ticketTypes.ticket_types.forEach((element) => {
+	context.state.ticketTypes.ticket_types.forEach((e) => {
 		// check which type of ticket the user doesn't have yet so we can show only the respective option
 		// also check if that type of ticket is active
-		if (!context.state.userTicketTypes.includes(element.id) && flow.solicitacoes.activeSolicitations.includes(element.id)) {
+		if (!context.state.userTicketTypes.includes(e.ticket_type_id) && flow.solicitacoes.activeSolicitations.includes(e.ticket_type_id)) {
 			const aux = {
 				content_type: 'text',
-				title: element.name,
-				payload: `solicitacao${element.id}`,
+				title: e.name,
+				payload: `solicitacao${e.ticket_type_id}`,
 			};
 
 			options.push(aux);
@@ -68,7 +67,7 @@ async function buildAtendimento(context) {
 	options.push({
 		content_type: 'text',
 		title: 'Reportar Incidente',
-		payload: 'solicitaca7',
+		payload: 'solicitacao7',
 	});
 
 
