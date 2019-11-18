@@ -138,22 +138,22 @@ async function handleSolicitacaoRequest(context) {
 		let idSolicitation = '';
 		// run through all entities until we find one that is a valid solicitation
 		entities.solicitacao.forEach((e) => { if (!idSolicitation) idSolicitation = flow.solicitacoes.typeDic[e]; }); data.idSolicitation = idSolicitation;
-		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
-		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === idSolicitation);
-		data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
-		if (ticket) {
-			ticket.name = ticket.name.toLowerCase();
-			await context.setState({ solicitacaoCounter: 0 });
-			if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
-				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
-				await sendMainMenu(context);
-			} else { // no open ticket, send user to the proper solicitation flow
-				await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
+			const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
+			const ticket = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === idSolicitation);
+			data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
+			if (ticket) {
+				ticket.name = ticket.name.toLowerCase();
+				await context.setState({ solicitacaoCounter: 0 });
+				if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
+					await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
+					await sendMainMenu(context);
+				} else { // no open ticket, send user to the proper solicitation flow
+					await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
+				}
+			} else { // DF found an entity but we dont have it in our dictionary, ask again
+				await context.sendText(flow.solicitacoes.noSolicitationType);
+				await context.setState({ dialog: 'solicitacoes' });
 			}
-		} else { // DF found an entity but we dont have it in our dictionary, ask again
-			await context.sendText(flow.solicitacoes.noSolicitationType);
-			await context.setState({ dialog: 'solicitacoes' });
-		}
 	}
 
 	return data;

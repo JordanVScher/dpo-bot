@@ -90,7 +90,7 @@ module.exports = {
 		menuPostback: ['askRevogarCPF', 'titularNao'],
 	},
 	solicitacao: {
-		consultarCPF: {
+		askCPF: {
 			base: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para ',
 			2: 'consultar seus dados.',
 			3: 'alterar ou apagar seus dados.',

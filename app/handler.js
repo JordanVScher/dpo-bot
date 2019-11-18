@@ -171,7 +171,7 @@ module.exports = async (context) => {
 		} break;
 			case 'solicitacao':
 				await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
-				await context.sendText(`${flow.solicitacao.consultarCPF.base}${flow.solicitacao.consultarCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
+				await context.sendText(`${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
 				await context.setState({ dialog: 'askCPF' });
 			break;
 			case 'askTitular':
