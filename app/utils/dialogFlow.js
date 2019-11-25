@@ -101,7 +101,7 @@ async function buildInformacoesMenu(context) {
 		{ intent: 'Sobre DPO', btn: 'O que é DPO' },
 		{ intent: 'Sobre abrangência da lei', btn: ' Abrangência da Lei' },
 		{ intent: 'Sobre a vigência da lei', btn: 'Vigência da Lei' },
-		{ intent: 'Processo de coleta de dados', btn: 'Coleta de Dados' },
+		// { intent: 'Processo de coleta de dados', btn: 'Coleta de Dados' },
 	];
 
 	for (let i = 0; i < intents.length; i++) {
