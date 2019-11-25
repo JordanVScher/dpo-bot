@@ -18,7 +18,8 @@ module.exports = {
 		text1: ['Ajudo em algo mais?', 'Como posso te ajudar?', 'Em que posso ser útil?'],
 		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 		gerando: 'Gerando seu ticket...',
-		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".\nO Número de protocolo do seu chamado é: <TICKET>.',
+		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".',
+		ticketTime: 'O Número de protocolo do seu chamado é: <TICKET>.\nEm até <TIME> nossa equipe entrará em contato com você.'
 	},
 	solicitacoes: {
 		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],

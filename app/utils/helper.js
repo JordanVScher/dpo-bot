@@ -145,6 +145,11 @@ function getRandomArray(array) {
 	return array[Math.floor((Math.random() * array.length))];
 }
 
+function getResponseTime(tickets, ticketID) {
+	const currentTicket = tickets.find(x => x.ticket_type_id === ticketID);
+	return currentTicket && currentTicket.usual_response_time ? currentTicket.usual_response_time : '48 horas';
+}
+
 module.exports = {
 	Sentry,
 	moment,
@@ -159,4 +164,5 @@ module.exports = {
 	getRandomArray,
 	sendTextAnswer,
 	sendAttachment,
+	getResponseTime
 };

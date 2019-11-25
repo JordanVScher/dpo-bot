@@ -165,7 +165,8 @@ module.exports = async (context) => {
 			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket1': {
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === '1');
+				await context.setState({ ticketID: '1'});
+				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
 		} break;
@@ -181,7 +182,7 @@ module.exports = async (context) => {
 			await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
 			break;
 		case 'gerarTicket': {
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === context.state.ticketID);
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID.toString());
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
 		}	break;
@@ -207,7 +208,8 @@ module.exports = async (context) => {
 			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket7': {
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === '7');
+			await context.setState({ ticketID: '7' });
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
 		} break;

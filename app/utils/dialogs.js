@@ -15,7 +15,9 @@ async function createTicket(context, ticketID) {
 	await context.sendText(flow.mainMenu.gerando);
 	if (ticketID && ticketID.id) {
 		await context.typing(1000 * 2.5);
-		await sendMainMenu(context, flow.mainMenu.createTicket.replace('<TICKET>', ticketID.id));
+		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, context.state.ticketID);
+		await context.sendText(flow.mainMenu.createTicket);
+		await sendMainMenu(context, flow.mainMenu.ticketTime.replace('<TIME>', time).replace('<TICKET>', ticketID.id));
 	} else {
 		await context.sendText('Erro ao criar o ticket');
 	}
