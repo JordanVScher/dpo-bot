@@ -165,8 +165,8 @@ module.exports = async (context) => {
 			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
 		case 'gerarTicket1': {
-				await context.setState({ ticketID: '1'});
-				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
+			await context.setState({ ticketID: '1' });
+			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
 			await dialogs.createTicket(context,
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
 		} break;

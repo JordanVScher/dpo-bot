@@ -145,9 +145,29 @@ function getRandomArray(array) {
 	return array[Math.floor((Math.random() * array.length))];
 }
 
+function formatTimeString(originalText) {
+	if (!originalText || originalText.slice(0, 1) === '0') return '48 horas';
+
+	let text = originalText.replace('days', '').replace('day', '');
+	text = text.trim();
+	if (!text) return '48 horas';
+	let res = '';
+
+	if (['1', '2', '3'].includes(text)) {
+		res = `${text * 24} horas`;
+	} else {
+		res = `${text} dias`;
+	}
+
+	return res;
+}
+
 function getResponseTime(tickets, ticketID) {
-	const currentTicket = tickets.find(x => x.ticket_type_id === ticketID);
-	return currentTicket && currentTicket.usual_response_time ? currentTicket.usual_response_time : '48 horas';
+	let res = '';
+	const currentTicket = tickets.find((x) => x.ticket_type_id === ticketID);
+	res = currentTicket && currentTicket.usual_response_time ? currentTicket.usual_response_time : null;
+	res = formatTimeString(res);
+	return res || '48 horas';
 }
 
 module.exports = {
@@ -164,5 +184,5 @@ module.exports = {
 	getRandomArray,
 	sendTextAnswer,
 	sendAttachment,
-	getResponseTime
+	getResponseTime,
 };
