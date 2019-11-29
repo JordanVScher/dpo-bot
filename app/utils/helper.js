@@ -148,8 +148,7 @@ function getRandomArray(array) {
 function formatTimeString(originalText) {
 	if (!originalText || originalText.slice(0, 1) === '0') return '48 horas';
 
-	let text = originalText.replace('days', '').replace('day', '');
-	text = text.trim();
+	const text = originalText.replace(/\D/g, '');
 	if (!text) return '48 horas';
 	let res = '';
 

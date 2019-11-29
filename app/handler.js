@@ -38,6 +38,7 @@ module.exports = async (context) => {
 			await context.setState({ lastPBpayload: context.event.postback.payload, onSolicitacoes: false, solicitacaoCounter: 0 });
 			if (context.state.lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 				await context.setState({ dialog: 'greetings' });
+				// await context.setState({ dialog: 'gerarTicket1' });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'cancelarT') {
 				await context.setState({ dialog: 'cancelConfirmation', ticketID: context.state.lastPBpayload.replace('cancelarT', '') });
 			} else if (context.state.lastPBpayload.slice(0, 9) === 'leaveTMsg') {
