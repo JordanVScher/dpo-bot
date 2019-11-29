@@ -19,7 +19,7 @@ module.exports = {
 		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 		gerando: 'Gerando seu ticket...',
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".',
-		ticketTime: 'O Número de protocolo do seu chamado é: <TICKET>.\nEm até <TIME> nossa equipe entrará em contato com você.'
+		ticketTime: 'O Número de protocolo do seu chamado é: <TICKET>.\nEm até <TIME> nossa equipe entrará em contato com você.',
 	},
 	solicitacoes: {
 		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],
@@ -42,7 +42,7 @@ module.exports = {
 		typeDic: {
 			1: 'solicitar uma revogação',
 			2: 'solicitar uma consulta',
-			3: 'solicitar uma alteração',
+			3: 'solicitar uma alteração/remoção',
 			7: 'reportar um incidente',
 			8: 'abrir uma solicitação de portabilidade',
 		},
