@@ -164,8 +164,7 @@ function formatTimeString(originalText) {
 
 function getResponseTime(tickets, ticketID) {
 	let res = '';
-	const currentTicket = tickets.find((x) => x.ticket_type_id === ticketID);
-	console.log('currentTicket.usual_response_interval', currentTicket.usual_response_interval);
+	const currentTicket = tickets.find((x) => x.ticket_type_id.toString() === ticketID.toString());
 	res = currentTicket && currentTicket.usual_response_interval ? currentTicket.usual_response_interval : null;
 	res = formatTimeString(res);
 	return res || '48 horas';

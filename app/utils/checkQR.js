@@ -77,5 +77,5 @@ async function buildAtendimento(context) {
 
 
 module.exports = {
-	buildMainMenu, buildAtendimento, buildConsumidorMenu,
+	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket,
 };
