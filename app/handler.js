@@ -84,10 +84,10 @@ module.exports = async (context) => {
 				// -- 1
 			} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 				await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
-			} else if (['askRevogarName', 'invalidName'].includes(context.state.dialog)) {
-				await dialogs.checkFullName(context, 'titularNome', 'askRevogarMail', 'invalidName');
-			} else if (['askRevogarPhone', 'invalidPhone'].includes(context.state.dialog)) {
-				await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
+			// } else if (['askRevogarName', 'invalidName'].includes(context.state.dialog)) {
+			// 	await dialogs.checkFullName(context, 'titularNome', 'askRevogarMail', 'invalidName');
+			// } else if (['askRevogarPhone', 'invalidPhone'].includes(context.state.dialog)) {
+			// 	await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
 			} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
 				await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
 				// -- 7
@@ -158,12 +158,12 @@ module.exports = async (context) => {
 		case 'askRevogarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
-		case 'askRevogarName':
-			await context.sendText(flow.revogar.askRevogarName, await attach.getQR(flow.askCPF));
-			break;
-		case 'askRevogarPhone':
-			await context.sendText(flow.revogar.askRevogarPhone, await attach.getQR(flow.askCPF));
-			break;
+		// case 'askRevogarName':
+		// 	await context.sendText(flow.revogar.askRevogarName, await attach.getQR(flow.askCPF));
+		// 	break;
+		// case 'askRevogarPhone':
+		// 	await context.sendText(flow.revogar.askRevogarPhone, await attach.getQR(flow.askCPF));
+		// 	break;
 		case 'askRevogarMail':
 			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
