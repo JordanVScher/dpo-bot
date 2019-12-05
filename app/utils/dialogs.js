@@ -118,8 +118,6 @@ async function handleSolicitacaoRequest(context) {
 	const data = {};
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
 	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
-	console.log('context.state.resultParameters', context.state.resultParameters);
-	console.log('entities', entities);
 	if (!context.state.solicitacaoCounter) { await context.setState({ solicitacaoCounter: 0 }); } // setting up or the first time
 	await context.setState({ solicitacaoCounter: context.state.solicitacaoCounter + 1 });
 	if (context.state.apiaiTextAnswer) {
@@ -134,17 +132,20 @@ async function handleSolicitacaoRequest(context) {
 			await context.setState({ dialog: 'mainMenu' });
 		}
 	} else if (!entities) {
-		console.log('AAAA');
 		await context.setState({ dialog: 'solicitacoes' });
 	} else if (!entities.solicitacao || entities.solicitacao.length === 0) {
-		console.log('BBBB');
 		await context.setState({ dialog: 'solicitacoes' });
 	} else {
 		let idSolicitation = '';
 		// run through all entities until we find one that is a valid solicitation
 		entities.solicitacao.forEach((e) => { if (!idSolicitation) idSolicitation = flow.solicitacoes.typeDic[e]; }); data.idSolicitation = idSolicitation;
+		console.log('entities.solicitacao', entities.solicitacao);
+		console.log('context.state.userTicketTypes', context.state.userTicketTypes);
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
+		console.log('userHas', userHas);
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === idSolicitation);
+		console.log('context.state.ticketTypes.ticket_types', context.state.ticketTypes.ticket_types);
+		console.log('ticket', ticket);
 		data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
 			ticket.name = ticket.name.toLowerCase();
@@ -156,7 +157,7 @@ async function handleSolicitacaoRequest(context) {
 				await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
 			}
 		} else { // DF found an entity but we dont have it in our dictionary, ask again
-			console.log('!!!!!!!!!!!!');
+			console.log('Não pode passar aqui');
 			await context.sendText(flow.solicitacoes.noSolicitationType);
 			await context.setState({ dialog: 'solicitacoes' });
 		}
