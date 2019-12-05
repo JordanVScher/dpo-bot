@@ -228,7 +228,9 @@ module.exports = async (context) => {
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);
+			await context.typingOn();
 			await context.sendVideo(flow.sobreLGPD.videoLink);
+			await context.typingOff();
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreDipiou':

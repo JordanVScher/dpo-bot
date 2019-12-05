@@ -126,7 +126,7 @@ module.exports = {
 		intro: 'Você pode reportar o incidente de forma anônima ou se indentificar. Como prefere?',
 		menuOptions: ['Identificado', 'Anônimo'],
 		menuPostback: ['incidenteI', 'incidenteA'],
-		askFile: 'Como preferir, agora, suba o arquivo nessa conversa e me envie.',
+		askFile: 'Como preferir. Agora por favor envie o anexo das provas/evidências clicando no botão ”Adicionar arquivo” e me envie.',
 		incidenteCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para reportar o incidente.',
 		time: 1000 * 20,
 		CPFNext: 'incidenteEmail',
