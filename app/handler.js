@@ -10,7 +10,7 @@ const DF = require('./utils/dialogFlow');
 const quiz = require('./utils/quiz');
 const timer = require('./utils/timer');
 const { checkUserOnLabelName } = require('./utils/labels');
-// const { reloadTicket } = require('./utils/checkQR');
+const { reloadTicket } = require('./utils/checkQR'); // eslint-disable-line
 
 const incidenteCPFAux = {}; // because the file timer stops setState from working
 
@@ -19,8 +19,7 @@ module.exports = async (context) => {
 		// let user = await getUser(context)
 		// we reload politicianData on every useful event
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
-		// await reloadTicket(context);
-		// console.log(context.state.ticketTypes);
+		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {

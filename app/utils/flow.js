@@ -30,8 +30,8 @@ module.exports = {
 		// add the new type of ticket to the array below to properly include it on the menu
 		activeSolicitations: [1, 2, 3, 4, 5, 6, 7, 8],
 		// fixed menu, for testing only
-		menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Incidente'],
-		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao7'],
+		// menuOptions: ['Revogar meus Dados', 'Meus Dados', 'Alterar meus Dados', 'Fale conosco', 'Incidente'],
+		// menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
 			Revogar: 1, Consultar: 2, Alterar: 3, Portabilidade: 4, Incidente: 7, // ADD TEXT TO typeDic on confirmaSolicitacao

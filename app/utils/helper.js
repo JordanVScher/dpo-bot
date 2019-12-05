@@ -192,6 +192,13 @@ function getResponseTime(tickets, ticketID) {
 	return res || '48 horas';
 }
 
+async function resumoTicket(ticketTypes) {
+	const sorted = ticketTypes.sort((a, b) => a.ticket_type_id - b.ticket_type_id);
+	sorted.forEach((e) => {
+		console.log(`Type ${e.ticket_type_id} - ${e.name} - ID: ${e.id}`);
+	});
+}
+
 module.exports = {
 	Sentry,
 	moment,
@@ -209,4 +216,5 @@ module.exports = {
 	getResponseTime,
 	errorDetail,
 	getCustomText,
+	resumoTicket,
 };
