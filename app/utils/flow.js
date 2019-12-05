@@ -34,7 +34,7 @@ module.exports = {
 		menuPostback: ['solicitacao1', 'solicitacao2', 'solicitacao3', 'solicitacao5', 'solicitacao7'],
 		// dictionary: [dialogflow entity]: tycket_type id
 		typeDic: {
-			Revogar: 1, Consultar: 2, Alterar: 3, Incidente: 7, Portabilidade: 8, // ADD TEXT TO typeDic on confirmaSolicitacao
+			Revogar: 1, Consultar: 2, Alterar: 3, Portabilidade: 4, Incidente: 7, // ADD TEXT TO typeDic on confirmaSolicitacao
 		},
 	},
 	confirmaSolicitacao: {
