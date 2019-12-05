@@ -1,6 +1,7 @@
 const { getUserTickets } = require('../chatbot_api');
 const { getTicketTypes } = require('../chatbot_api');
 const { getUserTicketTypes } = require('./helper');
+const { getCustomText } = require('./helper');
 const { checkUserOnLabelName } = require('./labels');
 const flow = require('./flow');
 
@@ -16,14 +17,17 @@ async function buildConsumidorMenu(context) {
 	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
 	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
 	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
-	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
-		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
-		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
 
-		// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 6) || {};
-		// getFaleDPO.name = 'Fale com DPO';
-		// if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
-	}
+	const faleConoscoText = await getCustomText(context, 'fale-conosco');
+	if (faleConoscoText) options.push({ content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' });
+
+	// if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
+	// 	const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
+	// 	if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
+	// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 6) || {};
+	// getFaleDPO.name = 'Fale com DPO';
+	// if (getFaleDPO) options.push({ content_type: 'text', title: getFaleDPO.name, payload: 'solicitacao6' });
+	// }
 
 	return { quick_replies: options };
 }

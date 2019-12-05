@@ -1,5 +1,6 @@
 const { moment } = require('./helper');
 const { sentryError } = require('./helper');
+const { getCustomText } = require('./helper');
 const flow = require('./flow');
 
 function capQR(text) {
@@ -211,13 +212,7 @@ async function sendTicketCards(context, tickets) {
 
 async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	try {
-		const answers = context.state && context.state.politicianData && context.state.politicianData.answers ? context.state.politicianData.answers : false;
-		let msgToSend;
-
-		if (answers && answers.length > 0) {
-			const currentMsg = answers.find((x) => x.code === code);
-			if (currentMsg && currentMsg.content) msgToSend = currentMsg.content;
-		}
+		const msgToSend = await getCustomText(context, code);
 
 		if (msgToSend && msgToSend.length > 0) {
 			await context.sendText(msgToSend);

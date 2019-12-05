@@ -128,6 +128,10 @@ module.exports = async (context) => {
 		case 'mainMenu':
 			await dialogs.sendMainMenu(context);
 			break;
+		case 'faleConosco':
+			await attach.sendMsgFromAssistente(context, 'fale-conosco', []);
+			await dialogs.sendMainMenu(context);
+			break;
 		case 'solicitacoes':
 			await context.setState({ whatWasTyped: 'Quero fazer uma solicitação' });
 			await DF.dialogFlow(context);
