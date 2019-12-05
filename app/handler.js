@@ -16,8 +16,6 @@ const incidenteCPFAux = {}; // because the file timer stops setState from workin
 
 module.exports = async (context) => {
 	try {
-		// let user = await getUser(context)
-		// we reload politicianData on every useful event
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
 		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
