@@ -145,6 +145,19 @@ function getRandomArray(array) {
 	return array[Math.floor((Math.random() * array.length))];
 }
 
+async function errorDetail(context, error) {
+	const date = new Date();
+	await context.sendText('Ops. Tive um erro interno. Tente novamente.');
+	console.log(`Parece que aconteceu um erro as ${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1} com ${context.session.user.name}=>`);
+	console.log(error);
+
+	await Sentry.configureScope(async (scope) => { // sending to sentry
+		scope.setUser({ username: context.session.user.first_name });
+		scope.setExtra('state', context.state);
+		throw error;
+	});
+}
+
 function formatTimeString(originalText) {
 	if (!originalText || originalText.slice(0, 1) === '0') return '48 horas';
 
@@ -184,4 +197,5 @@ module.exports = {
 	sendTextAnswer,
 	sendAttachment,
 	getResponseTime,
+	errorDetail,
 };

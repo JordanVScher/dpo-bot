@@ -52,6 +52,7 @@ async function getEntity(res) {
 async function checkPosition(context) {
 	await context.setState({ dialog: 'prompt' });
 	// lock user on this intent until he asks out with "sair"
+	console.log('onSolicitacoes', context.state.onSolicitacoes);
 	if (context.state.onSolicitacoes === true) { await context.setState({ intentName: 'Solicitação' }); }
 	switch (context.state.intentName) {
 	case 'Solicitação': {
@@ -82,12 +83,16 @@ async function checkPosition(context) {
 }
 
 async function dialogFlow(context) {
-	console.log(`\n${context.session.user.name} digitou ${context.state.whatWasTyped} - DF Status: ${context.state.politicianData.use_dialogflow}`);
+	const date = new Date();
+	console.log(`\n${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1}:${context.session.user.name} digitou ${context.state.whatWasTyped} - DF Status: ${context.state.politicianData.use_dialogflow}`);
 	if (context.state.politicianData.use_dialogflow === 1) { // check if 'politician' is using dialogFlow
 		await context.setState({ apiaiResp: await textRequestDF(await help.formatDialogFlow(context.state.whatWasTyped), context.session.user.id) });
 		await context.setState({ intentName: context.state.apiaiResp[0].queryResult.intent.displayName || '' }); // intent name
 		await context.setState({ resultParameters: await getEntity(context.state.apiaiResp) }); // entities
 		await context.setState({ apiaiTextAnswer: context.state.apiaiResp[0].queryResult.fulfillmentText || '' }); // response text
+		console.log('context.state.intentName', context.state.intentName);
+		console.log('context.state.apiaiTextAnswer', context.state.apiaiTextAnswer);
+		console.log('context.state.apiaiTextAnswer', context.state.apiaiTextAnswer);
 		await checkPosition(context);
 	} else {
 		await context.setState({ dialog: 'createIssueDirect' });

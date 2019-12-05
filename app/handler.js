@@ -184,11 +184,17 @@ module.exports = async (context) => {
 		case 'askMail':
 			await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
 			break;
-		case 'gerarTicket': {
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID.toString());
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
-		}	break;
+		case 'gerarTicket':
+			try {
+				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID.toString());
+				await dialogs.createTicket(context,
+					await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
+			} catch (error) {
+				console.log('--\ncontext.state.ticketTypes.ticket_types', context.state.ticketTypes.ticket_types);
+				console.log('context.state.ticketID', context.state.ticketID);
+				await help.errorDetail(context, error);
+			}
+			break;
 		case 'solicitacao7': // 'incidente'
 			await context.setState({ incidenteAnonimo: false, titularFiles: [], fileTimerType: 7 });
 			await attach.sendMsgFromAssistente(context, 'ticket_type_7', []);
@@ -294,15 +300,6 @@ module.exports = async (context) => {
 			break;
 		} // end switch case
 	} catch (error) {
-		const date = new Date();
-		console.log(`Parece que aconteceu um erro as ${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1} =>`);
-		console.log(error);
-		await context.sendText('Ops. Tive um erro interno. Tente novamente.'); // warning user
-
-		await help.Sentry.configureScope(async (scope) => { // sending to sentry
-			scope.setUser({ username: context.session.user.first_name });
-			scope.setExtra('state', context.state);
-			throw error;
-		});
+		await help.errorDetail(context, error);
 	} // catch
 };
