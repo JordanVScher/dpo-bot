@@ -129,6 +129,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'solicitacoes':
+			console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 			await context.setState({ whatWasTyped: 'Quero fazer uma solicitação' });
 			await DF.dialogFlow(context);
 			// await context.sendText(flow.solicitacoes.text1);
