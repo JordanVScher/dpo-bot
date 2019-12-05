@@ -52,7 +52,6 @@ async function getEntity(res) {
 async function checkPosition(context) {
 	await context.setState({ dialog: 'prompt' });
 	// lock user on this intent until he asks out with "sair"
-	console.log('onSolicitacoes', context.state.onSolicitacoes);
 	if (context.state.onSolicitacoes === true) { await context.setState({ intentName: 'Solicitação' }); }
 	switch (context.state.intentName) {
 	case 'Solicitação': {
@@ -90,9 +89,6 @@ async function dialogFlow(context) {
 		await context.setState({ intentName: context.state.apiaiResp[0].queryResult.intent.displayName || '' }); // intent name
 		await context.setState({ resultParameters: await getEntity(context.state.apiaiResp) }); // entities
 		await context.setState({ apiaiTextAnswer: context.state.apiaiResp[0].queryResult.fulfillmentText || '' }); // response text
-		console.log('context.state.intentName', context.state.intentName);
-		console.log('context.state.apiaiTextAnswer', context.state.apiaiTextAnswer);
-		console.log('context.state.apiaiTextAnswer', context.state.apiaiTextAnswer);
 		await checkPosition(context);
 	} else {
 		await context.setState({ dialog: 'createIssueDirect' });
