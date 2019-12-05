@@ -99,6 +99,16 @@ async function solicitacoesMenu(context) {
 	}
 }
 
+async function atendimentoAvançado(context) {
+	const options = await checkQR.atendimentoAvançado(context);
+	if (!options) {
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.atendimentoAvançado.intro1);
+		await context.sendText(flow.atendimentoAvançado.intro2, await attach.getQR(flow.atendimentoAvançado));
+	}
+}
+
 async function consumidorMenu(context) {
 	const options = await checkQR.buildConsumidorMenu(context);
 	if (!options) {
@@ -226,5 +236,6 @@ module.exports = {
 	handleFiles,
 	handleSolicitacaoRequest,
 	consumidorMenu,
+	atendimentoAvançado,
 	confirmaSolicitacao,
 };

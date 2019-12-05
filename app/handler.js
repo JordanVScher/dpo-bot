@@ -224,8 +224,7 @@ module.exports = async (context) => {
 				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
 		} break;
 		case 'atendimentoAvançado':
-			await context.sendText(flow.atendimentoAvançado.intro1);
-			await context.sendText(flow.atendimentoAvançado.intro2, await attach.getQR(flow.atendimentoAvançado));
+			await dialogs.atendimentoAvançado(context);
 			break;
 		case 'sobreLGPD':
 			await context.sendText(flow.sobreLGPD.text1);

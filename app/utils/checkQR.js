@@ -44,9 +44,27 @@ async function buildMainMenu(context) {
 	}
 	options.push({ content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' });
 	options.push({ content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' });
-	options.push({ content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' });
+	const atendimentoAvançado = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9 || x.ticket_type_id === 10);
+	if (atendimentoAvançado) {
+		options.push({ content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' });
+	}
 	// if (context.state.sendShare) options.push({ content_type: 'text', title: 'Compartilhar', payload: 'compartilhar' });
 
+	return { quick_replies: options };
+}
+
+async function buildAtendimentoAvançado(context) {
+	await reloadTicket(context);
+	const options = [];
+
+	const solicitacao9 = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9);
+	if (solicitacao9) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[0], payload: flow.atendimentoAvançado.payload[0] }); }
+	const solicitacao10 = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 10);
+	if (solicitacao10) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[1], payload: flow.atendimentoAvançado.payload[1] }); }
+
+	if (options && options.length > 0) {
+		options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[2], payload: flow.atendimentoAvançado.payload[2] });
+	}
 	return { quick_replies: options };
 }
 
@@ -81,5 +99,5 @@ async function buildAtendimento(context) {
 
 
 module.exports = {
-	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket,
+	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvançado,
 };
