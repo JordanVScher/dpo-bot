@@ -100,7 +100,7 @@ async function solicitacoesMenu(context) {
 }
 
 async function atendimentoAvançado(context) {
-	const options = await checkQR.atendimentoAvançado(context);
+	const options = await checkQR.buildAtendimentoAvancado(context);
 	if (!options) {
 		await sendMainMenu(context);
 	} else {

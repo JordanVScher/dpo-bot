@@ -53,17 +53,17 @@ async function buildMainMenu(context) {
 	return { quick_replies: options };
 }
 
-async function buildAtendimentoAvançado(context) {
+async function buildAtendimentoAvancado(context) {
 	await reloadTicket(context);
 	const options = [];
 
 	const solicitacao9 = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9);
-	if (solicitacao9) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[0], payload: flow.atendimentoAvançado.payload[0] }); }
+	if (solicitacao9) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[0], payload: flow.atendimentoAvançado.menuPostback[0] }); }
 	const solicitacao10 = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 10);
-	if (solicitacao10) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[1], payload: flow.atendimentoAvançado.payload[1] }); }
+	if (solicitacao10) { options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[1], payload: flow.atendimentoAvançado.menuPostback[1] }); }
 
 	if (options && options.length > 0) {
-		options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[2], payload: flow.atendimentoAvançado.payload[2] });
+		options.push({ content_type: 'text', title: flow.atendimentoAvançado.menuOptions[2], payload: flow.atendimentoAvançado.menuPostback[2] });
 	}
 	return { quick_replies: options };
 }
