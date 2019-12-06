@@ -99,5 +99,5 @@ async function buildAtendimento(context) {
 
 
 module.exports = {
-	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvançado,
+	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvancado,
 };
