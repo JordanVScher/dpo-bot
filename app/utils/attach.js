@@ -214,12 +214,9 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	try {
 		const msgToSend = await getCustomText(context, code);
 
-		console.log('msgToSend', msgToSend);
 		if (msgToSend && typeof msgToSend === 'string' && msgToSend.length > 0) {
-			console.log('Entrei aqui');
 			await context.sendText(msgToSend);
 		} else if (defaultMsgs && defaultMsgs.length > 0) {
-			console.log('defaultMsgs', defaultMsgs);
 			for (const msg of defaultMsgs) { // eslint-disable-line
 				await context.sendText(msg);
 			}
