@@ -2,14 +2,22 @@ const Sentry = require('@sentry/node');
 const moment = require('moment');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
+const { sendHTMLMail } = require('./mailer');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
 moment.locale('pt-BR');
 
-function sentryError(msg, err, override) {
-	console.log(msg, JSON.stringify(err, null, 2) || '');
-	if (override || process.env.ENV !== 'local') { Sentry.captureMessage(msg); }
+async function sentryError(msg, err) {
+	let erro = err;
+	if (typeof err === 'object' && err !== null) {
+		erro = JSON.stringify(err, null, 2);
+	}
+	if (process.env.ENV !== 'local') {
+		Sentry.captureMessage(msg);
+		await sendHTMLMail(`Erro no DPO - ${process.env.ENV || ''}`, process.env.MAILDEV, `${msg || ''}\n\n${erro}`);
+		console.log(`Error sent at ${new Date()}!\n `);
+	}
 	return false;
 }
 
