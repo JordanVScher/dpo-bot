@@ -81,10 +81,7 @@ async function checkNotificacao() {
 }
 
 
-module.exports = { sendNotificacao, checkNotificacao };
-
-
-const notificacao = new CronJob(
+const notificacaoCron = new CronJob(
 	'00 0-59/5 * * * *', async () => {
 		console.log('Running notificacao');
 		try {
@@ -96,4 +93,5 @@ const notificacao = new CronJob(
 	true, 'America/Sao_Paulo', false, false,
 );
 
-console.log(`Crontab sendNotificationCron is running? => ${notificacao.running}`);
+
+module.exports = { notificacaoCron };
