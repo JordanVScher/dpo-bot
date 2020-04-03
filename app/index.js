@@ -5,7 +5,7 @@ const { createServer } = require('bottender/restify');
 const requests = require('../requests');
 const { notificacaoCron } = require('../notification');
 
-console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
+if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
 
 const config = require('./bottender.config.js').messenger;
 const { getPoliticianData } = require('./chatbot_api');

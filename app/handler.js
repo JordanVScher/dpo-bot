@@ -103,6 +103,8 @@ module.exports = async (context) => {
 				await dialogs.handleReset(context);
 			} else if (context.state.dialog === 'leaveTMsg') {
 				await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
+			} else if (context.state.whatWasTyped === process.env.NOTIFICATION_KEY) {
+				await context.setState({ wantNotification: true, notificacao: null });
 			} else {
 				await DF.dialogFlow(context);
 			}

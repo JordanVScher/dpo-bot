@@ -56,8 +56,9 @@ async function sendNotificacao(file, fileName, text, buttons) {
 
 async function checkTimeDifference(date) {
 	const dateM = moment(date);
+
 	const now = moment(new Date());
-	const diff = dateM.diff(now, 'minutes');
+	const diff = now.diff(dateM, 'minutes');
 
 	if (diff > 5) return true;
 	return false;
@@ -65,16 +66,18 @@ async function checkTimeDifference(date) {
 
 async function checkNotificacao() {
 	const listNames = fs.readdirSync(sessionsFolder); // get all file names
-
 	for (let i = 0; i < listNames.length; i++) {
 		const fileName = listNames[i]; // get current filename
 		const file = jsonfile.readFileSync(sessionsFolder + fileName); // load file as a json
-		if (!file._state.notificacao) { file._state.notificacao = { sent: 0, date: null }; }
-		const opt = msgs[file._state.notificacao.sent];
-		if (opt) {
-			const checkTime = await checkTimeDifference(file._state.notificacao.date);
-			if (!file._state.notificacao.date || checkTime) {
-				await sendNotificacao(file, fileName, opt.text, opt.buttons);
+		if (file._state.wantNotification) {
+			if (!file._state.notificacao) { file._state.notificacao = { sent: 0, date: null }; }
+			const opt = msgs[file._state.notificacao.sent];
+			if (opt) {
+				const checkTime = await checkTimeDifference(file._state.notificacao.date);
+
+				if (!file._state.notificacao.date || checkTime) {
+					await sendNotificacao(file, fileName, opt.text, opt.buttons);
+				}
 			}
 		}
 	}
@@ -90,8 +93,9 @@ const notificacaoCron = new CronJob(
 			console.log('notificacao error', error);
 		}
 	}, (() => { console.log('Crontab notificacao stopped.'); }),
-	true, 'America/Sao_Paulo', false, false,
+	false, 'America/Sao_Paulo', false, false,
 );
 
+if (process.env.ENV !== 'PROD') notificacaoCron.start();
 
 module.exports = { notificacaoCron };
