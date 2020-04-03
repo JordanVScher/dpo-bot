@@ -1,4 +1,3 @@
-// handler function
 const assistenteAPI = require('./chatbot_api');
 // const opt = require('./util/options');
 const { createIssue } = require('./utils/send_issue');
@@ -234,7 +233,7 @@ module.exports = async (context) => {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'sobreDipiou':
-			await context.sendText(flow.sobreDipiou.text1);
+			await attach.sendMsgFromAssistente(context, 'sobre_dipiou', [flow.sobreDipiou.text1]);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'meuTicket':
