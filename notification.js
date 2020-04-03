@@ -60,7 +60,7 @@ async function checkTimeDifference(date) {
 	const now = moment(new Date());
 	const diff = now.diff(dateM, 'minutes');
 
-	if (diff > 5) return true;
+	if (diff >= 5) return true;
 	return false;
 }
 
