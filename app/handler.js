@@ -229,7 +229,7 @@ module.exports = async (context) => {
 			await dialogs.atendimentoAvançado(context);
 			break;
 		case 'sobreLGPD':
-			await context.sendText(flow.sobreLGPD.text1);
+			await attach.sendMsgFromAssistente(context, 'sobre_lgpd', [flow.sobreLGPD.text1]);
 			await context.typingOn();
 			await context.sendVideo(flow.sobreLGPD.videoLink);
 			await context.typingOff();
