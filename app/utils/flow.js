@@ -81,7 +81,7 @@ module.exports = {
 		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 	},
 	askCPF: {
-		clickTheButton: ' Ou clique no botão abaixo para cancelar o pedido.',
+		clickTheButton: 'Ou clique no botão abaixo para cancelar o pedido.',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
 	},
@@ -105,7 +105,7 @@ module.exports = {
 			10: 'o DPO entrar em contato.',
 
 		},
-		clickTheButton: ' Ou clique no botão abaixo para cancelar o pedido.',
+		clickTheButton: 'Ou clique no botão abaixo para cancelar o pedido.',
 		fail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],

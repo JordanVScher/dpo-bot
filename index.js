@@ -69,8 +69,8 @@ module.exports = async function App(context) {
 			} else {
 				await context.setState({ dialog: context.state.lastQRpayload });
 			}
-			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
-				context.event.message.quick_reply.payload, context.event.message.quick_reply.payload);
+
+			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id, context.state.lastQRpayload, context.state.lastQRpayload);
 		} else if (context.event.isText) {
 			await context.setState({ whatWasTyped: context.event.message.text });
 
