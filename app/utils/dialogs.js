@@ -126,7 +126,7 @@ async function checkSairMsg(message, keywords) {
 
 async function handleSolicitacaoRequest(context) {
 	const data = {};
-	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.session.user.name;
+	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.state.sessionUser.name;
 	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
 	if (!context.state.solicitacaoCounter) { await context.setState({ solicitacaoCounter: 0 }); } // setting up or the first time
 	await context.setState({ solicitacaoCounter: context.state.solicitacaoCounter + 1 });

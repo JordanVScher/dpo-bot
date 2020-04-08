@@ -15,15 +15,18 @@ const incidenteCPFAux = {}; // because the file timer stops setState from workin
 
 module.exports = async function App(context) {
 	try {
-		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
+		await context.setState({
+			politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id),
+			sessionUser: { ...await context.getUserProfile() },
+		});
 		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
 			fb_id: context.session.user.id,
-			name: `${context.session.user.first_name} ${context.session.user.last_name}`,
+			name: context.state.sessionUser.name,
 			origin_dialog: 'greetings',
-			picture: context.session.user.profile_pic,
+			picture: context.state.sessionUser.profilePic,
 			// session: JSON.stringify(context.state),
 		});
 
@@ -120,7 +123,7 @@ module.exports = async function App(context) {
 		switch (context.state.dialog) {
 		case 'greetings':
 			await context.sendImage(flow.avatarImage);
-			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.session.user.first_name));
+			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.state.sessionUser.firstName));
 			await attach.sendMsgFromAssistente(context, 'greetings', [flow.greetings.text2]);
 			await dialogs.sendMainMenu(context, flow.mainMenu.firstTime);
 			break;

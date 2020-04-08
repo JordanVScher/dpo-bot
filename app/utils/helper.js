@@ -166,11 +166,11 @@ async function getCustomText(context, code) {
 async function errorDetail(context, error) {
 	const date = new Date();
 	await context.sendText('Ops. Tive um erro interno. Tente novamente.');
-	console.log(`Parece que aconteceu um erro as ${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1} com ${context.session.user.name}=>`);
+	console.log(`Parece que aconteceu um erro as ${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1} com ${context.state.sessionUser.name}=>`);
 	console.log(error);
 
 	await Sentry.configureScope(async (scope) => { // sending to sentry
-		scope.setUser({ username: context.session.user.first_name });
+		scope.setUser({ username: context.state.sessionUser.name });
 		scope.setExtra('state', context.state);
 		throw error;
 	});
