@@ -1,19 +1,19 @@
-const assistenteAPI = require('./chatbot_api');
+const assistenteAPI = require('./app/chatbot_api');
 // const opt = require('./util/options');
-const { createIssue } = require('./utils/send_issue');
-const flow = require('./utils/flow');
-const help = require('./utils/helper');
-const dialogs = require('./utils/dialogs');
-const attach = require('./utils/attach');
-const DF = require('./utils/dialogFlow');
-const quiz = require('./utils/quiz');
-const timer = require('./utils/timer');
-const { checkUserOnLabelName } = require('./utils/labels');
-const { reloadTicket } = require('./utils/checkQR'); // eslint-disable-line
+const { createIssue } = require('./app/utils/send_issue');
+const flow = require('./app/utils/flow');
+const help = require('./app/utils/helper');
+const dialogs = require('./app/utils/dialogs');
+const attach = require('./app/utils/attach');
+const DF = require('./app/utils/dialogFlow');
+const quiz = require('./app/utils/quiz');
+const timer = require('./app/utils/timer');
+const { checkUserOnLabelName } = require('./app/utils/labels');
+const { reloadTicket } = require('./app/utils/checkQR'); // eslint-disable-line
 
 const incidenteCPFAux = {}; // because the file timer stops setState from working
 
-module.exports = async (context) => {
+module.exports = async function App(context) {
 	try {
 		await context.setState({ politicianData: await assistenteAPI.getPoliticianData(context.event.rawEvent.recipient.id) });
 		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
