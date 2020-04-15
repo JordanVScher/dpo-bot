@@ -12,11 +12,18 @@ const mapPageToAccessToken = async (pageId) => {
 
 module.exports = {
 	channels: {
+		whatsapp: {
+			enabled: true,
+			path: '/webhooks/whatsapp',
+			accountSid: process.env.ACCOUNT_SID,
+			authToken: process.env.AUTH_TOKEN,
+			phoneNumber: process.env.PHONE_NUMBER,
+		},
 		messenger: {
 			enabled: true,
 			path: '/webhooks/messenger',
 			pageId: process.env.MESSENGER_PAGE_ID,
-			// accessToken: process.env.MESSENGER_ACCESS_TOKEN,
+			accessToken: process.env.MESSENGER_ACCESS_TOKEN,
 			appId: process.env.MESSENGER_APP_ID,
 			appSecret: process.env.MESSENGER_APP_SECRET,
 			verifyToken: process.env.MESSENGER_VERIFY_TOKEN,
@@ -63,6 +70,7 @@ module.exports = {
 			},
 		},
 	},
+
 
 	session: {
 		driver: 'file',

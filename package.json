@@ -3,8 +3,8 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
+    "dev": "DEBUG=bottender:request nodemon server.js",
+    "start": "DEBUG=bottender:request node server.js",
     "test": "jest --detectOpenHandles",
     "pm2_add": "pm2 start app/index.js  --name \"dpo-homol\"",
     "restart": "pm2 restart \"dpo-homol\" --update-env",
