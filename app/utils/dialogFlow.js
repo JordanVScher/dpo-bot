@@ -26,6 +26,7 @@ async function textRequestDF(text, sessionId) {
 async function getExistingRes(res) {
 	let result = null;
 	res.forEach((e) => { if (e !== null && result === null) result = e; });
+	console.log('getExistingRes', result);
 	return result;
 }
 
