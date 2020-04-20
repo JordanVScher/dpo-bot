@@ -44,11 +44,15 @@ async function separateString(someString) {
 }
 
 async function sendTextAnswer(context, knowledge) {
+	const timeToWait = process.env.ISSUE_TIME_WAIT;
+
 	if (knowledge && knowledge.answer) {
 		await context.setState({ resultTexts: await separateString(knowledge.answer) });
 		if (context.state.resultTexts && context.state.resultTexts.firstString) {
+			if (timeToWait) await context.typing(timeToWait);
 			await context.sendText(context.state.resultTexts.firstString);
 			if (context.state.resultTexts.secondString) {
+				if (timeToWait) await context.typing(timeToWait);
 				await context.sendText(context.state.resultTexts.secondString);
 			}
 		}
