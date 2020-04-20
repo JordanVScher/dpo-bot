@@ -4,6 +4,7 @@ const { issueText } = require('./flow.js');
 const { getRandomArray } = require('./helper.js');
 
 const blacklist = ['sim', 'nao'];
+const timeToWait = process.env.ISSUE_TIME_WAIT;
 
 async function formatString(text) {
 	let result = text.toLowerCase();
@@ -22,6 +23,7 @@ async function createIssue(context) {
 		const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.whatWasTyped,
 			context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 
+		if (timeToWait) await context.typing(timeToWait);
 		if (issueResponse && issueResponse.id) {
 			await context.sendText(getRandomArray(issueText.success));
 			console.log('created issue? true');
