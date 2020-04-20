@@ -9,10 +9,13 @@ Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, capture
 moment.locale('pt-BR');
 
 async function sentryError(msg, err) {
-	let erro = err;
-	if (typeof err === 'object' && err !== null) {
-		erro = JSON.stringify(err, null, 2);
+	let erro;
+	if (typeof err === 'string') {
+		erro = err;
+	} else if (err && err.stack) {
+		erro = err.stack;
 	}
+
 	if (process.env.ENV !== 'local') {
 		Sentry.captureMessage(msg);
 		await sendHTMLMail(`Erro no DPO - ${process.env.ENV || ''}`, process.env.MAILDEV, `${msg || ''}\n\n${erro}`);
