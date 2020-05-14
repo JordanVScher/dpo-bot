@@ -67,6 +67,7 @@ typings/
 
 # file session storage
 .sessions
+.sessions_hangouts
 
 # for prod container
 run-container.sh
@@ -74,6 +75,7 @@ run-container.sh
 # google api key 
 google-secret-key.json
 google_private_key.json
+hangouts_private_key.json
 
 # Documents for consultation
 *.pdf
@@ -88,3 +90,4 @@ google_private_key.json
 test.js
 test.html
 ticket_types.js
+

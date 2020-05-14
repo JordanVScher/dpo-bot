@@ -20,6 +20,8 @@ async function sentryError(msg, err) {
 		Sentry.captureMessage(msg);
 		await sendHTMLMail(`Erro no DPO - ${process.env.ENV || ''}`, process.env.MAILDEV, `${msg || ''}\n\n${erro}`);
 		console.log(`Error sent at ${new Date()}!\n `);
+	} else {
+		console.log('erro', erro);
 	}
 	return false;
 }
@@ -54,6 +56,7 @@ async function sendTextAnswer(context, knowledge) {
 
 	if (knowledge && knowledge.answer) {
 		await context.setState({ resultTexts: await separateString(knowledge.answer) });
+		console.log('context.state.resultTexts', context.state.resultTexts);
 		if (context.state.resultTexts && context.state.resultTexts.firstString) {
 			if (timeToWait) await context.typing(timeToWait);
 			await context.sendText(context.state.resultTexts.firstString);

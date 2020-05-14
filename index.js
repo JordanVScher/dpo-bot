@@ -20,7 +20,6 @@ module.exports = async function App(context) {
 			sessionUser: { ...await context.getUserProfile() },
 		});
 		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
-
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
 			fb_id: context.session.user.id,
@@ -304,6 +303,9 @@ module.exports = async function App(context) {
 		case 'avançadoFilesTimer':
 		case 'createFilesTimer':
 			await timer.createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
+			break;
+		case 'end':
+			// do something
 			break;
 		} // end switch case
 	} catch (error) {

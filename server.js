@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const { bottender } = require('bottender');
 const { notificacaoCron } = require('./notification');
+// const handler = require('./index');
+// const HangoutContext = require('./hangouts');
 
 if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
 
@@ -38,6 +40,16 @@ app.prepare().then(() => {
 	server.get('/name-id', async (req, res) => {
 		await requests.getNameFBID(req, res);
 	});
+
+	// server.post('/hangouts', async (req, res) => {
+	// 	await res.sendStatus(200);
+	// 	const { body } = req;
+	// 	// console.log('body', JSON.stringify(body, null, 2));
+	// 	const hangouts = new HangoutContext(body);
+	// 	await hangouts.build();
+
+	// 	await handler(hangouts);
+	// });
 
 	server.all('*', (req, res) => handle(req, res));
 
