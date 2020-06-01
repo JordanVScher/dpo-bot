@@ -47,6 +47,7 @@ class BrowserContext extends Context {
 			content,
 			delay,
 			type: 'text',
+			// photo: true,
 			human: false,
 		});
 	}
@@ -110,24 +111,30 @@ class BrowserContext extends Context {
 		});
 	}
 
-	// sendButtonText() {
-	// 	this.client.sendAction({
-	// 		type: 'buttontext',
-	// 		addMessage: true,
-	// 		autoHide: false,
-	// 		actionButton: [
-	// 			{
-	// 				text: '1',
-	// 				value: 'Check',
-	// 			},
-	// 			{
-	// 				text: '2',
-	// 				value: 'Change',
-	// 			},
-	// 		],
-	// 		actionText: { placeholder: 'Entre seu texto' },
-	// 	});
-	// }
+	sendButtonText() {
+		this.client.sendAction({
+			type: 'text',
+			action: {
+				placeholder: 'escreve',
+			},
+		});
+		this.client.sendAction({
+			type: 'button',
+			addMessage: true,
+			autoHide: false,
+			action: [
+				{
+					text: '1',
+					value: 'Check',
+				},
+				{
+					text: '2',
+					value: 'Change',
+				},
+			],
+			// actionText: { placeholder: 'Entre seu texto' },
+		});
+	}
 }
 
 export default BrowserContext;
