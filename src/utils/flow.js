@@ -12,6 +12,7 @@ module.exports = {
 	},
 	greetings: {
 		text1: 'Olá, <USERNAME>! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
+		text1b: 'Olá! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
 		text2: 'Sou o assistente digital e estou aqui para te ajudar sobre a Lei Geral de Proteção de Dados (LGPD) 🤓',
 	},
 	mainMenu: {

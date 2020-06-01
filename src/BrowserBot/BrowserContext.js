@@ -42,13 +42,17 @@ class BrowserContext extends Context {
 		});
 	}
 
-	sendText(content, buttons, delay = 0) {
+	sendBotText(content, delay) {
 		this.client.sendText({
 			content,
 			delay,
 			type: 'text',
 			human: false,
 		});
+	}
+
+	sendText(content, buttons, delay = 0) {
+		this.sendBotText(content, delay);
 
 		if (buttons) {
 			const action = buildButtons(buttons);
@@ -84,6 +88,12 @@ class BrowserContext extends Context {
 	sendVideo(content) { this.sendAttachment(content); }
 
 	sendAudio(content) { this.sendAttachment(content); }
+
+	typingOn() { return null; } // eslint-disable-line
+
+	typingOff() { return null; } // eslint-disable-line
+
+	typing() { return null; } // eslint-disable-line
 
 
 	/**
