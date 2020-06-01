@@ -5,7 +5,6 @@ import BrowserEvent from './BrowserEvent';
 
 const { v4: uuidv4 } = require('uuid');
 
-
 class BrowserConnector {
 	constructor(client) {
 		this._client = client;
@@ -26,6 +25,7 @@ class BrowserConnector {
 				id: this.getUniqueSessionKey(),
 				name: 'you',
 				_updatedAt: new Date().toISOString(),
+				platform: 'browser',
 			};
 		}
 

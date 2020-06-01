@@ -1,13 +1,61 @@
 import { Context } from 'bottender';
 
+const buildButtons = (btns) => {
+	const res = [];
+	const buttons = btns.quick_replies;
+	buttons.forEach((e) => {
+		if (typeof e.title === 'string' && typeof e.payload === 'string') {
+			res.push({
+				text: e.title,
+				value: e.payload,
+			});
+		}
+	});
+
+	return res;
+};
+
 class BrowserContext extends Context {
-	sendText(content, delay = 0) {
+	async getUserProfile() {
+		const id = this.session.user.id.toString();
+
+		const profile = {
+			name: `browser ${id}`,
+			profilePic: '',
+			email: '',
+			firstName: 'browser',
+			lastName: id,
+		};
+
+		return profile;
+	}
+
+	/**
+  * Sends quickreply buttons to botui
+  * @param {Array} action - An array of objects containing "text" and "value"
+  * @example await context.sendQuickReply([{ text: "What the user sees", value: "What the bot receives"}]);
+  */
+	sendQuickReply(action) {
+		this.client.sendAction({
+			type: 'button',
+			action,
+		});
+	}
+
+	sendText(content, buttons, delay = 0) {
 		this.client.sendText({
 			content,
 			delay,
 			type: 'text',
 			human: false,
 		});
+
+		if (buttons) {
+			const action = buildButtons(buttons);
+			if (action && action.length > 0) {
+				this.sendQuickReply(action);
+			}
+		}
 	}
 
 	sendHumanText(content, delay = 0) {
@@ -31,17 +79,12 @@ class BrowserContext extends Context {
 		});
 	}
 
-	/**
-  * Sends quickreply buttons to botui
-  * @param {Array} action - An array of objects containing "text" and "value"
-  * @example await context.sendQuickReply([{ text: "What the user sees", value: "What the bot receives"}]);
-  */
-	sendQuickReply(action) {
-		this.client.sendAction({
-			type: 'button',
-			action,
-		});
-	}
+	sendImage(content) { this.sendAttachment(content); }
+
+	sendVideo(content) { this.sendAttachment(content); }
+
+	sendAudio(content) { this.sendAttachment(content); }
+
 
 	/**
   * Sends a text area to botui

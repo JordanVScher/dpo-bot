@@ -5,7 +5,7 @@ import 'botui/build/botui-theme-default.css';
 
 import BrowserBot from './BrowserBot';
 import BottenderApp from './BottenderApp';
-import introMsg from './utils/intro';
+import introMsg from './utils/introMsg';
 
 import './App.css';
 

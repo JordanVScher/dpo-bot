@@ -3,13 +3,13 @@
 
 const request = require('requisition');
 const queryString = require('query-string');
-const { handleRequestAnswer } = require('./requestHandler');
+const { handleRequestAnswer } = require('./utils/helper');
 
-const apiUri = process.env.REACT_APP_ASSISTENTE_API_URL;
-const security_token = process.env.REACT_APP_ASSISNTENTE_SECURITY_TOKEN;
+const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
+const apiUri = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
 
-export default {
-	async getProfileData(pageId) {
+module.exports = {
+	async getPoliticianData(pageId) {
 		return handleRequestAnswer(await request(`${apiUri}/api/chatbot/politician?fb_page_id=${pageId}&security_token=${security_token}`));
 	},
 

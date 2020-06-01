@@ -1,4 +1,4 @@
-const dialogflow = require('dialogflow');
+// const dialogflow = require('dialogflow');
 const MaAPI = require('../chatbot_api');
 const { createIssue } = require('./send_issue');
 const { sendAnswer } = require('./sendAnswer');
@@ -8,8 +8,8 @@ const { handleSolicitacaoRequest } = require('./dialogs');
 
 /* Initialize DialogFlow agent */
 /* set GOOGLE_APPLICATION_CREDENTIALS on .env */
-const sessionClient = new dialogflow.SessionsClient();
-const projectId = process.env.GOOGLE_PROJECT_ID;
+// const sessionClient = new dialogflow.SessionsClient();
+// const projectId = process.env.GOOGLE_PROJECT_ID;
 
 /**
  * Send a text query to the dialogflow agent, and return the query result.
@@ -17,10 +17,10 @@ const projectId = process.env.GOOGLE_PROJECT_ID;
  * @param {string} sessionId A unique identifier for the given session
  */
 async function textRequestDF(text, sessionId) {
-	const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-	const request = { session: sessionPath, queryInput: { text: { text, languageCode: 'pt-BR' } } };
-	const responses = await sessionClient.detectIntent(request);
-	return responses;
+	// const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+	// const request = { session: sessionPath, queryInput: { text: { text, languageCode: 'pt-BR' } } };
+	// const responses = await sessionClient.detectIntent(request);
+	// return responses;
 }
 
 async function getExistingRes(res) {
