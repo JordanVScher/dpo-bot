@@ -12,7 +12,7 @@ const handleQuickReply = async (context) => {
 	if (lastQRpayload === 'greetings') {
 		if (context.session.platform === 'browser') await context.resetMessages();
 		await context.setState({ dialog: 'greetings' });
-		// await context.setState({ dialog: 'solicitacoes' });
+		// await context.setState({ dialog: 'solicitacao' });
 	} else if (lastQRpayload.slice(0, 4) === 'quiz') {
 		await quiz.handleAnswer(context, lastQRpayload.charAt(4));
 	} else if (lastQRpayload.slice(0, 13) === 'extraQuestion') {
@@ -50,18 +50,20 @@ const handlePostback = async (context) => {
 	}
 };
 
+
 const handleText = async (context, incidenteCPFAux) => {
-	if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
+	const { whatWasTyped } = context.state;
+	const cancelKeywords = ['cancelar', 'sair', 'voltar', 'desisto'];
+
+	if (context.session.platform === 'browser' && cancelKeywords.includes(whatWasTyped.toLowerCase())) {
+		await context.setState({ dialog: 'mainMenu' });
+	} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
 		// -- 1
 	} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
-		// } else if (['askRevogarName', 'invalidName'].includes(context.state.dialog)) {
-		// 	await dialogs.checkFullName(context, 'titularNome', 'askRevogarMail', 'invalidName');
-		// } else if (['askRevogarPhone', 'invalidPhone'].includes(context.state.dialog)) {
-		// 	await dialogs.checkPhone(context, 'titularPhone', 'askRevogarMail', 'invalidPhone');
 	} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
 		// -- 7

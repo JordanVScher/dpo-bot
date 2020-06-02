@@ -108,13 +108,13 @@ module.exports = async function App(context) {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'askRevogarCPF':
-			await context.sendText(flow.revogar.askRevogarCPF + flow.askCPF.clickTheButton, await attach.getQR(flow.askCPF));
+			await dialogs.ask(context, flow.revogar.askRevogarCPF, flow.ask, flow.ask.cpfPlaceholder);
 			break;
 		case 'askRevogarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
 		case 'askRevogarMail':
-			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
+			await dialogs.ask(context, flow.revogar.askRevogarMail, flow.ask, flow.ask.mailPlaceholder);
 			break;
 		case 'gerarTicket1': {
 			await context.setState({ ticketID: '1' });
@@ -124,14 +124,14 @@ module.exports = async function App(context) {
 		} break;
 		case 'solicitacao':
 			await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
-			await context.sendText(`${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]} ${flow.solicitacao.clickTheButton}`, await attach.getQR(flow.solicitacao));
+			await dialogs.ask(context, `${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]}.`, flow.ask, flow.ask.cpfPlaceholder);
 			await context.setState({ dialog: 'askCPF' });
 			break;
 		case 'askTitular':
 			await context.sendText(flow.askTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.askTitular));
 			break;
 		case 'askMail':
-			await context.sendText(flow.askMail.ask, await attach.getQR(flow.askMail));
+			await dialogs.ask(context, flow.askMail.ask, flow.askMail, flow.ask.mailPlaceholder);
 			break;
 		case 'gerarTicket':
 			try {

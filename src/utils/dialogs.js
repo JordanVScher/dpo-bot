@@ -48,7 +48,19 @@ async function checkFullName(context, stateName, successDialog, invalidDialog, r
 	}
 }
 
-async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.solicitacao.fail) {
+async function ask(context, text, buttons, placeholder = '') {
+	let textToSend = text;
+
+	if (context.session.platform === 'browser') {
+		textToSend = `${textToSend} ${flow.ask.writeKeyword}`;
+	} else {
+		textToSend = `${textToSend} ${flow.ask.clickTheButton}`;
+	}
+
+	await help.expectText(context, textToSend, await attach.getQR(buttons), placeholder);
+}
+
+async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.ask.cpfFail) {
 	const cpf = await help.getCPFValid(context.state.whatWasTyped);
 
 	if (cpf) {
@@ -56,8 +68,11 @@ async function checkCPF(context, stateName, successDialog, invalidDialog, reaskM
 		return cpf;
 	}
 
-	if (reaskMsg) await context.sendText(reaskMsg, await attach.getQR(flow.askCPF));
-	await context.setState({ dialog: invalidDialog });
+	await context.setState({ dialog: invalidDialog || '' });
+	if (reaskMsg) {
+		await ask(context, reaskMsg, flow.ask, flow.ask.cpfPlaceholder);
+	}
+
 	return '';
 }
 
@@ -66,18 +81,25 @@ async function checkPhone(context, stateName, successDialog, invalidDialog, reas
 
 	if (phone) {
 		await context.setState({ [stateName]: phone, dialog: successDialog });
-	} else {
-		if (reaskMsg) await context.sendText(reaskMsg);
-		await context.setState({ dialog: invalidDialog });
+		return phone;
 	}
+
+	await context.setState({ dialog: invalidDialog || '' });
+	if (reaskMsg) {
+		await ask(context, reaskMsg, flow.ask);
+	}
+
+	return '';
 }
 
 async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg = flow.askMail.fail) {
 	if (context.state.whatWasTyped.includes('@')) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
 	} else {
-		if (reaskMsg)	await context.sendText(reaskMsg);
-		await context.setState({ dialog: invalidDialog });
+		await context.setState({ dialog: invalidDialog || '' });
+		if (reaskMsg)	{
+			await ask(context, reaskMsg, flow.ask, flow.ask.mailPlaceholder);
+		}
 	}
 }
 
@@ -244,4 +266,5 @@ module.exports = {
 	consumidorMenu,
 	atendimentoAvançado,
 	confirmaSolicitacao,
+	ask,
 };

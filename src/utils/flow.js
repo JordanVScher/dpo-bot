@@ -81,8 +81,12 @@ module.exports = {
 		askRevogarPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
 		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 	},
-	askCPF: {
+	ask: {
 		clickTheButton: 'Ou clique no botão abaixo para cancelar o pedido.',
+		writeKeyword: 'Ou digite "Cancelar" para voltar.',
+		cpfPlaceholder: 'Ex: 123.123.123-11',
+		cpfFail: 'CPF inválido! Exemplo de CPF: 123.123.123-11.',
+		mailPlaceholder: 'Ex: meuemail@mail.com',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
 	},
@@ -106,10 +110,6 @@ module.exports = {
 			10: 'o DPO entrar em contato.',
 
 		},
-		clickTheButton: 'Ou clique no botão abaixo para cancelar o pedido.',
-		fail: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
-		menuOptions: ['Cancelar'],
-		menuPostback: ['mainMenu'],
 	},
 	askTitular: {
 		ask: 'Eu declaro ser o proprietário dos dados referentes ao CPF <CPF>.',

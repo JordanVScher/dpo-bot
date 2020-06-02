@@ -25,10 +25,10 @@ async function createFilesTimer(userID, context) {
 				await createTicket(context,
 					await postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
 			} else {
-				await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.askCPF));
+				await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.ask));
 			}
 		} else if (context.state.dialog === 'avançadoFilesTimer') {
-			await context.sendText(flow.avançado.incidenteCPF, await getQR(flow.askCPF));
+			await context.sendText(flow.avançado.incidenteCPF, await getQR(flow.ask));
 		}
 		delete filesTimer[userID];
 	}, flow.incidente.time); // waiting for facebook to process all the files
