@@ -17,13 +17,15 @@ async function reloadTicket(context) {
 
 async function buildConsumidorMenu(context) {
 	const options = [];
+	const informacoes = { content_type: 'text', title: 'Informações', payload: 'informacoes' };
+	const solicitacoes = { content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' };
+	const faleConosco = { content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' };
 
-	options.push({ content_type: 'text', title: 'Informações', payload: 'informacoes' });
-	options.push({ content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' });
-	// options.push({ content_type: 'text', title: 'Solicitações Teste', payload: 'testeAtendimento' });
+	options.push(informacoes);
+	options.push(solicitacoes);
 
 	const faleConoscoText = await getCustomText(context, 'fale-conosco');
-	if (faleConoscoText) options.push({ content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' });
+	if (faleConoscoText) options.push(faleConosco);
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
 		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
