@@ -102,7 +102,9 @@ class BrowserContext extends Context {
   * @param {String} placeholder - A string that will serve as a placeholder for the text area
   *  @example await context.sendTextFreeText("Need help?");
   */
-	sendTextFreeText(placeholder = 'Entre com seu texto aqui') {
+	sendTextFreeText(content, placeholder = 'Entre com seu texto aqui') {
+		this.sendBotText(content);
+
 		this.client.sendAction({
 			type: 'text',
 			action: {
@@ -111,30 +113,36 @@ class BrowserContext extends Context {
 		});
 	}
 
-	sendButtonText() {
-		this.client.sendAction({
-			type: 'text',
-			action: {
-				placeholder: 'escreve',
-			},
-		});
-		this.client.sendAction({
-			type: 'button',
-			addMessage: true,
-			autoHide: false,
-			action: [
-				{
-					text: '1',
-					value: 'Check',
-				},
-				{
-					text: '2',
-					value: 'Change',
-				},
-			],
-			// actionText: { placeholder: 'Entre seu texto' },
-		});
-	}
+	// resetAction() {
+	// 	this.client.sendAction({
+	// 		action: {},
+	// 	});
+	// }
+
+	// sendButtonText() {
+	// 	this.client.sendAction({
+	// 		type: 'text',
+	// 		action: {
+	// 			placeholder: 'escreve',
+	// 		},
+	// 	});
+	// 	this.client.sendAction({
+	// 		type: 'button',
+	// 		addMessage: true,
+	// 		autoHide: false,
+	// 		action: [
+	// 			{
+	// 				text: '1',
+	// 				value: 'Check',
+	// 			},
+	// 			{
+	// 				text: '2',
+	// 				value: 'Change',
+	// 			},
+	// 		],
+	// 		// actionText: { placeholder: 'Entre seu texto' },
+	// 	});
+	// }
 }
 
 export default BrowserContext;

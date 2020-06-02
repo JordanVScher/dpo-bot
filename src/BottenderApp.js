@@ -24,13 +24,14 @@ const getPageID = (context) => {
 
 
 module.exports = async function App(context) {
-	await context.setState({
-		politicianData: await assistenteAPI.getPoliticianData(getPageID(context)),
-		sessionUser: { ...await context.getUserProfile() },
-	});
-
 	try {
-		// await reloadTicket(context); await help.resumoTicket(context.state.ticketTypes.ticket_types);
+		await context.setState({
+			politicianData: await assistenteAPI.getPoliticianData(getPageID(context)),
+			sessionUser: { ...await context.getUserProfile() },
+		});
+
+		// await reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
+
 		// we update context data at every interaction that's not a comment or a post
 		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
 			fb_id: context.session.user.id,
@@ -54,7 +55,7 @@ module.exports = async function App(context) {
 		} else if (input.isButton(context) === true) {
 			await context.setState({ lastQRpayload: context.event.rawEvent.message.value });
 			await input.handleQuickReply(context);
-		} else if (input.isText(context) === true) {
+		} else if (await input.isText(context) === true) {
 			await input.handleText(context);
 		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
 			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'incidenteFilesTimer'].includes(context.state.dialog)) {
@@ -112,12 +113,6 @@ module.exports = async function App(context) {
 		case 'askRevogarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
-		// case 'askRevogarName':
-		// 	await context.sendText(flow.revogar.askRevogarName, await attach.getQR(flow.askCPF));
-		// 	break;
-		// case 'askRevogarPhone':
-		// 	await context.sendText(flow.revogar.askRevogarPhone, await attach.getQR(flow.askCPF));
-		// 	break;
 		case 'askRevogarMail':
 			await context.sendText(flow.revogar.askRevogarMail, await attach.getQR(flow.askCPF));
 			break;
@@ -233,9 +228,6 @@ module.exports = async function App(context) {
 			}
 			await dialogs.sendMainMenu(context); }
 			break;
-		case 'testeAtendimento':
-			await context.sendText(flow.solicitacoes.text1, await attach.getQR(flow.solicitacoes));
-			break;
 		case 'notificationOn':
 			await assistenteAPI.updateBlacklistMA(context.session.user.id, 1);
 			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
@@ -254,10 +246,8 @@ module.exports = async function App(context) {
 			await timer.createFilesTimer(context.session.user.id, context); // time to wait for the uploaded files to enter as new events on facebook
 			break;
 		case 'end':
-			// do something
 			break;
 		default:
-			await dialogs.sendMainMenu(context);
 			break;
 		} // end switch case
 	} catch (error) {

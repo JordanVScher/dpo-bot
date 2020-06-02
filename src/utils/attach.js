@@ -222,7 +222,7 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 			}
 		}
 	} catch (error) {
-		sentryError('Erro em sendMsgFromAssistente', error);
+		sentryError('Erro em sendMsgFromAssistente', error, context.session.platform);
 	}
 }
 

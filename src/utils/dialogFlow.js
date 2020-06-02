@@ -52,7 +52,7 @@ async function checkPosition(context) {
 	case 'Solicitação': {
 		await context.setState({ onSolicitacoes: true });
 		const result = await handleSolicitacaoRequest(context);
-		await help.sentryError('Nova Solicitação', result, true);
+		await help.sentryError('Nova Solicitação', result, context.session.platform);
 	}
 		break;
 	case 'Fallback': // didn't understand what was typed

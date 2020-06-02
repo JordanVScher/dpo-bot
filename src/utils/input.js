@@ -9,7 +9,10 @@ const handleQuickReply = async (context) => {
 	// if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
 	const { lastQRpayload } = context.state;
 	await context.setState({ onSolicitacoes: false, solicitacaoCounter: 0 });
-	if (lastQRpayload.slice(0, 4) === 'quiz') {
+	if (lastQRpayload === 'greetings') {
+		await context.setState({ dialog: 'greetings' });
+		// await context.setState({ dialog: 'solicitacoes' });
+	} else if (lastQRpayload.slice(0, 4) === 'quiz') {
 		// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 		await quiz.handleAnswer(context, lastQRpayload.charAt(4));
 	} else if (lastQRpayload.slice(0, 13) === 'extraQuestion') {
@@ -48,11 +51,7 @@ const handlePostback = async (context) => {
 };
 
 const handleText = async (context, incidenteCPFAux) => {
-	await context.setState({ whatWasTyped: context.event.message.text });
-
-	if (context.state.whatWasTyped === process.env.TESTEKEYWORD) {
-		await context.setState({ dialog: 'testeAtendimento' });
-	} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
+	if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
@@ -97,9 +96,14 @@ const isButton = (context) => {
 
 	return false;
 };
-const isText = (context) => {
-	if (context.event.isText) return true;
+
+const isText = async (context) => {
+	if (context.event.isText) {
+		await context.setState({ whatWasTyped: context.event.message.text });
+		return true;
+	}
 	if (context.event && context.event.rawEvent && context.event.rawEvent.message && context.event.rawEvent.message.type === 'text') {
+		await context.setState({ whatWasTyped: context.event.rawEvent.message.value });
 		return true;
 	}
 	return false;

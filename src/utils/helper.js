@@ -10,7 +10,8 @@ const { sendHTMLMail } = require('./mailer');
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
 moment.locale('pt-BR');
 
-async function sentryError(msg, err) {
+async function sentryError(msg, err, platform) {
+	if (platform === 'browser') return null;
 	let erro;
 	if (typeof err === 'string') {
 		erro = err;
@@ -225,6 +226,14 @@ async function resumoTicket(ticketTypes) {
 	});
 }
 
+async function expectText(context, text, buttons, placeholder) {
+	if (context.session.platform === 'browser') {
+		await context.sendTextFreeText(text, placeholder);
+	} else {
+		await context.sendText(text, buttons);
+	}
+}
+
 module.exports = {
 	Sentry,
 	moment,
@@ -243,4 +252,5 @@ module.exports = {
 	errorDetail,
 	getCustomText,
 	resumoTicket,
+	expectText,
 };

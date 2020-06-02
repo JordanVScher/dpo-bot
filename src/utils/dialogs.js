@@ -7,7 +7,7 @@ const help = require('./helper');
 
 async function sendMainMenu(context, text) {
 	const textToSend = text || help.getRandomArray(flow.mainMenu.text1);
-	await context.setState({ onSolicitacoes: false });
+	await context.setState({ onSolicitacoes: false, dialog: '' });
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
@@ -126,20 +126,25 @@ async function checkSairMsg(message, keywords) {
 
 async function handleSolicitacaoRequest(context) {
 	const data = {};
+	const { apiaiTextAnswer } = context.state;
+
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.state.sessionUser.name;
 	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
+
 	if (!context.state.solicitacaoCounter) { await context.setState({ solicitacaoCounter: 0 }); } // setting up or the first time
 	await context.setState({ solicitacaoCounter: context.state.solicitacaoCounter + 1 });
-	if (context.state.apiaiTextAnswer) {
+
+	if (apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
-		if (context.state.solicitacaoCounter >= 3) {
-			await context.sendText(context.state.apiaiTextAnswer, await attach.getQR(flow.solicitacaoVoltar));
-		} else {
-			await context.sendText(context.state.apiaiTextAnswer);
-		}
+
 		// if user cancels the request, send to mainMenu (check if one of the built-in response texts contains our mapped keywords)
-		if (await checkSairMsg(context.state.apiaiTextAnswer, flow.solicitacoes.builtInSairResponse))	{
+		if (await checkSairMsg(apiaiTextAnswer, flow.solicitacoes.builtInSairResponse)) {
+			await context.sendText(apiaiTextAnswer);
 			await context.setState({ dialog: 'mainMenu' });
+		} else if (context.state.solicitacaoCounter >= 3) {
+			await help.expectText(context, apiaiTextAnswer, await attach.getQR(flow.solicitacaoVoltar), 'Qual sua requisição?');
+		} else {
+			await help.expectText(context, apiaiTextAnswer, await attach.getQR(flow.solicitacaoVoltar), 'Qual sua requisição?');
 		}
 	} else if (!entities) {
 		await context.setState({ dialog: 'solicitacoes' });
@@ -167,6 +172,7 @@ async function handleSolicitacaoRequest(context) {
 		}
 	}
 
+	console.log('data', data);
 	return data;
 }
 
