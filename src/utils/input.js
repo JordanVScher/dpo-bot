@@ -54,7 +54,7 @@ const handleText = async (context, incidenteCPFAux) => {
 	const { whatWasTyped } = context.state;
 	const cancelKeywords = ['cancelar', 'sair', 'voltar', 'desisto'];
 
-	if (context.session.platform === 'browser' && cancelKeywords.includes(whatWasTyped.toLowerCase())) {
+	if (context.session.platform === 'browser' && context.state.onSolicitacoes !== true && cancelKeywords.includes(whatWasTyped.toLowerCase())) {
 		await context.setState({ dialog: 'mainMenu' });
 	} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
