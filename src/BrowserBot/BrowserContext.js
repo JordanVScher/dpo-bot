@@ -113,6 +113,11 @@ class BrowserContext extends Context {
 		});
 	}
 
+	// Erases messages array. In the button "greetings" case, we use it to erase the intro
+	resetMessages() {
+		this.client.resetMessages();
+	}
+
 	// resetAction() {
 	// 	this.client.sendAction({
 	// 		action: {},

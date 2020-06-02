@@ -125,6 +125,7 @@ async function checkSairMsg(message, keywords) {
 }
 
 async function handleSolicitacaoRequest(context) {
+	await checkQR.reloadTicket(context);
 	const data = {};
 	const { apiaiTextAnswer } = context.state;
 
@@ -172,7 +173,6 @@ async function handleSolicitacaoRequest(context) {
 		}
 	}
 
-	console.log('data', data);
 	return data;
 }
 

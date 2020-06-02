@@ -30,6 +30,10 @@ class App extends Component {
             messages.pop();
             this.setState({ messages: messages, action });
           },
+
+          resetMessages: () => {  
+            this.setState({ messages: [], action: null });
+          },
         },
     });
 

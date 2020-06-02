@@ -10,10 +10,10 @@ const handleQuickReply = async (context) => {
 	const { lastQRpayload } = context.state;
 	await context.setState({ onSolicitacoes: false, solicitacaoCounter: 0 });
 	if (lastQRpayload === 'greetings') {
+		if (context.session.platform === 'browser') await context.resetMessages();
 		await context.setState({ dialog: 'greetings' });
 		// await context.setState({ dialog: 'solicitacoes' });
 	} else if (lastQRpayload.slice(0, 4) === 'quiz') {
-		// await quiz.handleAnswerA(context, context.state.lastQRpayload.replace('quiz', '').replace(context.state.currentQuestion.code), '');
 		await quiz.handleAnswer(context, lastQRpayload.charAt(4));
 	} else if (lastQRpayload.slice(0, 13) === 'extraQuestion') {
 		await quiz.answerExtraQuestion(context);
