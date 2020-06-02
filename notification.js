@@ -4,8 +4,8 @@ require('dotenv').config();
 const { CronJob } = require('cron');
 const fs = require('fs');
 const jsonfile = require('jsonfile');
-const { sendBroadcast } = require('./app/utils/broadcast');
-const { moment } = require('./app/utils/helper');
+const { sendBroadcast } = require('./src/utils/broadcast');
+const { moment } = require('./src/utils/helper');
 
 const sessionsFolder = './.sessions/';
 

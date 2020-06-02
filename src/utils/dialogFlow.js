@@ -1,4 +1,3 @@
-// const dialogflow = require('dialogflow');
 const MaAPI = require('../chatbot_api');
 const { createIssue } = require('./send_issue');
 const { sendAnswer } = require('./sendAnswer');
@@ -6,27 +5,22 @@ const { sendMainMenu } = require('./dialogs');
 const help = require('./helper');
 const { handleSolicitacaoRequest } = require('./dialogs');
 
-/* Initialize DialogFlow agent */
-/* set GOOGLE_APPLICATION_CREDENTIALS on .env */
-// const sessionClient = new dialogflow.SessionsClient();
-// const projectId = process.env.GOOGLE_PROJECT_ID;
-
 /**
- * Send a text query to the dialogflow agent, and return the query result.
- * @param {string} text The text to be queried
+ * Send a text query to the dialogflow server, and return the query result.
+ * @param {string} textQuery The text to be queried
  * @param {string} sessionId A unique identifier for the given session
  */
-async function textRequestDF(text, sessionId) {
-	// const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-	// const request = { session: sessionPath, queryInput: { text: { text, languageCode: 'pt-BR' } } };
-	// const responses = await sessionClient.detectIntent(request);
-	// return responses;
+async function textRequestDF(queryText, sessionId) {
+	queryText = await help.formatDialogFlow(queryText);
+	if (typeof sessionId === 'number') sessionId = sessionId.toString();
+	const res = await MaAPI.dialogflowText(queryText, sessionId);
+	return res;
 }
 
-async function getExistingRes(res) {
+async function getExistingRes(apiaiResp) {
 	let result = null;
+	const res = apiaiResp.result;
 	res.forEach((e) => { if (e !== null && result === null) result = e; });
-	console.log('getExistingRes', result);
 	return result;
 }
 
@@ -82,14 +76,27 @@ async function checkPosition(context) {
 	}
 }
 
+async function getDFAnswerData(context) {
+	const { apiaiResp } = context.state;
+
+	await context.setState({ intentName: '' }); // intent name
+	await context.setState({ resultParameters: {} }); // entities
+	await context.setState({ apiaiTextAnswer: '' }); // response text
+
+	if (apiaiResp.result) {
+		const { result } = apiaiResp;
+		await context.setState({ intentName: result[0].queryResult.intent.displayName || '' }); // intent name
+		await context.setState({ resultParameters: await getEntity(result) }); // entities
+		await context.setState({ apiaiTextAnswer: result[0].queryResult.fulfillmentText || '' }); // response text
+	}
+}
+
 async function dialogFlow(context) {
 	const date = new Date();
 	console.log(`\n${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1}:${context.state.sessionUser.name} digitou ${context.state.whatWasTyped} - DF Status: ${context.state.politicianData.use_dialogflow}`);
 	if (context.state.politicianData.use_dialogflow === 1) { // check if 'politician' is using dialogFlow
-		await context.setState({ apiaiResp: await textRequestDF(await help.formatDialogFlow(context.state.whatWasTyped), context.session.user.id) });
-		await context.setState({ intentName: context.state.apiaiResp[0].queryResult.intent.displayName || '' }); // intent name
-		await context.setState({ resultParameters: await getEntity(context.state.apiaiResp) }); // entities
-		await context.setState({ apiaiTextAnswer: context.state.apiaiResp[0].queryResult.fulfillmentText || '' }); // response text
+		await context.setState({ apiaiResp: await textRequestDF(context.state.whatWasTyped, context.session.user.id) });
+		await getDFAnswerData(context);
 		await checkPosition(context);
 	} else {
 		await context.setState({ dialog: 'createIssueDirect' });

@@ -7,6 +7,7 @@ const { handleRequestAnswer } = require('./utils/helper');
 
 const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const apiUri = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
+const dialogFlowPort = process.env.DF_PORT || process.env.REACT_APP_DF_PORT;
 
 module.exports = {
 	async getPoliticianData(pageId) {
@@ -178,5 +179,9 @@ module.exports = {
 		return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/questionnaire/reset?security_token=${security_token}`).query({
 			fb_id, type,
 		}));
+	},
+
+	async dialogflowText(queryText, sessionId) {
+		return handleRequestAnswer(await request.post(`http://localhost:${dialogFlowPort}/text-request`).send({ queryText, sessionId }));
 	},
 };

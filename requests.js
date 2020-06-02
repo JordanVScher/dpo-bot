@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const testFolder = './.sessions/';
 const fs = require('fs');
-const { linkUserToLabelByName } = require('./app/utils/labels');
+const { linkUserToLabelByName } = require('./src/utils/labels');
 
 async function getFBIDJson() { // eslint-disable-line
 	const result = {};

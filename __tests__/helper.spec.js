@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 const tickets = require('./mock_data/tickets');
-const helper = require('../app/utils/helper');
-// const flow = require('../app/utils/flow');
+const helper = require('../src/utils/helper');
+// const flow = require('../src/utils/flow');
 
 // const activeTicketTypes = flow.solicitacoes.activeSolicitations;
 

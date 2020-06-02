@@ -1,13 +1,13 @@
 require('dotenv').config();
 
 const cont = require('./mock_data/context');
-const flow = require('../app/utils/flow');
-const dialogs = require('../app/utils/dialogs');
-const checkQR = require('../app/utils/checkQR');
+const flow = require('../src/utils/flow');
+const dialogs = require('../src/utils/dialogs');
+const checkQR = require('../src/utils/checkQR');
 
-jest.mock('../app/chatbot_api');
-jest.mock('../app/utils/labels');
-jest.mock('../app/utils/checkQR');
+jest.mock('../src/chatbot_api');
+jest.mock('../src/utils/labels');
+jest.mock('../src/utils/checkQR');
 
 it('handleSolicitacaoRequest - with apiaiTextAnswer', async () => {
 	const context = cont.quickReplyContext();

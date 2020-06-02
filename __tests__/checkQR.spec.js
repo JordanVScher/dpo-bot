@@ -2,14 +2,14 @@ require('dotenv').config();
 
 const tickets = require('./mock_data/tickets');
 const cont = require('./mock_data/context');
-const checkQR = require('../app/utils/checkQR');
-const { getUserTicketTypes } = require('../app/utils/helper');
-// const flow = require('../app/utils/flow');
+const checkQR = require('../src/utils/checkQR');
+const { getUserTicketTypes } = require('../src/utils/helper');
+// const flow = require('../src/utils/flow');
 
 // const activeTicketTypes = flow.solicitacoes.activeSolicitations;
 
-jest.mock('../app/chatbot_api');
-jest.mock('../app/utils/labels');
+jest.mock('../src/chatbot_api');
+jest.mock('../src/utils/labels');
 
 it('buildMainMenu - mainMenu - no tickets', async () => {
 	const context = cont.quickReplyContext();

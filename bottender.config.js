@@ -1,9 +1,9 @@
 const { withTyping } = require('bottender');
-const { getStarted } = require('./app/utils/flow');
+const { getStarted } = require('./src/utils/flow');
 
 const messageWaiting = eval(process.env.WITH_TYPING); // eslint-disable-line no-eval
 
-const { getPoliticianData } = require('./app/chatbot_api');
+const { getPoliticianData } = require('./src/chatbot_api');
 
 const mapPageToAccessToken = async (pageId) => {
 	const perfilData = await getPoliticianData(pageId);
@@ -20,9 +20,9 @@ module.exports = {
 		// 	phoneNumber: process.env.PHONE_NUMBER,
 		// },
 		// telegram: {
-			// enabled: true,
-			// path: '/webhooks/telegram',
-			// accessToken: process.env.TELEGRAM_ACCESS_TOKEN,
+		// enabled: true,
+		// path: '/webhooks/telegram',
+		// accessToken: process.env.TELEGRAM_ACCESS_TOKEN,
 		// },
 		messenger: {
 			enabled: true,

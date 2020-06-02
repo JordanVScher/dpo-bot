@@ -1,4 +1,4 @@
-const { solicitacoes } = require('../../app/utils/flow');
+const { solicitacoes } = require('../../src/utils/flow');
 
 const { activeSolicitations } = solicitacoes;
 
