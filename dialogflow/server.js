@@ -1,9 +1,11 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const textRequestDF = require('./agent');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/text-request', async (req, res) => {
