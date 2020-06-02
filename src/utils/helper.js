@@ -228,7 +228,7 @@ async function resumoTicket(ticketTypes) {
 
 async function expectText(context, text, buttons, placeholder) {
 	if (context.session.platform === 'browser') {
-		await context.sendTextFreeText(text, placeholder);
+		await context.sendTextArea(text, placeholder);
 	} else {
 		await context.sendText(text, buttons);
 	}

@@ -26,9 +26,7 @@ class App extends Component {
           },
 
           sendAction: (action) => {
-            const messages = [...this.state.messages];
-            messages.pop();
-            this.setState({ messages: messages, action });
+            this.setState({ messages: this.state.messages, action });
           },
 
           resetMessages: () => {  

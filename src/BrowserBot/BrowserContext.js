@@ -35,15 +35,15 @@ class BrowserContext extends Context {
   * @param {Array} action - An array of objects containing "text" and "value"
   * @example await context.sendQuickReply([{ text: "What the user sees", value: "What the bot receives"}]);
   */
-	sendQuickReply(action) {
-		this.client.sendAction({
+	async sendQuickReply(action) {
+		await this.client.sendAction({
 			type: 'button',
 			action,
 		});
 	}
 
-	sendBotText(content, delay) {
-		this.client.sendText({
+	async sendBotText(content, delay) {
+		await this.client.sendText({
 			content,
 			delay,
 			type: 'text',
@@ -52,19 +52,19 @@ class BrowserContext extends Context {
 		});
 	}
 
-	sendText(content, buttons, delay = 0) {
-		this.sendBotText(content, delay);
+	async sendText(content, buttons, delay = 0) {
+		await this.sendBotText(content, delay);
 
 		if (buttons) {
 			const action = buildButtons(buttons);
 			if (action && action.length > 0) {
-				this.sendQuickReply(action);
+				await this.sendQuickReply(action);
 			}
 		}
 	}
 
-	sendHumanText(content, delay = 0) {
-		this.client.sendText({
+	async sendHumanText(content, delay = 0) {
+		await this.client.sendText({
 			content,
 			delay,
 			type: 'text',
@@ -77,24 +77,24 @@ class BrowserContext extends Context {
   * @param {String} content - A link to the attachment online (can be audio, video or image)
   * @example await context.sendAttachment('https://www.youtube.com/embed/ZRBH5vHhm4c');
   */
-	sendAttachment(content) {
-		this.client.sendAttachment({
+	async sendAttachment(content) {
+		await this.client.sendAttachment({
 			type: 'embed',
 			content,
 		});
 	}
 
-	sendImage(content) { this.sendAttachment(content); }
+	async sendImage(content) { await this.sendAttachment(content); }
 
-	sendVideo(content) { this.sendAttachment(content); }
+	async sendVideo(content) { await this.sendAttachment(content); }
 
-	sendAudio(content) { this.sendAttachment(content); }
+	async sendAudio(content) { await this.sendAttachment(content); }
 
-	typingOn() { return null; } // eslint-disable-line
+	async typingOn() { return null; } // eslint-disable-line
 
-	typingOff() { return null; } // eslint-disable-line
+	async typingOff() { return null; } // eslint-disable-line
 
-	typing() { return null; } // eslint-disable-line
+	async typing() { return null; } // eslint-disable-line
 
 
 	/**
@@ -102,10 +102,10 @@ class BrowserContext extends Context {
   * @param {String} placeholder - A string that will serve as a placeholder for the text area
   *  @example await context.sendTextFreeText("Need help?");
   */
-	sendTextFreeText(content, placeholder = 'Entre com seu texto aqui') {
-		this.sendBotText(content);
+	async sendTextArea(content, placeholder = 'Entre com seu texto aqui') {
+		await this.sendBotText(content);
 
-		this.client.sendAction({
+		await this.client.sendAction({
 			type: 'text',
 			action: {
 				placeholder,
@@ -114,8 +114,8 @@ class BrowserContext extends Context {
 	}
 
 	// Erases messages array. In the button "greetings" case, we use it to erase the intro
-	resetMessages() {
-		this.client.resetMessages();
+	async resetMessages() {
+		await this.client.resetMessages();
 	}
 
 	// resetAction() {

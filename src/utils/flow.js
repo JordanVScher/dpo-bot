@@ -62,10 +62,10 @@ module.exports = {
 		text1: 'Escolha uma opção ou me faça uma pergunta.',
 	},
 	dataFail: {
-		cpf: 'CPF inválido! Exemplo de CPF: 123.123.123-00',
-		name: 'Nome inválido! Tente novamente',
-		phone: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444',
-		mail: 'E-mail inválido! Tente Novamente',
+		cpf: 'CPF inválido! Exemplo de CPF: 123.123.123-00.',
+		name: 'Nome inválido! Tente novamente.',
+		phone: 'Fone inválido! Exemplo: 55555-4444 ou (55)115555-4444.',
+		mail: 'E-mail inválido! Tente Novamente.',
 	},
 	revogar: {
 		text1: 'Quando o assunto é dado pessoal, meu conselho é sempre ir com cautela. É muito importante você saber os dados que temos e para que servem 😉',
@@ -119,7 +119,7 @@ module.exports = {
 	},
 	askMail: {
 		ask: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		fail: 'E-mail inválido! Tente Novamente',
+		fail: 'E-mail inválido! Tente Novamente.',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
 	},
@@ -132,7 +132,7 @@ module.exports = {
 		time: 1000 * 20,
 		CPFNext: 'incidenteEmail',
 		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
-		askMailFail: 'E-mail inválido! Tente Novamente',
+		askMailFail: 'E-mail inválido! Tente Novamente.',
 	},
 	atendimentoAvançado: {
 		intro1: 'Essa área é destinada para Autoridade e para Mídia. Vou pedir alguns dados de identificação para solicitar que o nosso DPO entre em contato com você.',
@@ -162,7 +162,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 	quiz: {
 		beginQuiz: 'Vamos lá!',
 		form_error: 'Ops, Ocorreu um erro interno, tente novamente!',
-		invalid: 'Esse formato é inválido! Tente Novamente',
+		invalid: 'Esse formato é inválido! Tente Novamente.',
 		// done: 'Você terminou o Questionário Preparatório! Parabéns!',
 	},
 	ticketStatus: {
