@@ -95,6 +95,7 @@ async function checkPhone(context, stateName, successDialog, invalidDialog, reas
 async function checkEmail(context, stateName, successDialog, invalidDialog, reaskMsg = flow.askMail.fail) {
 	if (context.state.whatWasTyped.includes('@')) {
 		await context.setState({ [stateName]: context.state.whatWasTyped, dialog: successDialog });
+		if (context.session.platform === 'browser') await context.setState({ userEmail: context.state[stateName] });
 	} else {
 		await context.setState({ dialog: invalidDialog || '' });
 		if (reaskMsg)	{

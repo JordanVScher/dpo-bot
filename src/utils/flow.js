@@ -22,6 +22,16 @@ module.exports = {
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".',
 		ticketTime: 'O Número de protocolo do seu chamado é: <TICKET>.\nEm até <TIME> nossa equipe entrará em contato com você.',
 	},
+	duvidas: {
+		intro: 'Tem alguma dúvida? Entre com ela aqui que eu tentarei te responder.',
+		naoEntendi: 'Não entendi a sua pergunta mas posso verificar com a minha equipe.',
+		askEmail: 'Entre o seu e-mail, é ele que minha equipe usará para te responder.',
+		duvidaPlaceholder: 'Qual a sua dúvida?',
+		emailPlaceholder: 'Entre seu e-mail:',
+		success: 'Recebi a sua dúvida. Logo mais nossa equipe entrará em contato pelo seu e-mail.',
+		failure: 'Não te entendi, tente novamente.',
+
+	},
 	solicitacoes: {
 		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],
 		text1: 'Combinado 😉\nVocê pode me fazer uma pergunta livremente como "Como proteger meus dados" ou escolher uma das opções abaixo:',
@@ -108,7 +118,6 @@ module.exports = {
 			8: 'que seja possível abrir um chamado para alterar ou apagar seus dados.',
 			9: 'o DPO entrar em contato.',
 			10: 'o DPO entrar em contato.',
-
 		},
 	},
 	askTitular: {

@@ -32,7 +32,8 @@ async function sentryError(msg, err, platform) {
 async function addChar(a, b, position) { return a.substring(0, position) + b + a.substring(position); }
 
 // separates string in the first dot on the second half of the string
-async function separateString(someString) {
+async function separateString(someString, platform) {
+	if (platform === 'browser') return { firstString: someString, secondString: '' };
 	let removeLastChar = false;
 	if (someString.trim()[someString.length - 1] !== '.') { // trying to guarantee the last char is a dot so we never use halfLength alone as the divisor
 		someString += '.'; // eslint-disable-line no-param-reassign
@@ -56,10 +57,8 @@ async function separateString(someString) {
 
 async function sendTextAnswer(context, knowledge) {
 	const timeToWait = process.env.ISSUE_TIME_WAIT;
-
 	if (knowledge && knowledge.answer) {
-		await context.setState({ resultTexts: await separateString(knowledge.answer) });
-		console.log('context.state.resultTexts', context.state.resultTexts);
+		await context.setState({ resultTexts: await separateString(knowledge.answer, context.session.platform) });
 		if (context.state.resultTexts && context.state.resultTexts.firstString) {
 			if (timeToWait) await context.typing(timeToWait);
 			await context.sendText(context.state.resultTexts.firstString);
@@ -137,6 +136,14 @@ async function getUserTicketTypes(tickets) {
 	return result.sort();
 }
 
+function maskEmail(email) {
+	const index = email.indexOf('@');
+	if (!index) return email;
+	const subs = email.substring(3, index);
+	const sublength = subs.length;
+	const replaceWith = '*'.repeat(sublength);
+	return email.replace(subs, replaceWith);
+}
 
 async function handleErrorApi(options, res, err) {
 	let msg = `Endereço: ${options.host}`;
@@ -144,8 +151,9 @@ async function handleErrorApi(options, res, err) {
 	msg += `\nQuery: ${JSON.stringify(options.query, null, 2)}`;
 	msg += `\nMethod: ${options.method}`;
 	msg += `\nMoment: ${new Date()}`;
+
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
-	if (err) msg += `\nErro: ${err.stack}`;
+	if (err) msg += `\nErro: ${err.stack || err}`;
 
 	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
@@ -253,4 +261,5 @@ module.exports = {
 	getCustomText,
 	resumoTicket,
 	expectText,
+	maskEmail,
 };

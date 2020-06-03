@@ -48,9 +48,11 @@ async function buildMainMenu(context) {
 	const sobreLGPD = { content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' };
 	const sobreDipiou = { content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' };
 	const atendimentoAvancado = { content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' };
-
+	const duvidas = { content_type: 'text', title: 'Dúvidas', payload: 'duvidas' };
 
 	options.push(consumidor);
+	if (context.session.platform === 'browser') options.push(duvidas);
+
 	if (context.session.platform !== 'browser') {
 		if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push(meusTickets);
 

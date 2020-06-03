@@ -49,14 +49,14 @@ module.exports = {
 		if (issue_active === 1 || issue_active === true) {
 			// message = encodeURI(message);
 			entities = JSON.stringify(entities);
-			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?&security_token=${security_token}`).query({
+			return handleRequestAnswer(await request.post(`${apiUri}/api/chatbot/issue?security_token=${security_token}`).query({
 				politician_id,
 				fb_id,
 				message,
 				entities: { result: entities },
 			}));
 		}
-		return false;
+		return {};
 	},
 
 	async postIssueWithoutEntities(politician_id, fb_id, message, issue_active) {

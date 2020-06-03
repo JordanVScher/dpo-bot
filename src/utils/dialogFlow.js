@@ -63,15 +63,13 @@ async function checkPosition(context) {
 		await context.setState(
 			{ knowledge: await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.session.user.id) },
 		);
-		console.log('knowledge', context.state.knowledge);
-
 		// check if there's at least one answer in knowledge_base
 		if (context.state.knowledge && context.state.knowledge.knowledge_base && context.state.knowledge.knowledge_base.length >= 1) {
 			await sendAnswer(context);
+			await sendMainMenu(context);
 		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
 			await createIssue(context);
 		}
-		await sendMainMenu(context);
 		break;
 	}
 }

@@ -56,6 +56,8 @@ const handleText = async (context, incidenteCPFAux) => {
 
 	if (context.session.platform === 'browser' && context.state.onSolicitacoes !== true && cancelKeywords.includes(whatWasTyped.toLowerCase())) {
 		await context.setState({ dialog: 'mainMenu' });
+	} else if (['askEmailDuvida', 'invalidEmailDuvida'].includes(context.state.dialog)) {
+		await dialogs.checkEmail(context, 'userEmail', 'createIssueDirect', 'invalidEmailDuvida');
 	} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {

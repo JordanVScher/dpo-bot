@@ -1,6 +1,8 @@
 const accents = require('remove-accents');
+const { sendMainMenu } = require('./dialogs');
 const chatbotAPI = require('../chatbot_api.js');
 const { issueText } = require('./flow.js');
+const { duvidas } = require('./flow.js');
 const { getRandomArray } = require('./helper.js');
 
 const blacklist = ['sim', 'nao'];
@@ -15,23 +17,40 @@ async function formatString(text) {
 }
 module.exports.formatString = formatString;
 
+async function endProcess(context, answer, successText, failureText) {
+	if (timeToWait) await context.typing(timeToWait);
+	console.log('created issue?', answer);
+	if (answer && answer.id) {
+		if (successText) await context.sendText(successText);
+		return true;
+	}
+	if (failureText) await context.sendText(failureText);
+	return false;
+}
+
 // check if we should create an issue with that text message.If it returns true, we send the appropriate message.
 async function createIssue(context) {
 	// check if text is not empty and not on the blacklist
 	const cleanString = await formatString(context.state.whatWasTyped);
 	if (cleanString && cleanString.length > 0 && !blacklist.includes(cleanString)) {
-		const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.whatWasTyped,
-			context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+		if (context.session.platform === 'browser') {
+			if (context.state.userEmail) {
+				const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.originalDuvida,
+					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 
-		if (timeToWait) await context.typing(timeToWait);
-		if (issueResponse && issueResponse.id) {
-			await context.sendText(getRandomArray(issueText.success));
-			console.log('created issue? true');
-			return true;
+				await endProcess(context, issueResponse, duvidas.success, duvidas.failure);
+				await context.setState({ dialog: 'null' });
+				await sendMainMenu(context);
+			} else {
+				await context.setState({ originalDuvida: context.state.whatWasTyped });
+				await context.setState({ dialog: 'askEmailDuvida' });
+			}
+		} else {
+			const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.whatWasTyped,
+				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
+			await endProcess(context, issueResponse, getRandomArray(issueText.success), issueText.failure);
+			await context.setState({ dialog: 'mainMenu' });
 		}
 	}
-	await context.sendText(issueText.failure);
-	console.log('created issue? false');
-	return false;
 }
 module.exports.createIssue = createIssue;

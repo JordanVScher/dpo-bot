@@ -83,6 +83,13 @@ module.exports = async function App(context) {
 			await attach.sendMsgFromAssistente(context, 'fale-conosco', []);
 			await dialogs.sendMainMenu(context);
 			break;
+		case 'duvidas':
+			await dialogs.ask(context, flow.duvidas.intro, flow.ask, flow.duvidas.duvidaPlaceholder);
+			break;
+		case 'askEmailDuvida':
+			await context.sendText(flow.duvidas.naoEntendi);
+			await dialogs.ask(context, flow.duvidas.askEmail, flow.ask, flow.duvidas.emailPlaceholder);
+			break;
 		case 'solicitacoes':
 			await context.setState({ whatWasTyped: 'Quero fazer uma solicitação' });
 			await DF.dialogFlow(context);
