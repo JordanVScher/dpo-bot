@@ -84,11 +84,24 @@ class BrowserContext extends Context {
 		});
 	}
 
-	async sendImage(content) { await this.sendAttachment(content); }
+	async sendHTML(content) {
+		await this.client.sendAttachment({
+			type: 'html',
+			content,
+		});
+	}
 
-	async sendVideo(content) { await this.sendAttachment(content); }
+	async sendImage(content) {
+		await this.sendHTML(`<img class="botui-image" src="${content}">`);
+	}
 
-	async sendAudio(content) { await this.sendAttachment(content); }
+	async sendVideo(content) {
+		await this.sendHTML(`<video class="botui-video" src="${content}" controls>Seu Navegador não tem suporte a vídeo</video>`);
+	}
+
+	async sendAudio(content) {
+		await this.sendHTML(`<audio class="botui-audio" src="${content}" controls>Seu Navegador não tem suporte a áudio</audio>`);
+	}
 
 	async typingOn() { return null; } // eslint-disable-line
 

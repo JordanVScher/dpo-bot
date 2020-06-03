@@ -12,3 +12,82 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.botui-container {
+  background-color: #ffffff;
+}
+
+/* Onde ficam as mensagens que já foram */
+/* .botui-messages-container {
+} */
+
+/* Onde ficam as mensagens atuais */
+/* .botui-actions-container {
+} */
+
+/* O quadrado de cada mensagem trocada */
+/* .botui-message {
+} */
+
+/* width="200" height="200" bobackground-color="#ffffff" */
+
+
+.botui-message-content {
+  background-color: #dfe6e9;
+}
+
+.botui-message-content.human {
+  background-color: #0984e3;
+}
+
+
+/* .botui-message-content.embed {
+    width: 500;
+} iframe .shrinkToFit {
+    height: 1800;
+    min-height: 120px;
+    max-height: auto;
+    float: center;
+    margin: 0px;
+    padding: 0px;
+} */
+/* 
+.botui-message-content.text {
+  float: left;
+} 
+
+.botui-message-content.text.human {
+  float: right;
+}  */
+
+/* .botui-message-content-link {
+
+}
+
+.botui-actions-text-input {
+
+}
+
+.botui-actions-text-submit {
+
+} */
+
+.botui-actions-buttons-button {
+  background-color: #0984e3;
+
+}
+
+.botui-image {
+  max-width: 200px;
+  max-height: 200px;
+  /* filter: grayscale(100%); */
+}
+
+.botui-video {
+  max-width: 250px;
+  max-height: 250px;
+}
+
+.botui-message-content.html {
+  background: rgba(0,0,0,0);
+}

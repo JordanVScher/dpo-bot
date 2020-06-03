@@ -3,8 +3,8 @@ import flow from './flow';
 const introMsg = {
 	messages: [
 		{
-			type: 'embed',
-			content: flow.avatarImage,
+			type: 'html',
+			content: `<img class="botui-image"  src="${flow.avatarImage}">`,
 		},
 		{
 			content: flow.getStarted,
