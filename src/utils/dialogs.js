@@ -191,7 +191,7 @@ async function handleSolicitacaoRequest(context) {
 				await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
 			}
 		} else { // DF found an entity but we dont have it in our dictionary, ask again
-			await context.sendText(flow.solicitacoes.noSolicitationType);
+			await help.expectText(context, flow.solicitacoes.noSolicitationType, await attach.getQR(flow.solicitacaoVoltar), 'Qual sua requisição?');
 			await context.setState({ dialog: 'solicitacoes' });
 		}
 	}

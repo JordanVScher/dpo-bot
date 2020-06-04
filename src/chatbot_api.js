@@ -7,7 +7,7 @@ const { handleRequestAnswer } = require('./utils/helper');
 
 const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const apiUri = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
-const dialogFlowPort = process.env.DF_PORT || process.env.REACT_APP_DF_PORT;
+const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADDRESS;
 
 module.exports = {
 	async getPoliticianData(pageId) {
@@ -182,6 +182,6 @@ module.exports = {
 	},
 
 	async dialogflowText(queryText, sessionId) {
-		return handleRequestAnswer(await request.post(`http://localhost:${dialogFlowPort}/text-request`).send({ queryText, sessionId }));
+		return handleRequestAnswer(await request.post(`${dialogFlowAddress}/text-request`).send({ queryText, sessionId }));
 	},
 };
