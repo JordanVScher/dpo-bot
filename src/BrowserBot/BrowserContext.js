@@ -1,5 +1,7 @@
 import { Context } from 'bottender';
 
+const defaultDelay = 0;
+
 const buildButtons = (btns) => {
 	const res = [];
 	const buttons = btns.quick_replies;
@@ -35,14 +37,16 @@ class BrowserContext extends Context {
   * @param {Array} action - An array of objects containing "text" and "value"
   * @example await context.sendQuickReply([{ text: "What the user sees", value: "What the bot receives"}]);
   */
-	async sendQuickReply(action) {
+	async sendQuickReply(action, delay = defaultDelay) {
 		await this.client.sendAction({
 			type: 'button',
 			action,
+			delay,
+			// loading: true,
 		});
 	}
 
-	async sendBotText(content, delay) {
+	async sendBotText(content, delay = defaultDelay) {
 		await this.client.sendText({
 			content,
 			delay,
@@ -52,18 +56,18 @@ class BrowserContext extends Context {
 		});
 	}
 
-	async sendText(content, buttons, delay = 0) {
+	async sendText(content, buttons, delay = defaultDelay) {
 		await this.sendBotText(content, delay);
 
 		if (buttons) {
 			const action = buildButtons(buttons);
 			if (action && action.length > 0) {
-				await this.sendQuickReply(action);
+				await this.sendQuickReply(action, delay);
 			}
 		}
 	}
 
-	async sendHumanText(content, delay = 0) {
+	async sendHumanText(content, delay = defaultDelay) {
 		await this.client.sendText({
 			content,
 			delay,
@@ -115,14 +119,13 @@ class BrowserContext extends Context {
   * @param {String} placeholder - A string that will serve as a placeholder for the text area
   *  @example await context.sendTextFreeText("Need help?");
   */
-	async sendTextArea(content, placeholder = 'Entre com seu texto aqui') {
-		await this.sendBotText(content);
+	async sendTextArea(content, placeholder = 'Entre com seu texto aqui', delay = defaultDelay) {
+		await this.sendBotText(content, delay);
 
 		await this.client.sendAction({
 			type: 'text',
-			action: {
-				placeholder,
-			},
+			action: { placeholder },
+			delay,
 		});
 	}
 

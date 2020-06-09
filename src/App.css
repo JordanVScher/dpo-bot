@@ -91,3 +91,33 @@
 .botui-message-content.html {
   background: rgba(0,0,0,0);
 }
+
+
+/* Apply same fadeIn effect to all message elements, to create a delay effect */
+.botui-image, 
+.botui-video, 
+.botui-message-content.html, 
+.botui-actions-buttons-button, 
+.botui-message-content, 
+.botui-actions-text-input {
+    /* background: red; */
+    opacity: 0;
+
+    animation: fadeIn 0.5s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+.botui-message-content.human {
+    opacity: 1;
+
+    animation: fadeIn 0s;
+    animation-delay: 0s;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
