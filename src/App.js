@@ -3,6 +3,7 @@ import BotUI from '@chentsulin/react-botui';
 import 'botui/build/botui.min.css';
 import 'botui/build/botui-theme-default.css';
 
+import sanitizeHtml from 'sanitize-html';
 import BrowserBot from './BrowserBot';
 import BottenderApp from './BottenderApp';
 import introMsg from './utils/introMsg';
@@ -43,9 +44,10 @@ class App extends Component {
 
     // new message for the botui
     let valueToShow = '';
-    if (res.type === 'button') valueToShow = res.text
-    if (res.type === 'text') valueToShow = res.value
-
+    console.log(`res.text`, res.text);
+    if (res.type === 'button') valueToShow = sanitizeHtml(res.text);
+    if (res.type === 'text') valueToShow = res.value;
+    console.log(`valueToShow`, valueToShow);
     this.setState({
       messages: [
         ...this.state.messages, // keeps old messages on the interface

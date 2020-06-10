@@ -1,4 +1,5 @@
 import { Context } from 'bottender';
+import { replaceLinks } from '../utils/helper';
 
 const defaultDelay = 0;
 
@@ -47,6 +48,8 @@ class BrowserContext extends Context {
 	}
 
 	async sendBotText(content, delay = defaultDelay) {
+		content = replaceLinks(content);
+
 		await this.client.sendText({
 			content,
 			delay,
