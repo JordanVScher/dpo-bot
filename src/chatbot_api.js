@@ -125,7 +125,7 @@ module.exports = {
 		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params: { message } });
 	},
 
-	async postNewTicket(chatbot_id, fb_id, type_id, data, message = '', anonymous = 0, files = []) {
+	async postNewTicket(chatbot_id, recipient_id, type_id, data, message = '', anonymous = 0, files = []) {
 		const aux = {};
 		if (files) files.forEach((e, i) => { aux[`ticket_attachment_${i}`] = e; });
 
@@ -133,7 +133,7 @@ module.exports = {
 			url: `${apiUri}/api/chatbot/ticket`,
 			method: 'post',
 			params: {
-				chatbot_id, fb_id, type_id, message, data: JSON.stringify(data), anonymous, ...aux,
+				chatbot_id, recipient_id, type_id, message, data: JSON.stringify(data), anonymous, ...aux,
 			},
 		});
 	},

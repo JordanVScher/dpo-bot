@@ -1,5 +1,5 @@
 const { sendMainMenu } = require('./dialogs');
-const { createTicket } = require('./dialogs');
+const { ticketFollowUp } = require('./dialogs');
 const { postNewTicket } = require('../chatbot_api');
 const { getQR } = require('./attach');
 const flow = require('./flow');
@@ -22,8 +22,13 @@ async function createFilesTimer(userID, context) {
 	filesTimer[userID] = setTimeout(async () => {
 		if (context.state.dialog === 'incidenteFilesTimer') {
 			if (context.state.incidenteAnonimo === true) {
-				await createTicket(context,
-					await postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, 7, '', '', 1, context.state.titularFiles));
+				const desiredTicket = 7;
+				await ticketFollowUp(context,
+					await postNewTicket(
+						context.state.politicianData.organization_chatbot_id,
+						context.session.user.id, desiredTicket,
+						'', '', 1, context.state.titularFiles,
+					), desiredTicket);
 			} else {
 				await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.ask));
 			}

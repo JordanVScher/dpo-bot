@@ -22,6 +22,25 @@ const getPageID = (context) => {
 	return process.env.REACT_APP_MESSENGER_PAGE_ID;
 };
 
+// we update context data at every interaction that's not a comment or a post
+const postRecipient = async (context) => {
+	const params = {
+		name: context.state.sessionUser.name,
+		origin_dialog: 'greetings',
+	};
+
+	if (context.session.platform === 'browser') {
+		params.uuid = context.session.user.id;
+	} else {
+		params.picture = context.state.sessionUser.profilePic;
+		// session: JSON.stringify(context.state),
+	}
+
+	// return recipient id, which will be used on the others endpoints
+	const recipient = await assistenteAPI.postRecipient(context.state.politicianData.user_id, params);
+	return recipient.id;
+};
+
 
 module.exports = async function App(context) {
 	try {
@@ -30,16 +49,8 @@ module.exports = async function App(context) {
 			sessionUser: { ...await context.getUserProfile() },
 		});
 
+		await context.setState({ recipientID: await postRecipient(context) });
 		// await reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
-
-		// we update context data at every interaction that's not a comment or a post
-		await assistenteAPI.postRecipient(context.state.politicianData.user_id, {
-			fb_id: context.session.user.id,
-			name: context.state.sessionUser.name,
-			origin_dialog: 'greetings',
-			picture: context.state.sessionUser.profilePic,
-			// session: JSON.stringify(context.state),
-		});
 
 		await timer.deleteTimers(context.session.user.id);
 
@@ -123,12 +134,10 @@ module.exports = async function App(context) {
 		case 'askRevogarMail':
 			await dialogs.ask(context, flow.revogar.askRevogarMail, flow.ask, flow.ask.mailPlaceholder);
 			break;
-		case 'gerarTicket1': {
+		case 'gerarTicket1':
 			await context.setState({ ticketID: '1' });
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
-		} break;
+			await dialogs.createTicket(context);
+			break;
 		case 'solicitacao':
 			await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
 			await dialogs.ask(context, `${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]}.`, flow.ask, flow.ask.cpfPlaceholder);
@@ -142,9 +151,7 @@ module.exports = async function App(context) {
 			break;
 		case 'gerarTicket':
 			try {
-				const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID.toString());
-				await dialogs.createTicket(context,
-					await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state)));
+				await dialogs.createTicket(context);
 			} catch (error) {
 				console.log('--\ncontext.state.ticketTypes.ticket_types', context.state.ticketTypes.ticket_types);
 				console.log('context.state.ticketID', context.state.ticketID);
@@ -172,12 +179,10 @@ module.exports = async function App(context) {
 		case 'incidenteEmail':
 			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
 			break;
-		case 'gerarTicket7': {
+		case 'gerarTicket7':
 			await context.setState({ ticketID: '7' });
-			const { id } = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id.toString() === context.state.ticketID);
-			await dialogs.createTicket(context,
-				await assistenteAPI.postNewTicket(context.state.politicianData.organization_chatbot_id, context.session.user.id, id, await help.buildTicket(context.state), '', 0, context.state.titularFiles));
-		} break;
+			await dialogs.createTicket(context);
+			break;
 		case 'atendimentoAvançado':
 			await dialogs.atendimentoAvançado(context);
 			break;

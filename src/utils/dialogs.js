@@ -11,16 +11,31 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
-async function createTicket(context, ticketID) {
-	await context.sendText(flow.mainMenu.gerando);
-	if (ticketID && ticketID.id) {
+async function ticketFollowUp(context, ticket, desiredTicket) {
+	if (ticket && ticket.id) {
 		await context.typing(1000 * 2.5);
-		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, context.state.ticketID);
+		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, desiredTicket);
 		await context.sendText(flow.mainMenu.createTicket);
-		await sendMainMenu(context, flow.mainMenu.ticketTime.replace('<TIME>', time).replace('<TICKET>', ticketID.id));
+		await sendMainMenu(context, flow.mainMenu.ticketTime.replace('<TIME>', time).replace('<TICKET>', ticket.id));
 	} else {
-		await context.sendText('Erro ao criar o ticket');
+		await context.sendText('Erro ao criar o ticket.');
+		await sendMainMenu(context);
 	}
+}
+async function createTicket(context) {
+	await checkQR.reloadTicket(context);
+	await context.sendText(flow.mainMenu.gerando);
+
+	const { ticketID } = context.state;
+	const activeTickets = context.state.ticketTypes.ticket_types;
+
+	const { id: desiredTicket } = activeTickets.find((x) => x.ticket_type_id.toString() === ticketID.toString());
+
+	const res = await assistenteAPI.postNewTicket(
+		context.state.politicianData.organization_chatbot_id, context.state.recipientID, desiredTicket, await help.buildTicket(context.state),
+	);
+
+	await ticketFollowUp(context, res, desiredTicket);
 }
 
 // obs: facebook may take a while to process larger files, so if the user updates multiple files, we must wait for facebook to finish them all (actually we just wait for a few seconds)
