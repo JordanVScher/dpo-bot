@@ -67,7 +67,7 @@ module.exports = async function App(context) {
 			await context.setState({ lastQRpayload: context.event.rawEvent.message.value });
 			await input.handleQuickReply(context);
 		} else if (await input.isText(context) === true) {
-			await input.handleText(context);
+			await input.handleText(context, incidenteCPFAux);
 		} else if (context.event.isFile || context.event.isVideo || context.event.isImage) {
 			if (['incidenteAskFile', 'incidenteI', 'incidenteA', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 				await dialogs.handleFiles(context, 'incidenteFilesTimer');
@@ -131,6 +131,9 @@ module.exports = async function App(context) {
 		case 'askRevogarTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', context.state.titularCPF), await attach.getQRCPF(flow.CPFConfirm, flow.revogar.CPFNext));
 			break;
+		case 'askRevogarNome':
+			await dialogs.ask(context, flow.revogar.askRevogarName, flow.ask, flow.ask.nomePlaceholder);
+			break;
 		case 'askRevogarMail':
 			await dialogs.ask(context, flow.revogar.askRevogarMail, flow.ask, flow.ask.mailPlaceholder);
 			break;
@@ -146,8 +149,11 @@ module.exports = async function App(context) {
 		case 'askTitular':
 			await context.sendText(flow.askTitular.ask.replace('<CPF>', context.state.titularCPF), await attach.getQR(flow.askTitular));
 			break;
+		case 'askNome':
+			await dialogs.ask(context, flow.revogar.askRevogarName, flow.ask, flow.ask.nomePlaceholder);
+			break;
 		case 'askMail':
-			await dialogs.ask(context, flow.askMail.ask, flow.askMail, flow.ask.mailPlaceholder);
+			await dialogs.ask(context, flow.askMail.ask, flow.ask, flow.ask.mailPlaceholder);
 			break;
 		case 'gerarTicket':
 			try {
@@ -168,16 +174,28 @@ module.exports = async function App(context) {
 			// falls throught
 		case 'incidenteI':
 		case 'incidenteAskFile':
-			await context.setState({ titularFiles: [] }); // clean any past files
-			await context.sendText(flow.incidente.askFile);
+			if (context.session.platform === 'browser') {
+				await context.setState({ dialog: 'askDescricaoIdentificado' });
+				if (context.state.incidenteAnonimo === true) await context.setState({ dialog: 'askDescricaoAnonimo' });
+				await dialogs.ask(context, flow.askDescrição.ask, flow.ask, flow.ask.descricaoPlaceholder);
+			} else {
+				await context.setState({ titularFiles: [] }); // clean any past files
+				await context.sendText(flow.incidente.askFile);
+			}
+			break;
+		case 'incidenteCPF':
+			await dialogs.ask(context, flow.incidente.incidenteCPF, flow.ask, flow.ask.cpfPlaceholder);
 			break;
 		case 'incidenteTitular':
 			await context.sendText(flow.CPFConfirm.ask.replace('<CPF>', incidenteCPFAux[context.session.user.id]), await attach.getQRCPF(flow.CPFConfirm, flow.incidente.CPFNext));
 			await context.setState({ titularCPF: incidenteCPFAux[context.session.user.id] }); // passing memory data to state
 			delete incidenteCPFAux[context.session.user.id];
 			break;
+		case 'incidenteNome':
+			await dialogs.ask(context, flow.incidente.askName, flow.ask, flow.ask.nomePlaceholder);
+			break;
 		case 'incidenteEmail':
-			await context.sendText(flow.incidente.askMail, await attach.getQR(flow.askCPF));
+			await dialogs.ask(context, flow.incidente.askMail, flow.ask, flow.ask.mailPlaceholder);
 			break;
 		case 'gerarTicket7':
 			await context.setState({ ticketID: '7' });

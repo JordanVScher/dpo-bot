@@ -99,6 +99,7 @@ async function buildTicket(state) {
 	if (state.titularCPF) { result.cpf = state.titularCPF;	}
 	// if (state.titularPhone) { result.telefone = state.titularPhone;	}
 	if (state.titularMail) { result.mail = state.titularMail;	}
+	if (state.titularDescription) { result.description = state.titularDescription;	}
 
 	return result;
 }

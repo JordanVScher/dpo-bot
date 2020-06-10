@@ -35,7 +35,10 @@ async function createIssue(context) {
 	if (cleanString && cleanString.length > 0 && !blacklist.includes(cleanString)) {
 		if (context.session.platform === 'browser') {
 			if (context.state.userEmail) {
-				const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.originalDuvida,
+				await chatbotAPI.postRecipient(context.state.politicianData.user_id, { uuid: context.session.user.id, email: context.state.userEmail });
+
+				await context.setState({ originalDuvida: `${context.state.originalDuvida}\n\nO e-mail desse usuário é: ${context.state.userEmail}` });
+				const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.originalDuvida,
 					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 
 				await endProcess(context, issueResponse, duvidas.success, duvidas.failure);
@@ -46,7 +49,7 @@ async function createIssue(context) {
 				await context.setState({ dialog: 'askEmailDuvida' });
 			}
 		} else {
-			const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.session.user.id, context.state.whatWasTyped,
+			const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.whatWasTyped,
 				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 			await endProcess(context, issueResponse, getRandomArray(issueText.success), issueText.failure);
 			await context.setState({ dialog: 'mainMenu' });

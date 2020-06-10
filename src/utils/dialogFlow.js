@@ -58,18 +58,19 @@ async function checkPosition(context) {
 	case 'Fallback': // didn't understand what was typed
 		await createIssue(context);
 		break;
-	default: // default acts for every intent - position on MA
+	default: {
+		// default acts for every intent - position on MA
 		// getting knowledge base. We send the complete answer from dialogflow
-		await context.setState(
-			{ knowledge: await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.session.user.id) },
-		);
+		const knowledge = await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.state.recipientID);
+		await context.setState({ knowledge });
 		// check if there's at least one answer in knowledge_base
-		if (context.state.knowledge && context.state.knowledge.knowledge_base && context.state.knowledge.knowledge_base.length >= 1) {
+		if (knowledge && knowledge.knowledge_base && knowledge.knowledge_base.length >= 1) {
 			await sendAnswer(context);
 			await sendMainMenu(context);
 		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
 			await createIssue(context);
 		}
+	}
 		break;
 	}
 }
@@ -113,7 +114,7 @@ async function buildInformacoesMenu(context) {
 
 	for (let i = 0; i < intents.length; i++) {
 		const e = intents[i];
-		const aux = await MaAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.session.user.id);
+		const aux = await MaAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.state.recipientID);
 		if (aux && aux.knowledge_base && aux.knowledge_base.length > 0) {
 			options.push({ content_type: 'text', title: e.btn, payload: `InfoRes${answer.length}` });
 			answer.push(aux.knowledge_base[0]);

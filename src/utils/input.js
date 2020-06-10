@@ -5,6 +5,14 @@ const DF = require('./dialogFlow');
 const dialogs = require('./dialogs');
 const { checkUserOnLabelName } = require('./labels');
 
+const checkNextStep = async (context, browser, regular) => {
+	if (context.session.platform === 'browser') {
+		await context.setState({ dialog: browser });
+	} else {
+		await context.setState({ dialog: regular });
+	}
+};
+
 const handleQuickReply = async (context) => {
 	// if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
 	const { lastQRpayload } = context.state;
@@ -12,6 +20,12 @@ const handleQuickReply = async (context) => {
 	if (lastQRpayload === 'greetings') {
 		if (context.session.platform === 'browser') await context.resetMessages();
 		await context.setState({ dialog: 'greetings' });
+	} else if (lastQRpayload === 'checkNextStepRevogar') {
+		await checkNextStep(context, 'askRevogarNome', 'askRevogarMail');
+	} else if (lastQRpayload === 'checkNextStep') {
+		await checkNextStep(context, 'askNome', 'askMail');
+	} else if (lastQRpayload === 'checkNextStepIncidente') {
+		await checkNextStep(context, 'incidenteNome', 'incidenteEmail');
 	} else if (lastQRpayload.slice(0, 4) === 'quiz') {
 		await quiz.handleAnswer(context, lastQRpayload.charAt(4));
 	} else if (lastQRpayload.slice(0, 13) === 'extraQuestion') {
@@ -60,16 +74,26 @@ const handleText = async (context, incidenteCPFAux) => {
 		await dialogs.checkEmail(context, 'userEmail', 'createIssueDirect', 'invalidEmailDuvida');
 	} else if (['solicitacao', 'askCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askTitular', 'invalidCPF');
+	} else if (['askNome', 'invalidNome'].includes(context.state.dialog)) {
+		await dialogs.checkNome(context, 'titularNome', 'askMail', 'invalidNome');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
 		// -- 1
 	} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
+	} else if (['askRevogarNome', 'invalidNome'].includes(context.state.dialog)) {
+		await dialogs.checkNome(context, 'titularNome', 'askRevogarMail', 'invalidNome');
 	} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
 		// -- 7
-	} else if (['incidenteAskPDF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
+	} else if (['incidenteAskCPF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 		incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
+	} else if (['incidenteNome', 'incidenteNomeReAsk'].includes(context.state.dialog)) {
+		await dialogs.checkNome(context, 'titularNome', 'incidenteEmail', 'incidenteNomeReAsk');
+	} else if (['askDescricaoAnonimo', 'askDescricaoAnonimoReAsk'].includes(context.state.dialog)) {
+		await dialogs.checkDescricao(context, 'titularDescription', 'incidenteEmail', 'askDescricaoAnonimoReAsk');
+	} else if (['askDescricaoIdentificado', 'askDescricaoIdentificadoReAsk'].includes(context.state.dialog)) {
+		await dialogs.checkDescricao(context, 'titularDescription', 'incidenteCPF', 'askDescricaoIdentificadoReAsk');
 	} else if (['incidenteEmail', 'incidenteEmailReAsk'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket7', 'incidenteEmailReAsk');
 	} else if (context.state.onTextQuiz === true) {

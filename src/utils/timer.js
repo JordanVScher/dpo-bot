@@ -1,8 +1,10 @@
 const { sendMainMenu } = require('./dialogs');
 const { ticketFollowUp } = require('./dialogs');
+const { ask } = require('./dialogs');
 const { postNewTicket } = require('../chatbot_api');
-const { getQR } = require('./attach');
+// const { getQR } = require('./attach');
 const flow = require('./flow');
+
 
 const informacoesTimer = {};
 const filesTimer = {};
@@ -30,10 +32,12 @@ async function createFilesTimer(userID, context) {
 						'', '', 1, context.state.titularFiles,
 					), desiredTicket);
 			} else {
-				await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.ask));
+				await ask(context, flow.incidente.incidenteCPF, flow.ask, flow.ask.cpfPlaceholder);
+				// await context.sendText(flow.incidente.incidenteCPF, await getQR(flow.ask));
 			}
 		} else if (context.state.dialog === 'avançadoFilesTimer') {
-			await context.sendText(flow.avançado.incidenteCPF, await getQR(flow.ask));
+			await ask(context, flow.avançado.incidenteCPF, flow.ask, flow.ask.cpfPlaceholder);
+			// await context.sendText(flow.avançado.incidenteCPF, await getQR(flow.ask));
 		}
 		delete filesTimer[userID];
 	}, flow.incidente.time); // waiting for facebook to process all the files

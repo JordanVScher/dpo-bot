@@ -15,7 +15,14 @@ async function ticketFollowUp(context, ticket, desiredTicket) {
 	if (ticket && ticket.id) {
 		await context.typing(1000 * 2.5);
 		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, desiredTicket);
-		await context.sendText(flow.mainMenu.createTicket);
+
+		if (context.session.platform !== 'browser') await context.sendText(flow.mainMenu.createTicket);
+
+		const { ticketID } = context.state;
+		if (ticketID && ticketID.toString() === '7') {
+			await context.sendText('Você pode mandar as provas do seu incidente para o nosso e-mail em: "email@gmail.com"');
+		}
+
 		await sendMainMenu(context, flow.mainMenu.ticketTime.replace('<TIME>', time).replace('<TICKET>', ticket.id));
 	} else {
 		await context.sendText('Erro ao criar o ticket.');
@@ -75,6 +82,22 @@ async function ask(context, text, buttons, placeholder = '') {
 	await help.expectText(context, textToSend, await attach.getQR(buttons), placeholder);
 }
 
+async function checkNome(context, stateName, successDialog, invalidDialog, reaskMsg = flow.ask.cpfFail) {
+	const nome = context.state.whatWasTyped;
+
+	if (nome) {
+		await context.setState({ [stateName]: nome, dialog: successDialog });
+		return nome;
+	}
+
+	await context.setState({ dialog: invalidDialog || '' });
+	if (reaskMsg) {
+		await ask(context, reaskMsg, flow.ask, flow.ask.nomePlaceholder);
+	}
+
+	return '';
+}
+
 async function checkCPF(context, stateName, successDialog, invalidDialog, reaskMsg = flow.ask.cpfFail) {
 	const cpf = await help.getCPFValid(context.state.whatWasTyped);
 
@@ -117,6 +140,22 @@ async function checkEmail(context, stateName, successDialog, invalidDialog, reas
 			await ask(context, reaskMsg, flow.ask, flow.ask.mailPlaceholder);
 		}
 	}
+}
+
+async function checkDescricao(context, stateName, successDialog, invalidDialog, reaskMsg = flow.ask.cpfFail) {
+	const descricao = context.state.whatWasTyped;
+
+	if (descricao) {
+		await context.setState({ [stateName]: descricao, dialog: successDialog });
+		return descricao;
+	}
+
+	await context.setState({ dialog: invalidDialog || '' });
+	if (reaskMsg) {
+		await ask(context, reaskMsg, flow.ask, flow.ask.descricaoPlaceholder);
+	}
+
+	return '';
 }
 
 async function meuTicket(context) {
@@ -267,6 +306,8 @@ async function handleReset(context) {
 module.exports = {
 	sendMainMenu,
 	checkFullName,
+	checkDescricao,
+	checkNome,
 	checkCPF,
 	checkPhone,
 	checkEmail,
