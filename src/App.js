@@ -44,10 +44,10 @@ class App extends Component {
 
     // new message for the botui
     let valueToShow = '';
-    console.log(`res.text`, res.text);
-    if (res.type === 'button') valueToShow = sanitizeHtml(res.text);
-    if (res.type === 'text') valueToShow = res.value;
-    console.log(`valueToShow`, valueToShow);
+
+    if (res.type === 'button') valueToShow = res.text;
+    if (res.type === 'text') valueToShow = sanitizeHtml(res.value);
+
     this.setState({
       messages: [
         ...this.state.messages, // keeps old messages on the interface
