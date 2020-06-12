@@ -32,6 +32,7 @@ const postRecipient = async (context) => {
 	if (context.session.platform === 'browser') {
 		params.uuid = context.session.user.id;
 	} else {
+		params.fb_id = context.session.user.id;
 		params.picture = context.state.sessionUser.profilePic;
 		// session: JSON.stringify(context.state),
 	}
@@ -53,6 +54,7 @@ module.exports = async function App(context) {
 		// await reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
 		await timer.deleteTimers(context.session.user.id);
+
 
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
