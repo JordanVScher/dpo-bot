@@ -10,7 +10,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
+# COPY package-lock.json ./
 RUN npm install --silent
 RUN npm install react-scripts@3.4.1 -g --silent
 
@@ -19,5 +19,6 @@ COPY . ./
 EXPOSE 1992
 
 # start app
-RUN npm run react_build
-# CMD ["npm", "run", "start2"]
+# RUN npm run react_build
+COPY ./src/entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["entrypoint.sh"]
