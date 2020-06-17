@@ -1,26 +1,37 @@
+# FROM node:11.13.0
+# ENV NPM_CONFIG_LOGLEVEL warn
+
+# EXPOSE 2700
+
+# USER root
+# RUN mkdir src
+# RUN chown -R node:node /src
+# RUN apt-get update
+# RUN apt-get install -y runit
+# USER node
+# ADD package.json /src/
+# WORKDIR /src
+
+# # RUN npm install bottender dotenv
+# # RUN npm install
+# # ADD . /src
+
+# USER root
+
+# COPY services/ /etc/service/
+# RUN chmod +x /etc/service/*/run
+# RUN chown -R node:node /src
+
+# ENTRYPOINT ["runsvdir"]
+# CMD ["/etc/service/"]
+
 FROM node:11.13.0
-ENV NPM_CONFIG_LOGLEVEL warn
 
-EXPOSE 2700
+WORKDIR /home/node/app
 
-USER root
-RUN mkdir src
-RUN chown -R node:node /src
-RUN apt-get update
-RUN apt-get install -y runit
-USER node
-ADD package.json /src/
-WORKDIR /src
+COPY . .
 
-# RUN npm install bottender dotenv
-# RUN npm install
-# ADD . /src
+EXPOSE 2004
 
-USER root
-
-COPY services/ /etc/service/
-RUN chmod +x /etc/service/*/run
-RUN chown -R node:node /src
-
-ENTRYPOINT ["runsvdir"]
-CMD ["/etc/service/"]
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
