@@ -19,6 +19,7 @@ COPY . ./
 EXPOSE 1992
 
 # start app
-RUN npm run react_build --max-old-space-size=8192
+CMD ["npm", "run", "react_build", "--max-old-space-size=8192"]
+
 # COPY ./src/entrypoint.sh /usr/local/bin/
 # ENTRYPOINT ["entrypoint.sh"]

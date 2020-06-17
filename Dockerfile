@@ -7,7 +7,7 @@ RUN npm install
 
 EXPOSE 1990
 
-RUN npm start
+CMD ["npm", "start"]
 # COPY docker-entrypoint.sh /usr/local/bin/
 # ENTRYPOINT ["docker-entrypoint.sh"]
 

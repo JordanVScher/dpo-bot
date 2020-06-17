@@ -7,7 +7,8 @@ RUN npm install
 
 EXPOSE 1991
 
-RUN node ./dialogflow/server.js
+CMD ["node", "./dialogflow/server.js"]
+
 # COPY ./dialogflow/entrypoint.sh /usr/local/bin/
 # ENTRYPOINT ["entrypoint.sh"]
 
