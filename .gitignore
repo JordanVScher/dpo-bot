@@ -92,6 +92,3 @@ test.html
 ticket_types.js
 
 build/
-
-.dockerignore
-Dockerfile.prod

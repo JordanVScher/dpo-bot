@@ -1,8 +1,9 @@
 # pull official base image
 FROM node:13.12.0-alpine
+ENV DEBUG=*
 
 # set working directory
-WORKDIR /app
+WORKDIR /home/node/app_browser
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
@@ -15,6 +16,8 @@ RUN npm install react-scripts@3.4.1 -g --silent
 
 # add app
 COPY . ./
+EXPOSE 1992
 
 # start app
-CMD ["npm", "start"]
+RUN npm run react_build
+# CMD ["npm", "run", "start2"]
