@@ -19,7 +19,7 @@ services:
         dockerfile: ./dialogflow/Dockerfile
     restart: unless-stopped
     ports:
-      - "1992:2777"
+      - "1991:2777"
     volumes:
       - .:/home/node/app_df
       - /home/node/app_df/node_modules
