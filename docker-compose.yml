@@ -7,7 +7,7 @@ services:
       dockerfile: ./Dockerfile
     restart: unless-stopped
     ports:
-      - "1990:5000"
+      - "1990:2700"
     volumes:
       - .:/home/node/app
       - /home/node/app/node_modules
