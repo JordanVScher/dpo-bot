@@ -159,7 +159,7 @@ async function checkDescricao(context, stateName, successDialog, invalidDialog, 
 }
 
 async function meuTicket(context) {
-	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
+	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.state.recipientID), currentTicket: '', ticketID: '' });
 	if (context.state.userTickets.itens_count > 0) {
 		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);

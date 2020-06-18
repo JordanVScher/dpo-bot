@@ -15,12 +15,12 @@ const { reloadTicket } = require('./utils/checkQR'); // eslint-disable-line
 
 const incidenteCPFAux = {}; // because the file timer stops setState from working
 
-const getPageID = (context) => {
-	if (context && context.event && context.event.rawEvent && context.event.rawEvent.recipient && context.event.rawEvent.recipient.id) {
-		return context.event.rawEvent.recipient.id;
-	}
-	return process.env.REACT_APP_MESSENGER_PAGE_ID;
-};
+// const getPageChatbotID = (context) => {
+// 	if (context && context.event && context.event.rawEvent && context.event.rawEvent.recipient && context.event.rawEvent.recipient.id) {
+// 		return context.event.rawEvent.recipient.id;
+// 	}
+// 	return process.env.REACT_APP_MESSENGER_PAGE_ID;
+// };
 
 // we update context data at every interaction that's not a comment or a post
 const postRecipient = async (context) => {
@@ -46,7 +46,7 @@ const postRecipient = async (context) => {
 module.exports = async function App(context) {
 	try {
 		await context.setState({
-			politicianData: await assistenteAPI.getPoliticianData(getPageID(context)),
+			politicianData: await assistenteAPI.getPoliticianData('1'),
 			sessionUser: { ...await context.getUserProfile() },
 		});
 

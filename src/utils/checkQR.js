@@ -8,7 +8,7 @@ const flow = require('./flow');
 async function reloadTicket(context) {
 	await context.setState({ ticketTypes: await getTicketTypes(context.state.politicianData.organization_chatbot_id) });
 	if (context.session.platform !== 'browser') {
-		await context.setState({ userTickets: await getUserTickets(context.session.user.id) });
+		await context.setState({ userTickets: await getUserTickets(context.state.recipientID) });
 		await context.setState({ userTicketTypes: await getUserTicketTypes(context.state.userTickets.tickets) });
 	} else {
 		await context.setState({ userTickets: [], userTicketTypes: [] });
