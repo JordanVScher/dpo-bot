@@ -15,7 +15,7 @@
     "react_build": "react-scripts build",
     "react_test": "react-scripts test",
     "react_eject": "react-scripts eject",
-    "docker_build": "docker-compose up -d --build",
+    "docker_build": "docker-compose down; docker-compose up -d --build;",
     "docker_update": "docker-compose up -d",
     "log_dialogflow": "docker logs dpo-dialogflow -f",
     "log_bottender": "docker logs dpo-bottender -f",
