@@ -171,7 +171,8 @@ async function handleRequestAnswer(response) {
 	try {
 		const { status } = response;
 		const { data } = await response;
-		await handleErrorApi(response.config, data, status, false);
+		console.log('response', response);
+		if (response.config) await handleErrorApi(response.config, data, status, false);
 		return data;
 	} catch (error) {
 		await handleErrorApi(response.config, false, null, error);

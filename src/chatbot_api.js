@@ -10,6 +10,7 @@ const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADD
 const makeRequest = async (opt) => {
 	try {
 		if (opt.params) opt.params.security_token = security_token;
+		console.log('opt', opt);
 		const result = await axios(opt).then((res) => res).catch((err) => err.response);
 		return handleRequestAnswer(result);
 	} catch (error) {
@@ -219,6 +220,8 @@ module.exports = {
 	},
 
 	async dialogflowText(queryText, sessionId) {
+		console.log('dialogFlowAddress', dialogFlowAddress);
+		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 		return makeRequest({
 			url: `${dialogFlowAddress}/text-request`,
 			method: 'post',
