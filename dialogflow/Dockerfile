@@ -5,7 +5,7 @@ WORKDIR /home/node/app_df
 COPY . .
 RUN npm install
 
-EXPOSE 1991
+EXPOSE 1992
 
 CMD ["node", "./dialogflow/server.js"]
 
