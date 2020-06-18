@@ -16,7 +16,7 @@ RUN npm install react-scripts@3.4.1 -g --silent
 
 # add app
 COPY . ./
-EXPOSE 1992
+EXPOSE 1991
 
 # start app
 CMD ["npm", "run", "react_build", "--max-old-space-size=8192"]
