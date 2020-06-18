@@ -17,6 +17,7 @@ const incidenteCPFAux = {}; // because the file timer stops setState from workin
 
 const getPageID = (context) => {
 	return process.env.REACT_APP_MESSENGER_PAGE_ID;
+	// eslint-disable-next-line
 	if (context && context.event && context.event.rawEvent && context.event.rawEvent.recipient && context.event.rawEvent.recipient.id) {
 		return context.event.rawEvent.recipient.id;
 	}
