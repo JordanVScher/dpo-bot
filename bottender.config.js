@@ -3,12 +3,12 @@ const { getStarted } = require('./src/utils/flow');
 
 const messageWaiting = eval(process.env.WITH_TYPING); // eslint-disable-line no-eval
 
-const { getPoliticianData } = require('./src/chatbot_api');
+// const { getPoliticianData } = require('./src/chatbot_api');
 
-const mapPageToAccessToken = async (pageId) => {
-	const perfilData = await getPoliticianData(pageId);
-	return perfilData && perfilData.fb_access_token ? perfilData.fb_access_token : process.env.MESSENGER_ACCESS_TOKEN;
-};
+// const mapPageToAccessToken = async (pageId) => {
+// 	const perfilData = await getPoliticianData(pageId);
+// 	return perfilData && perfilData.fb_access_token ? perfilData.fb_access_token : process.env.MESSENGER_ACCESS_TOKEN;
+// };
 
 module.exports = {
 	channels: {
