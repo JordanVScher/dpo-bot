@@ -303,7 +303,7 @@ async function handleReset(context) {
 	await context.setState({ dialog: 'greetings', quizEnded: false, sendShare: false });
 }
 
-export default {
+export {
 	sendMainMenu,
 	checkFullName,
 	checkDescricao,
