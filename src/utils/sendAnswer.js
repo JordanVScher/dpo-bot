@@ -1,6 +1,6 @@
 import assistenteAPI from "../chatbot_api";
 import { createIssue } from "./send_issue";
-import help from "help";
+import help from "./helper";
 
 async function sendAnswer(context) { // send answer from posicionamento
 	await context.typingOn();
