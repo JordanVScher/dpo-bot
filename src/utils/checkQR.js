@@ -1,9 +1,9 @@
-const { getUserTickets } = require('../chatbot_api');
-const { getTicketTypes } = require('../chatbot_api');
-const { getUserTicketTypes } = require('./helper');
-const { getCustomText } = require('./helper');
-const { checkUserOnLabelName } = require('./labels');
-const flow = require('./flow');
+import { getUserTickets } from '../chatbot_api';
+import { getTicketTypes } from '../chatbot_api';
+import { getUserTicketTypes } from './helper';
+import { getCustomText } from './helper';
+import { checkUserOnLabelName } from './labels';
+import flow from './flow';
 
 async function reloadTicket(context) {
 	await context.setState({ ticketTypes: await getTicketTypes(context.state.politicianData.organization_chatbot_id) });
@@ -115,6 +115,6 @@ async function buildAtendimento(context) {
 }
 
 
-module.exports = {
+export default {
 	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvancado,
 };

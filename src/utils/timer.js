@@ -1,10 +1,9 @@
-const { sendMainMenu } = require('./dialogs');
-const { ticketFollowUp } = require('./dialogs');
-const { ask } = require('./dialogs');
-const { postNewTicket } = require('../chatbot_api');
-// const { getQR } = require('./attach');
-const flow = require('./flow');
-
+import { sendMainMenu } from './dialogs';
+import { ticketFollowUp } from './dialogs';
+import { ask } from './dialogs';
+import { postNewTicket } from './dialogs';
+import { getQR } from './attach';
+import { flow } from './flow';
 
 const informacoesTimer = {};
 const filesTimer = {};
@@ -49,6 +48,6 @@ async function deleteTimers(userID) {
 }
 
 
-module.exports = {
+export default {
 	deleteTimers, createInformacoesTimer, createFilesTimer,
 };

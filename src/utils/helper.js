@@ -1,9 +1,9 @@
 // const Sentry = require('@sentry/node');
-const moment = require('moment');
-const accents = require('remove-accents');
-const validarCpf = require('validar-cpf');
-const Sentry = require('./sentry');
-const { sendHTMLMail } = require('./mailer');
+import moment from 'moment'; 
+import accents from 'remove-accents'; 
+import validarCpf from 'validar-cpf'; 
+import Sentry from './sentry'; 
+import { sendHTMLMail } from './mailer'; 
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
@@ -247,7 +247,7 @@ async function expectText(context, text, buttons, placeholder) {
 }
 
 
-module.exports = {
+export default {
 	Sentry,
 	moment,
 	separateString,

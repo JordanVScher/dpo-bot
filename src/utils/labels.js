@@ -1,6 +1,6 @@
-const req = require('requisition');
-const { handleRequestAnswer } = require('./helper');
-const { sentryError } = require('./helper');
+import req from 'requisition';
+import { handleRequestAnswer } from './helper';
+import { sentryError } from './helper';
 
 async function createNewLabel(labelName, pageToken) {
 	return handleRequestAnswer(await req.post('https://graph.facebook.com/v4.0/me/custom_labels').query({ name: labelName, access_token: pageToken }));
@@ -85,7 +85,7 @@ async function linkUserToLabelByName(PSID, labelName, pageToken, create = true) 
 }
 
 
-module.exports = {
+export default {
 	createNewLabel,
 	linkUserToLabel,
 	removeUserFromLabel,

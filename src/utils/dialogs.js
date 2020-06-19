@@ -1,8 +1,8 @@
-const assistenteAPI = require('../chatbot_api');
-const flow = require('./flow');
-const attach = require('./attach');
-const checkQR = require('./checkQR');
-const help = require('./helper');
+import assistenteAPI from '../chatbot_api';
+import flow from './flow';
+import attach from './attach';
+import checkQR from './checkQR';
+import help from './helper';
 // const { createFilesTimer } = require('./timer');
 
 async function sendMainMenu(context, text) {
@@ -303,7 +303,7 @@ async function handleReset(context) {
 	await context.setState({ dialog: 'greetings', quizEnded: false, sendShare: false });
 }
 
-module.exports = {
+export default {
 	sendMainMenu,
 	checkFullName,
 	checkDescricao,

@@ -1,5 +1,5 @@
-const { MessengerClient } = require('messaging-api-messenger');
-const { sentryError } = require('./helper');
+import { MessengerClient } from 'messaging-api-messenger';
+import sentryError  from './helper';
 
 const config = require('../../bottender.config').channels.messenger;
 
@@ -19,4 +19,4 @@ async function sendBroadcast(USER_ID, textMsg, buttons) {
 	}
 }
 
-module.exports = { sendBroadcast };
+export default { sendBroadcast };
