@@ -83,6 +83,6 @@ async function sendHTMLFile(subject, to, html, pdf, png) {
 	}
 }
 
-export default {
+export {
 	sendTestMail, sendHTMLMail, sendHTMLFile,
 };

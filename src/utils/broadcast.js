@@ -19,4 +19,4 @@ async function sendBroadcast(USER_ID, textMsg, buttons) {
 	}
 }
 
-export default { sendBroadcast };
+export { sendBroadcast };

@@ -85,7 +85,7 @@ async function linkUserToLabelByName(PSID, labelName, pageToken, create = true) 
 }
 
 
-export default {
+export {
 	createNewLabel,
 	linkUserToLabel,
 	removeUserFromLabel,

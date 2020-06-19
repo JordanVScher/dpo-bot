@@ -26,4 +26,4 @@ async function sendAnswer(context) { // send answer from posicionamento
 	}
 }
 
-export default { sendAnswer };
+export { sendAnswer };

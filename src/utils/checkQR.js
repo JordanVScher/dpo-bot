@@ -115,6 +115,6 @@ async function buildAtendimento(context) {
 }
 
 
-export default {
+export {
 	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvancado,
 };

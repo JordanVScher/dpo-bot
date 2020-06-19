@@ -67,7 +67,7 @@ async function answerExtraQuestion(context) {
 	return answer;
 }
 
-export default {
+export {
 	answerQuiz,
 	handleAnswer,
 	answerExtraQuestion,

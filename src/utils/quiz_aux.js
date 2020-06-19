@@ -24,4 +24,4 @@ const buildMultipleChoice = async (question, complement) => {
 	return { quick_replies: qrButtons };
 };
 
-export default { buildMultipleChoice, endQuiz }
+export { buildMultipleChoice, endQuiz }

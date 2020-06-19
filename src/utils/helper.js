@@ -247,7 +247,7 @@ async function expectText(context, text, buttons, placeholder) {
 }
 
 
-export default {
+export {
 	Sentry,
 	moment,
 	separateString,

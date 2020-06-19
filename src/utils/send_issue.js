@@ -55,4 +55,4 @@ async function createIssue(context) {
 		}
 	}
 }
-export default { createIssue, formatString };
+export { createIssue, formatString };

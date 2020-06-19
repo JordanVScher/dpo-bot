@@ -136,7 +136,7 @@ const isText = async (context) => {
 	return false;
 };
 
-export default {
+export {
 	handleQuickReply,
 	handlePostback,
 	handleText,

@@ -226,7 +226,7 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	}
 }
 
-export default {
+export {
 	getErrorQR,
   getVoltarQR,
   getQR, 

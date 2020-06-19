@@ -125,6 +125,6 @@ async function buildInformacoesMenu(context) {
 	return options.length > 0 ? { quick_replies: options } : false;
 }
 
-export default {
+export {
 	checkPosition, dialogFlow, textRequestDF, getExistingRes, buildInformacoesMenu,
 };

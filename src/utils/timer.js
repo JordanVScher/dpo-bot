@@ -48,6 +48,6 @@ async function deleteTimers(userID) {
 }
 
 
-export default {
+export {
 	deleteTimers, createInformacoesTimer, createFilesTimer,
 };
