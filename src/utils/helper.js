@@ -2,7 +2,6 @@
 const moment = require('moment');
 const accents = require('remove-accents');
 const validarCpf = require('validar-cpf');
-const linkifyjs = require('linkifyjs');
 const Sentry = require('./sentry');
 const { sendHTMLMail } = require('./mailer');
 
@@ -247,23 +246,6 @@ async function expectText(context, text, buttons, placeholder) {
 	}
 }
 
-const addLinkTag = (text) => `<a href="${text}" target="_blank" rel="noopener noreferrer">${text}</a>`;
-
-const replaceLinks = (text) => {
-	try {
-		let res = text;
-		const links = linkifyjs.find(text);
-
-		links.forEach((e) => {
-			const newUrl = addLinkTag(e.href);
-			res = res.replace(e.value, newUrl);
-		});
-
-		return res;
-	} catch (error) {
-		return text;
-	}
-};
 
 module.exports = {
 	Sentry,
@@ -285,5 +267,4 @@ module.exports = {
 	resumoTicket,
 	expectText,
 	maskEmail,
-	replaceLinks,
 };

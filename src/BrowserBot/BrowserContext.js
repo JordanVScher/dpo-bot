@@ -1,5 +1,5 @@
 import { Context } from 'bottender';
-import { replaceLinks } from '../utils/helper';
+import replaceLinks from '../utils/fixHtml';
 
 const defaultDelay = 0;
 

@@ -43,7 +43,7 @@ const postRecipient = async (context) => {
 };
 
 
-module.exports = async function App(context) {
+async function App(context) {
 	try {
 		await context.setState({
 			politicianData: await assistenteAPI.getPoliticianData('1'),
@@ -285,4 +285,6 @@ module.exports = async function App(context) {
 	} catch (error) {
 		await help.errorDetail(context, error);
 	} // catch
-};
+}
+
+export default App;
