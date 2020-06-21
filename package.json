@@ -3,8 +3,9 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "babel-node src/index.js",
+    "start_dialogflow": "babel-node dialogflow/server.js",
+    "dev": "nodemon src/index.js --exec babel-node",
     "test": "jest --detectOpenHandles",
     "pm2_add": "pm2 start app/index.js  --name \"dpo-homol\"",
     "restart": "pm2 restart \"dpo-homol\" --update-env",
@@ -25,6 +26,12 @@
     "dialogflow_log": "docker logs dpo-dialogflow -f"
   },
   "dependencies": {
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/node": "^7.10.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
     "@chentsulin/react-botui": "^0.2.1",
     "@sentry/node": "^5.15.4",
     "async-child-process": "^1.1.1",

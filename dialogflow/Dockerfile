@@ -7,4 +7,4 @@ RUN yarn
 
 EXPOSE 1992
 
-CMD ["node", "./dialogflow/server.js"]
+CMD ["npm", "run", "start_dialogflow"]
