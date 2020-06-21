@@ -16,7 +16,14 @@
     "react_start": "react-scripts start",
     "react_build": "react-scripts build",
     "react_test": "react-scripts test",
-    "react_eject": "react-scripts eject"
+    "react_serve": "serve -p 1991 -s .",
+    "react_eject": "react-scripts eject",
+    "bottender_build": "docker-compose up -d --build bottender",
+    "bottender_build_log": "docker logs dpo-bottender -f",
+    "browser_build": "docker-compose up -d --build browser",
+    "browser_log": "docker logs dpo-browser -f",
+    "dialogflow_build": "docker-compose up -d --build dialogflow",
+    "dialogflow_log": "docker logs dpo-dialogflow -f"
   },
   "dependencies": {
     "@chentsulin/react-botui": "^0.2.1",
