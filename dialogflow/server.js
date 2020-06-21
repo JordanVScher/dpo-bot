@@ -14,8 +14,9 @@ app.post('/text-request', async (req, res) => {
 		res.status(422).send({ error: 'Missing "sessionId" or "queryText" params.' });
 		return;
 	}
-
+	console.log('queryText', queryText);
 	const result = await textRequestDF(queryText, sessionId);
+	console.log(JSON.stringify(result, null, 2));
 	if (!result || !result[0] || !result[0].responseId) {
 		res.status(500).send({ error: 'There was an error processing the request.' });
 		return;

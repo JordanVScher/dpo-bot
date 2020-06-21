@@ -203,15 +203,16 @@ async function checkSairMsg(message, keywords) {
 
 async function handleSolicitacaoRequest(context) {
 	await checkQR.reloadTicket(context);
+	console.log('context.state.ticketTypes', context.state.ticketTypes);
 	const data = {};
 	const { apiaiTextAnswer } = context.state;
-
+	console.log('apiaiTextAnswer', apiaiTextAnswer);
 	const entities = context.state.resultParameters; data.entities = entities; data.apiaiResp = context.state.apiaiResp; data.userName = context.state.sessionUser.name;
 	if (entities.solicitacao) entities.solicitacao = entities.solicitacao.filter((x) => x !== 'solicitar');
-
+	console.log('entities', entities);
 	if (!context.state.solicitacaoCounter) { await context.setState({ solicitacaoCounter: 0 }); } // setting up or the first time
 	await context.setState({ solicitacaoCounter: context.state.solicitacaoCounter + 1 });
-
+	console.log('context.state.solicitacaoCounter', context.state.solicitacaoCounter);
 	if (apiaiTextAnswer) {
 		await context.setState({ dialog: '' });
 
@@ -232,19 +233,26 @@ async function handleSolicitacaoRequest(context) {
 		let idSolicitation = '';
 		// run through all entities until we find one that is a valid solicitation
 		entities.solicitacao.forEach((e) => { if (!idSolicitation) idSolicitation = flow.solicitacoes.typeDic[e]; }); data.idSolicitation = idSolicitation;
+		console.log('idSolicitation', idSolicitation);
 		const userHas = context.state.userTicketTypes.includes(idSolicitation); data.userHas = userHas; data.userTicketTypes = context.state.userTicketTypes;
+		console.log('userHas', userHas);
 		const ticket = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === idSolicitation);
+		console.log('ticket', ticket);
 		data.ticket = ticket; data.ticketTypes = context.state.ticketTypes.ticket_types;
 		if (ticket) {
+			console.log('AAAAAA');
 			ticket.name = ticket.name.toLowerCase();
 			await context.setState({ solicitacaoCounter: 0 });
 			if (userHas && idSolicitation !== 7) { // if user already has an open ticket for this, warn him and go to main menu
+				console.log('BBBBBB');
 				await context.sendText(flow.solicitacoes.userHasOpenTicket.replace('<TIPO_TICKET>', ticket.name));
 				await sendMainMenu(context);
 			} else { // no open ticket, send user to the proper solicitation flow
+				console.log('CCCCCC');
 				await context.setState({ dialog: 'confirmaSolicitacao', idSolicitation, onSolicitacoes: false });
 			}
 		} else { // DF found an entity but we dont have it in our dictionary, ask again
+			console.log('DDDDDD');
 			await help.expectText(context, flow.solicitacoes.noSolicitationType, await attach.getQR(flow.solicitacaoVoltar), 'Qual sua requisição?');
 			await context.setState({ dialog: 'solicitacoes' });
 		}
