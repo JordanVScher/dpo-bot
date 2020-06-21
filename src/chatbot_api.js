@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */ // --> OFF
 /* eslint no-param-reassign: 0 */ // --> OFF
-const axios = require('axios');
-const { handleRequestAnswer } = require('./utils/helper');
+import axios from 'axios';
+import helper from './utils/helper';
 
 const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const apiUri = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
@@ -10,10 +10,10 @@ const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADD
 const makeRequest = async (opt) => {
 	if (opt.params) opt.params.security_token = security_token;
 	const result = await axios(opt);
-	return handleRequestAnswer(result);
+	return helper.handleRequestAnswer(result);
 };
 
-module.exports = {
+export default {
 	async getPoliticianData(chatbot_id) {
 		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { chatbot_id: 1 } });
 	},

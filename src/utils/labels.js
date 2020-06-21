@@ -1,33 +1,32 @@
-const req = require('requisition');
-const { handleRequestAnswer } = require('./helper');
-const { sentryError } = require('./helper');
+import req from 'requisition';
+import helper from './helper';
 
 async function createNewLabel(labelName, pageToken) {
-	return handleRequestAnswer(await req.post('https://graph.facebook.com/v4.0/me/custom_labels').query({ name: labelName, access_token: pageToken }));
+	return helper.handleRequestAnswer(await req.post('https://graph.facebook.com/v4.0/me/custom_labels').query({ name: labelName, access_token: pageToken }));
 }
 
 async function linkUserToLabel(PSID, labelID, pageToken) {
-	return handleRequestAnswer(await req.post(`https://graph.facebook.com/v4.0/${labelID}/label`).query({ user: PSID, access_token: pageToken }));
+	return helper.handleRequestAnswer(await req.post(`https://graph.facebook.com/v4.0/${labelID}/label`).query({ user: PSID, access_token: pageToken }));
 }
 
 async function removeUserFromLabel(PSID, labelID, pageToken) {
-	return handleRequestAnswer(await req.delete(`https://graph.facebook.com/v4.0/${labelID}/label`).query({ user: PSID, access_token: pageToken }));
+	return helper.handleRequestAnswer(await req.delete(`https://graph.facebook.com/v4.0/${labelID}/label`).query({ user: PSID, access_token: pageToken }));
 }
 
 async function getUserLabels(PSID, pageToken) {
-	return handleRequestAnswer(await req.get(`https://graph.facebook.com/v4.0/${PSID}/custom_labels`).query({ access_token: pageToken, fields: 'name' }));
+	return helper.handleRequestAnswer(await req.get(`https://graph.facebook.com/v4.0/${PSID}/custom_labels`).query({ access_token: pageToken, fields: 'name' }));
 }
 
 async function getLabelDetails(labelID, pageToken) {
-	return handleRequestAnswer(await req.get(`https://graph.facebook.com/v4.0/${labelID}`).query({ access_token: pageToken, fields: 'name' }));
+	return helper.handleRequestAnswer(await req.get(`https://graph.facebook.com/v4.0/${labelID}`).query({ access_token: pageToken, fields: 'name' }));
 }
 
 async function listAllLabels(pageToken) {
-	return handleRequestAnswer(await req.get('https://graph.facebook.com/v4.0/me/custom_labels').query({ access_token: pageToken, fields: 'name' }));
+	return helper.handleRequestAnswer(await req.get('https://graph.facebook.com/v4.0/me/custom_labels').query({ access_token: pageToken, fields: 'name' }));
 }
 
 async function deleteLabel(labelID, pageToken) {
-	return handleRequestAnswer(await req.delete(`https://graph.facebook.com/v4.0/${labelID}`).query({ access_token: pageToken }));
+	return helper.handleRequestAnswer(await req.delete(`https://graph.facebook.com/v4.0/${labelID}`).query({ access_token: pageToken }));
 }
 
 // checks if user is on the label using the id
@@ -40,7 +39,7 @@ async function checkUserOnLabel(PSID, labelID, pageToken) {
 		if (theOneLabel) { return theOneLabel; }
 		return false;
 	} catch (error) {
-		return sentryError('Erro em checkUserOnLabel', error);
+		return helper.sentryError('Erro em checkUserOnLabel', error);
 	}
 }
 
@@ -54,7 +53,7 @@ async function checkUserOnLabelName(PSID, labelName, pageToken) {
 		if (theOneLabel) { return theOneLabel; }
 		return false;
 	} catch (error) {
-		return sentryError('Erro em checkUserOnLabel', error);
+		return helper.sentryError('Erro em checkUserOnLabel', error);
 	}
 }
 
@@ -71,7 +70,7 @@ async function getLabelID(labelName, pageToken, create = true) {
 		}
 		return undefined;
 	} catch (error) {
-		return sentryError('Erro em getLabelID', error);
+		return helper.sentryError('Erro em getLabelID', error);
 	}
 }
 
@@ -85,7 +84,7 @@ async function linkUserToLabelByName(PSID, labelName, pageToken, create = true) 
 }
 
 
-module.exports = {
+export default {
 	createNewLabel,
 	linkUserToLabel,
 	removeUserFromLabel,

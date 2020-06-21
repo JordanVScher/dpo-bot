@@ -1,9 +1,10 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-const bodyParser = require('body-parser');
-const express = require('express');
-const { bottender } = require('bottender');
-const { notificacaoCron } = require('./notification');
+import bodyParser from 'body-parser';
+import express from 'express';
+import { bottender } from 'bottender';
+import notificacaoCron from './notification';
+
 // const handler = require('./index');
 // const HangoutContext = require('./hangouts');
 

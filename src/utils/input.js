@@ -1,9 +1,9 @@
-const flow = require('./flow');
-const quiz = require('./quiz');
-const attach = require('./attach');
-const DF = require('./dialogFlow');
-const dialogs = require('./dialogs');
-const { checkUserOnLabelName } = require('./labels');
+import flow from './flow';
+import quiz from './quiz';
+import attach from './attach';
+import DF from './dialogFlow';
+import dialogs from './dialogs';
+import labels from './labels';
 
 const checkNextStep = async (context, browser, regular) => {
 	if (context.session.platform === 'browser') {
@@ -104,7 +104,7 @@ const handleText = async (context, incidenteCPFAux) => {
 			await context.sendText('Formato inválido, digite só um número, exemplo 10');
 			await context.setState({ dialog: 'startQuiz' });
 		}
-	} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token)) {
+	} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await labels.checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token)) {
 		await dialogs.handleReset(context);
 	} else if (context.state.dialog === 'leaveTMsg') {
 		await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
@@ -136,7 +136,7 @@ const isText = async (context) => {
 	return false;
 };
 
-module.exports = {
+export default {
 	handleQuickReply,
 	handlePostback,
 	handleText,

@@ -1,9 +1,8 @@
-const accents = require('remove-accents');
-const { sendMainMenu } = require('./dialogs');
-const chatbotAPI = require('../chatbot_api.js');
-const { issueText } = require('./flow.js');
-const { duvidas } = require('./flow.js');
-const { getRandomArray } = require('./helper.js');
+import accents from 'remove-accents';
+import dialogs from './dialogs';
+import flow from './flow';
+import helper from './helper';
+import chatbotAPI from '../chatbot_api';
 
 const blacklist = ['sim', 'nao'];
 const timeToWait = process.env.ISSUE_TIME_WAIT;
@@ -15,7 +14,6 @@ async function formatString(text) {
 	result = await accents.remove(result);
 	return result.trim();
 }
-module.exports.formatString = formatString;
 
 async function endProcess(context, answer, successText, failureText) {
 	if (timeToWait) await context.typing(timeToWait);
@@ -41,9 +39,9 @@ async function createIssue(context) {
 				const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.originalDuvida,
 					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
 
-				await endProcess(context, issueResponse, duvidas.success, duvidas.failure);
+				await endProcess(context, issueResponse, flow.duvidas.success, flow.duvidas.failure);
 				await context.setState({ dialog: 'null' });
-				await sendMainMenu(context);
+				await dialogs.sendMainMenu(context);
 			} else {
 				await context.setState({ originalDuvida: context.state.whatWasTyped });
 				await context.setState({ dialog: 'askEmailDuvida' });
@@ -51,9 +49,10 @@ async function createIssue(context) {
 		} else {
 			const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.whatWasTyped,
 				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active);
-			await endProcess(context, issueResponse, getRandomArray(issueText.success), issueText.failure);
+			await endProcess(context, issueResponse, helper.getRandomArray(flow.issueText.success), flow.issueText.failure);
 			await context.setState({ dialog: 'mainMenu' });
 		}
 	}
 }
-module.exports.createIssue = createIssue;
+
+export default { createIssue, formatString };

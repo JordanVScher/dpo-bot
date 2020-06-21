@@ -1,7 +1,5 @@
-const { moment } = require('./helper');
-const { sentryError } = require('./helper');
-const { getCustomText } = require('./helper');
-const flow = require('./flow');
+import helper from './helper';
+import flow from './flow';
 
 function capQR(text) {
 	let result = text;
@@ -11,7 +9,7 @@ function capQR(text) {
 	return result;
 }
 
-async function buildButton(url, title) { return [{ type: 'web_url', url, title }]; } module.exports.buildButton = buildButton;
+async function buildButton(url, title) { return [{ type: 'web_url', url, title }]; }
 
 // sends one card with an image and link
 async function sendCardWithLink(context, cardData, url, text) {
@@ -167,8 +165,8 @@ async function sendTicketCards(context, tickets) {
 			let msg = '';
 			msg += `\nNúmero de Protocolo: ${element.id}`;
 			if (element.status && flow.ticketStatus[element.status]) msg += `\nEstado: ${flow.ticketStatus[element.status].name}`;
-			if (element.created_at) msg += `\nData de criação: ${moment(element.created_at).format('DD/MM/YY')}`;
-			if (element.closed_at) msg += `\nData de encerramento: ${moment(element.closed_at).format('DD/MM/YY')}`;
+			if (element.created_at) msg += `\nData de criação: ${helper.moment(element.created_at).format('DD/MM/YY')}`;
+			if (element.closed_at) msg += `\nData de encerramento: ${helper.moment(element.closed_at).format('DD/MM/YY')}`;
 
 			const buttons = [];
 			// if (element.message && element.message.length > 0) {
@@ -212,7 +210,7 @@ async function sendTicketCards(context, tickets) {
 
 async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	try {
-		const msgToSend = await getCustomText(context, code);
+		const msgToSend = await helper.getCustomText(context, code);
 
 		if (msgToSend && typeof msgToSend === 'string' && msgToSend.length > 0) {
 			await context.sendText(msgToSend);
@@ -222,11 +220,20 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 			}
 		}
 	} catch (error) {
-		sentryError('Erro em sendMsgFromAssistente', error, context.session.platform);
+		helper.sentryError('Erro em sendMsgFromAssistente', error, context.session.platform);
 	}
 }
 
-
-module.exports = {
-	getErrorQR, getVoltarQR, getQR, getQRCPF, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
+export default {
+	getErrorQR,
+	getVoltarQR,
+	getQR,
+	getQRCPF,
+	sendSequenceMsgs,
+	sendCardWithLink,
+	cardLinkNoImage,
+	capQR,
+	buildButton,
+	sendTicketCards,
+	sendMsgFromAssistente,
 };

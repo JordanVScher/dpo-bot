@@ -1,9 +1,8 @@
-const MaAPI = require('../chatbot_api');
-const { createIssue } = require('./send_issue');
-const { sendAnswer } = require('./sendAnswer');
-const { sendMainMenu } = require('./dialogs');
-const help = require('./helper');
-const { handleSolicitacaoRequest } = require('./dialogs');
+import sendIssue from './send_issue';
+import sendAnswer from './sendAnswer';
+import dialogs from './dialogs';
+import MaAPI from '../chatbot_api';
+import help from './helper';
 
 /**
  * Send a text query to the dialogflow server, and return the query result.
@@ -51,12 +50,12 @@ async function checkPosition(context) {
 	switch (context.state.intentName) {
 	case 'Solicitação': {
 		await context.setState({ onSolicitacoes: true });
-		const result = await handleSolicitacaoRequest(context);
+		const result = await dialogs.handleSolicitacaoRequest(context);
 		await help.sentryError('Nova Solicitação', result, context.session.platform);
 	}
 		break;
 	case 'Fallback': // didn't understand what was typed
-		await createIssue(context);
+		await sendIssue.createIssue(context);
 		break;
 	default: {
 		// default acts for every intent - position on MA
@@ -66,9 +65,9 @@ async function checkPosition(context) {
 		// check if there's at least one answer in knowledge_base
 		if (knowledge && knowledge.knowledge_base && knowledge.knowledge_base.length >= 1) {
 			await sendAnswer(context);
-			await sendMainMenu(context);
+			await dialogs.sendMainMenu(context);
 		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
-			await createIssue(context);
+			await sendIssue.createIssue(context);
 		}
 	}
 		break;
@@ -125,6 +124,10 @@ async function buildInformacoesMenu(context) {
 	return options.length > 0 ? { quick_replies: options } : false;
 }
 
-module.exports = {
-	checkPosition, dialogFlow, textRequestDF, getExistingRes, buildInformacoesMenu,
+export default {
+	checkPosition,
+	dialogFlow,
+	textRequestDF,
+	getExistingRes,
+	buildInformacoesMenu,
 };

@@ -1,17 +1,17 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-const assistenteAPI = require('./chatbot_api');
-// const opt = require('./util/options');
-const { createIssue } = require('./utils/send_issue');
-const flow = require('./utils/flow');
-const help = require('./utils/helper');
-const dialogs = require('./utils/dialogs');
-const attach = require('./utils/attach');
-const DF = require('./utils/dialogFlow');
-const quiz = require('./utils/quiz');
-const timer = require('./utils/timer');
-const input = require('./utils/input');
-const { reloadTicket } = require('./utils/checkQR'); // eslint-disable-line
+// import opt from './util/options';
+import assistenteAPI from './chatbot_api';
+import flow from './utils/flow';
+import help from './utils/helper';
+import dialogs from './utils/dialogs';
+import attach from './utils/attach';
+import DF from './utils/dialogFlow';
+import quiz from './utils/quiz';
+import timer from './utils/timer';
+import input from './utils/input';
+import sendIssue from './utils/send_issue';
+import checkQR from './utils/checkQR'; // eslint-disable-line
 
 const incidenteCPFAux = {}; // because the file timer stops setState from working
 
@@ -43,7 +43,7 @@ const postRecipient = async (context) => {
 };
 
 
-module.exports = async function App(context) {
+export default async function App(context) {
 	try {
 		await context.setState({
 			politicianData: await assistenteAPI.getPoliticianData(getPageID(context)),
@@ -51,7 +51,7 @@ module.exports = async function App(context) {
 		});
 
 		await context.setState({ recipientID: await postRecipient(context) });
-		// await reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
+		// await checkQR.reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
 		await timer.deleteTimers(context.session.user.id);
 
@@ -234,7 +234,7 @@ module.exports = async function App(context) {
 			await dialogs.newTicketMessage(context);
 			break;
 		case 'createIssueDirect':
-			await createIssue(context);
+			await sendIssue.createIssue(context);
 			break;
 		case 'beginQuiz':
 			await context.setState({ startedQuiz: true, typeQuiz: 'preparatory' });
@@ -283,6 +283,7 @@ module.exports = async function App(context) {
 			break;
 		} // end switch case
 	} catch (error) {
+		console.log('error', error);
 		await help.errorDetail(context, error);
 	} // catch
-};
+}

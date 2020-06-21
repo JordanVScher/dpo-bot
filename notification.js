@@ -1,11 +1,11 @@
 /* eslint no-param-reassign: 0 */ // --> OFF
-require('dotenv').config();
+import 'dotenv/config';
 
-const { CronJob } = require('cron');
-const fs = require('fs');
-const jsonfile = require('jsonfile');
-const { sendBroadcast } = require('./src/utils/broadcast');
-const { moment } = require('./src/utils/helper');
+import { CronJob } from 'cron';
+import { fs } from 'fs';
+import { jsonfile } from 'jsonfile';
+import sendBroadcast from './src/utils/broadcast';
+import { moment } from './src/utils/helper';
 
 const sessionsFolder = './.sessions/';
 
@@ -98,4 +98,4 @@ const notificacaoCron = new CronJob(
 
 if (process.env.ENV !== 'PROD') notificacaoCron.start();
 
-module.exports = { notificacaoCron };
+export default notificacaoCron;

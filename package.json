@@ -12,8 +12,11 @@
     "webhook": "npx bottender messenger webhook set",
     "profileGet": "npx bottender messenger profile get",
     "profileSet": "npx bottender messenger profile set",
-    "build2": "react-scripts build",
-    "start2": "react-scripts start --dev"
+    "react_dev": "react-scripts start --dev",
+    "react_start": "react-scripts start",
+    "react_build": "react-scripts build",
+    "react_test": "react-scripts test",
+    "react_eject": "react-scripts eject"
   },
   "dependencies": {
     "@chentsulin/react-botui": "^0.2.1",

@@ -1,15 +1,13 @@
-const { getUserTickets } = require('../chatbot_api');
-const { getTicketTypes } = require('../chatbot_api');
-const { getUserTicketTypes } = require('./helper');
-const { getCustomText } = require('./helper');
-const { checkUserOnLabelName } = require('./labels');
-const flow = require('./flow');
+import chatbotAPI from '../chatbot_api';
+import helper from './helper';
+import labels from './labels';
+import flow from './flow';
 
 async function reloadTicket(context) {
-	await context.setState({ ticketTypes: await getTicketTypes(context.state.politicianData.organization_chatbot_id) });
+	await context.setState({ ticketTypes: await chatbotAPI.getTicketTypes(context.state.politicianData.organization_chatbot_id) });
 	if (context.session.platform !== 'browser') {
-		await context.setState({ userTickets: await getUserTickets(context.session.user.id) });
-		await context.setState({ userTicketTypes: await getUserTicketTypes(context.state.userTickets.tickets) });
+		await context.setState({ userTickets: await chatbotAPI.getUserTickets(context.session.user.id) });
+		await context.setState({ userTicketTypes: await chatbotAPI.getUserTicketTypes(context.state.userTickets.tickets) });
 	} else {
 		await context.setState({ userTickets: [], userTicketTypes: [] });
 	}
@@ -24,7 +22,7 @@ async function buildConsumidorMenu(context) {
 	options.push(informacoes);
 	options.push(solicitacoes);
 
-	const faleConoscoText = await getCustomText(context, 'fale-conosco');
+	const faleConoscoText = await helper.getCustomText(context, 'fale-conosco');
 	if (faleConoscoText) options.push(faleConosco);
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
@@ -57,7 +55,7 @@ async function buildMainMenu(context) {
 		if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push(meusTickets);
 
 		if (context.state.quizEnded !== true) {
-			await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
+			await context.setState({ isFuncionario: await labels.checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
 			if (context.state.isFuncionario && context.state.isFuncionario.name) options.push(quiz);
 		}
 	}
@@ -115,6 +113,10 @@ async function buildAtendimento(context) {
 }
 
 
-module.exports = {
-	buildMainMenu, buildAtendimento, buildConsumidorMenu, reloadTicket, buildAtendimentoAvancado,
+export default {
+	buildMainMenu,
+	buildAtendimento,
+	buildConsumidorMenu,
+	reloadTicket,
+	buildAtendimentoAvancado,
 };

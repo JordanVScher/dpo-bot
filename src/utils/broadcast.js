@@ -1,5 +1,5 @@
-const { MessengerClient } = require('messaging-api-messenger');
-const { sentryError } = require('./helper');
+import { MessengerClient } from 'messaging-api-messenger';
+import helper from './helper';
 
 const config = require('../../bottender.config').channels.messenger;
 
@@ -14,9 +14,9 @@ async function sendBroadcast(USER_ID, textMsg, buttons) {
 		const res = await client.sendText(USER_ID, textMsg, buttons).then(() => null).catch((err) => err);
 		return res;
 	} catch (err) {
-		sentryError(`Erro no broadcast para ${USER_ID}!`, err);
+		helper.sentryError(`Erro no broadcast para ${USER_ID}!`, err);
 		return err;
 	}
 }
 
-module.exports = { sendBroadcast };
+export default sendBroadcast;

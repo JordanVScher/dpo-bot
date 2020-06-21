@@ -1,6 +1,6 @@
-const assistenteAPI = require('../chatbot_api');
-const { createIssue } = require('./send_issue');
-const help = require('./helper');
+import sendIssue from './send_issue';
+import assistenteAPI from '../chatbot_api';
+import help from './helper';
 
 async function sendAnswer(context) { // send answer from posicionamento
 	await context.typingOn();
@@ -22,8 +22,8 @@ async function sendAnswer(context) { // send answer from posicionamento
 		}
 		await context.typingOff();
 	} else {
-		await createIssue(context);
+		await sendIssue.createIssue(context);
 	}
 }
 
-module.exports = { sendAnswer };
+export default sendAnswer;
