@@ -1,8 +1,8 @@
-import assistenteAPI from '../chatbot_api';
-import flow from './flow';
-import attach from './attach';
-import checkQR from './checkQR';
-import help from './helper';
+const assistenteAPI = require('../chatbot_api');
+const flow = require('./flow');
+const attach = require('./attach');
+const checkQR = require('./checkQR');
+const help = require('./helper');
 // const { createFilesTimer } = require('./timer');
 
 async function sendMainMenu(context, text) {
@@ -159,7 +159,7 @@ async function checkDescricao(context, stateName, successDialog, invalidDialog, 
 }
 
 async function meuTicket(context) {
-	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.state.recipientID), currentTicket: '', ticketID: '' });
+	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
 	if (context.state.userTickets.itens_count > 0) {
 		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);
@@ -303,7 +303,7 @@ async function handleReset(context) {
 	await context.setState({ dialog: 'greetings', quizEnded: false, sendShare: false });
 }
 
-export {
+module.exports = {
 	sendMainMenu,
 	checkFullName,
 	checkDescricao,

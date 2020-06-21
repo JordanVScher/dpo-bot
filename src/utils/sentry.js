@@ -18,4 +18,4 @@ class Sentry {
 }
 
 
-export default new Sentry();
+module.exports = new Sentry();

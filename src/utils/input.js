@@ -1,9 +1,9 @@
-import flow from './flow';
-import quiz from './quiz';
-import attach from './attach';
-import DF from './dialogFlow';
-import dialogs from './dialogs';
-import { checkUserOnLabelName } from './labels';
+const flow = require('./flow');
+const quiz = require('./quiz');
+const attach = require('./attach');
+const DF = require('./dialogFlow');
+const dialogs = require('./dialogs');
+const { checkUserOnLabelName } = require('./labels');
 
 const checkNextStep = async (context, browser, regular) => {
 	if (context.session.platform === 'browser') {
@@ -136,7 +136,7 @@ const isText = async (context) => {
 	return false;
 };
 
-export {
+module.exports = {
 	handleQuickReply,
 	handlePostback,
 	handleText,

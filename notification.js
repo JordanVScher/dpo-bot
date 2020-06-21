@@ -1,11 +1,11 @@
 /* eslint no-param-reassign: 0 */ // --> OFF
 require('dotenv').config();
 
-import { CronJob } from 'cron';
-import fs from 'fs';
-import jsonfile from 'jsonfile';
-import { sendBroadcast } from './src/utils/broadcast';
-import { moment } from './src/utils/helper';
+const { CronJob } = require('cron');
+const fs = require('fs');
+const jsonfile = require('jsonfile');
+const { sendBroadcast } = require('./src/utils/broadcast');
+const { moment } = require('./src/utils/helper');
 
 const sessionsFolder = './.sessions/';
 

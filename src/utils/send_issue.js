@@ -1,9 +1,9 @@
-import accents from "remove-accents";
-import { sendMainMenu } from "./dialogs";
-import chatbotAPI from "../chatbot_api.js";
-import { issueText } from "./flow.js";
-import { duvidas } from "./flow.js";
-import { getRandomArray } from "./helper.js";
+const accents = require('remove-accents');
+const { sendMainMenu } = require('./dialogs');
+const chatbotAPI = require('../chatbot_api.js');
+const { issueText } = require('./flow.js');
+const { duvidas } = require('./flow.js');
+const { getRandomArray } = require('./helper.js');
 
 const blacklist = ['sim', 'nao'];
 const timeToWait = process.env.ISSUE_TIME_WAIT;
@@ -15,6 +15,7 @@ async function formatString(text) {
 	result = await accents.remove(result);
 	return result.trim();
 }
+module.exports.formatString = formatString;
 
 async function endProcess(context, answer, successText, failureText) {
 	if (timeToWait) await context.typing(timeToWait);
@@ -55,4 +56,4 @@ async function createIssue(context) {
 		}
 	}
 }
-export { createIssue, formatString };
+module.exports.createIssue = createIssue;

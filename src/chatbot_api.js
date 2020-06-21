@@ -8,27 +8,22 @@ const apiUri = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDAT
 const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADDRESS;
 
 const makeRequest = async (opt) => {
-	try {
-		if (opt.params) opt.params.security_token = security_token;
-		console.log('opt', opt);
-		const result = await axios(opt).then((res) => res).catch((err) => err.response);
-		return handleRequestAnswer(result);
-	} catch (error) {
-		return {};
-	}
+	if (opt.params) opt.params.security_token = security_token;
+	const result = await axios(opt);
+	return handleRequestAnswer(result);
 };
 
 module.exports = {
-	async getPoliticianData(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { chatbot_id } });
+	async getPoliticianData(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { fb_page_id } });
 	},
 
 	async addAssistenteUser(name, email, password) {
 		return makeRequest({ url: `${apiUri}/api/register`, method: 'post', params: { name, email, password } });
 	},
 
-	async getPollData(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { chatbot_id } });
+	async getPollData(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { fb_page_id } });
 	},
 
 	async postRecipient(politician_id, recipient) {
@@ -95,12 +90,12 @@ module.exports = {
 	},
 
 	// has pagination
-	async getAvailableIntents(chatbot_id, page) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { chatbot_id, page } });
+	async getAvailableIntents(fb_page_id, page) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, page } });
 	},
 
-	async getAllAvailableIntents(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { chatbot_id } });
+	async getAllAvailableIntents(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id } });
 	},
 
 	async getTicketTypes(chatbot_id) {
@@ -220,8 +215,6 @@ module.exports = {
 	},
 
 	async dialogflowText(queryText, sessionId) {
-		console.log('dialogFlowAddress', dialogFlowAddress);
-		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 		return makeRequest({
 			url: `${dialogFlowAddress}/text-request`,
 			method: 'post',

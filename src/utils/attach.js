@@ -1,7 +1,7 @@
-import { moment } from './helper';
-import { sentryError } from './helper';
-import { getCustomText } from './helper';
-import flow from './flow';
+const { moment } = require('./helper');
+const { sentryError } = require('./helper');
+const { getCustomText } = require('./helper');
+const flow = require('./flow');
 
 function capQR(text) {
 	let result = text;
@@ -226,16 +226,7 @@ async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	}
 }
 
-export {
-	getErrorQR,
-  getVoltarQR,
-  getQR, 
-	getQRCPF, 
-	sendSequenceMsgs,
-	sendCardWithLink,
-	cardLinkNoImage,
-	capQR,
-	buildButton,
-	sendTicketCards,
-	sendMsgFromAssistente,
+
+module.exports = {
+	getErrorQR, getVoltarQR, getQR, getQRCPF, sendSequenceMsgs, sendCardWithLink, cardLinkNoImage, capQR, buildButton, sendTicketCards, sendMsgFromAssistente,
 };

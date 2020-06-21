@@ -1,6 +1,6 @@
-import assistenteApi from '../chatbot_api';
-import aux from './quiz_aux';
-import flow from './flow';
+const assistenteApi = require('../chatbot_api');
+const aux = require('./quiz_aux');
+const flow = require('./flow');
 
 // loads next question and shows it to the user
 async function answerQuiz(context) {
@@ -67,7 +67,7 @@ async function answerExtraQuestion(context) {
 	return answer;
 }
 
-export {
+module.exports = {
 	answerQuiz,
 	handleAnswer,
 	answerExtraQuestion,

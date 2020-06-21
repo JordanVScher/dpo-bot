@@ -1,15 +1,16 @@
-import { capQR } from './attach';
-// import { flow } from './flow';
-import { sendMainMenu } from './dialogs';
+const { capQR } = require('./attach');
+// const flow = require('./flow');
+const { sendMainMenu } = require('./dialogs');
 
-const endQuiz = async (context) => {
+
+module.exports.endQuiz = async (context) => {
 	await context.setState({ dialog: 'endQuiz', quizEnded: true });
 	await context.typing(1000 * 5);
 	await sendMainMenu(context);
 };
 
 // builds quick_reply menu from the question answer options
-const buildMultipleChoice = async (question, complement) => {
+module.exports.buildMultipleChoice = async (question, complement) => {
 	// complement -> quiz or triagem to put on the button payload for each type of quiz
 	const qrButtons = [];
 	Object.keys(question.multiple_choices).forEach(async (element) => {
@@ -23,5 +24,3 @@ const buildMultipleChoice = async (question, complement) => {
 	}
 	return { quick_replies: qrButtons };
 };
-
-export { buildMultipleChoice, endQuiz }

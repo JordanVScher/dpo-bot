@@ -1,9 +1,8 @@
 require('dotenv').config();
 
-
-import { createReadStream } from 'fs'; 
-import { nodemailer } from 'nodemailer'; 
-// import { Sentry } from './helper';
+const { createReadStream } = require('fs');
+const nodemailer = require('nodemailer');
+// const { Sentry } = require('./helper');
 
 const user = process.env.MAIL_USER;
 const pass = process.env.MAIL_PASS;
@@ -83,6 +82,6 @@ async function sendHTMLFile(subject, to, html, pdf, png) {
 	}
 }
 
-export {
+module.exports = {
 	sendTestMail, sendHTMLMail, sendHTMLFile,
 };

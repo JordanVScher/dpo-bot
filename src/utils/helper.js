@@ -1,9 +1,10 @@
 // const Sentry = require('@sentry/node');
-import moment from 'moment'; 
-import accents from 'remove-accents'; 
-import validarCpf from 'validar-cpf'; 
-import Sentry from './sentry'; 
-import { sendHTMLMail } from './mailer'; 
+const moment = require('moment');
+const accents = require('remove-accents');
+const validarCpf = require('validar-cpf');
+const linkifyjs = require('linkifyjs');
+const Sentry = require('./sentry');
+const { sendHTMLMail } = require('./mailer');
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
@@ -170,8 +171,7 @@ async function handleRequestAnswer(response) {
 	try {
 		const { status } = response;
 		const { data } = await response;
-		console.log('response', response);
-		if (response.config) await handleErrorApi(response.config, data, status, false);
+		await handleErrorApi(response.config, data, status, false);
 		return data;
 	} catch (error) {
 		await handleErrorApi(response.config, false, null, error);
@@ -246,8 +246,25 @@ async function expectText(context, text, buttons, placeholder) {
 	}
 }
 
+const addLinkTag = (text) => `<a href="${text}" target="_blank" rel="noopener noreferrer">${text}</a>`;
 
-export {
+const replaceLinks = (text) => {
+	try {
+		let res = text;
+		const links = linkifyjs.find(text);
+
+		links.forEach((e) => {
+			const newUrl = addLinkTag(e.href);
+			res = res.replace(e.value, newUrl);
+		});
+
+		return res;
+	} catch (error) {
+		return text;
+	}
+};
+
+module.exports = {
 	Sentry,
 	moment,
 	separateString,
@@ -267,4 +284,5 @@ export {
 	resumoTicket,
 	expectText,
 	maskEmail,
+	replaceLinks,
 };

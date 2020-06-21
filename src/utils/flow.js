@@ -1,4 +1,4 @@
-export default {
+module.exports = {
 	avatarImage: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
 	getStarted: 'Olá, eu sou o Dipiou. Vamos conversar? ',
 	share: {

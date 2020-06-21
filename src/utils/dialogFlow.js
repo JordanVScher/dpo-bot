@@ -1,9 +1,9 @@
-import MaAPI from '../chatbot_api';
-import { createIssue } from './send_issue';
-import { sendAnswer } from './sendAnswer';
-import { sendMainMenu } from './dialogs';
-import { handleSolicitacaoRequest } from './dialogs';
-import help from './helper';
+const MaAPI = require('../chatbot_api');
+const { createIssue } = require('./send_issue');
+const { sendAnswer } = require('./sendAnswer');
+const { sendMainMenu } = require('./dialogs');
+const help = require('./helper');
+const { handleSolicitacaoRequest } = require('./dialogs');
 
 /**
  * Send a text query to the dialogflow server, and return the query result.
@@ -125,6 +125,6 @@ async function buildInformacoesMenu(context) {
 	return options.length > 0 ? { quick_replies: options } : false;
 }
 
-export {
+module.exports = {
 	checkPosition, dialogFlow, textRequestDF, getExistingRes, buildInformacoesMenu,
 };
