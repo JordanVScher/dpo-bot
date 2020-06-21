@@ -16,7 +16,6 @@
     "react_start": "react-scripts start",
     "react_build": "react-scripts build",
     "react_test": "react-scripts test",
-    "react_serve": "serve -p 1991 -s .",
     "react_eject": "react-scripts eject",
     "bottender_build": "docker-compose up -d --build bottender",
     "bottender_log": "docker logs dpo-bottender -f",

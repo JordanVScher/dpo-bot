@@ -1,15 +1,10 @@
-FROM node:11.13.0 AS builder
+FROM node:11.13.0
 
-WORKDIR /home/node/app
+WORKDIR /home/node/app_browser
 
 COPY . .
-RUN yarn run react_build
-RUN yarn global add serve
-
-COPY --from=builder /app/build .
 
 EXPOSE 1991
 
-CMD ["yarn", "run" "react_serve"]
-
-
+RUN yarn global add serve
+CMD ["serve", "-p", "1991", "-s", "."]
