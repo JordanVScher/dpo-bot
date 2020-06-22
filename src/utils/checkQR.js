@@ -66,7 +66,7 @@ async function buildMainMenu(context) {
 	const shouldHaveAvancado = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9 || x.ticket_type_id === 10);
 	if (shouldHaveAvancado) options.push(atendimentoAvancado);
 
-	if (context.session.platform === 'browser') options.push(cancelarTicket);
+	// if (context.session.platform === 'browser') options.push(cancelarTicket);
 
 	return { quick_replies: options };
 }
