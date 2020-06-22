@@ -25,7 +25,7 @@ export default {
 	duvidas: {
 		intro: 'Tem alguma dúvida? Entre com ela aqui que eu tentarei te responder.',
 		naoEntendi: 'Não entendi a sua pergunta mas posso verificar com a minha equipe.',
-		askEmail: 'Entre o seu e-mail, é ele que minha equipe usará para te responder.',
+		askEmail: 'Me diga seu e-mail de contato para que minha equipe responda a sua dúvida.',
 		duvidaPlaceholder: 'Qual a sua dúvida?',
 		emailPlaceholder: 'Entre seu e-mail:',
 		success: 'Recebi a sua dúvida. Logo mais nossa equipe entrará em contato pelo seu e-mail.',
@@ -170,7 +170,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		videoLink: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/files/d3f121c6-ac3e-4881-a484-9fa33c272bd0/y2mate.com_patricia_peck_fala_sobre_protecao_dos_dados_pessoais_duLAb_PQuMw_360p.mp4',
 	},
 	sobreDipiou: {
-		text1: 'Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua comunicação com as empresas, sempre pensando em valorizar a sua privacidade. com as empresas, sempre pensando em valorizar a sua privacidade.',
+		text1: 'Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua comunição com as empresas, um robô interativo, estou aqui para harmonizar a sua comunicação com as empresas, sempre pensando em valorizar a sua privacidade. com as empresas, sempre pensando em valorizar a sua privacidade.',
 	},
 	issueText: {
 		success: ['Você me pegou. Preciso pensar e te retorno em breve.',

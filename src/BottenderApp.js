@@ -146,7 +146,7 @@ export default async function App(context) {
 			break;
 		case 'solicitacao':
 			await attach.sendMsgFromAssistente(context, `ticket_type_${context.state.ticketID}`, []);
-			await dialogs.ask(context, `${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]}.`, flow.ask, flow.ask.cpfPlaceholder);
+			await dialogs.ask(context, `${flow.solicitacao.askCPF.base}${flow.solicitacao.askCPF[context.state.ticketID]}`, flow.ask, flow.ask.cpfPlaceholder);
 			await context.setState({ dialog: 'askCPF' });
 			break;
 		case 'askTitular':
