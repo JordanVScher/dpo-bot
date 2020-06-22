@@ -11,21 +11,6 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
-
-async function cancelarFinal(context) {
-	const { cancelarNumero } = context.state;
-	const { cancelarCPF } = context.state;
-
-	const res = await assistenteAPI.cancelTicket(cancelarCPF, cancelarNumero);
-
-	if (res && res.id) {
-		await context.sendText(flow.cancelarTicket.success);
-		await sendMainMenu(context);
-	} else {
-		await context.sendText(flow.cancelarTicket.failure.text, await attach.getQR(flow.cancelarTicket.failure));
-	}
-}
-
 async function ticketFollowUp(context, ticket, desiredTicket) {
 	if (ticket && ticket.id) {
 		await context.typing(1000 * 2.5);
@@ -300,14 +285,37 @@ async function confirmaSolicitacao(context) {
 	await context.sendText(text, await attach.getQR(QR));
 }
 
-async function cancelTicket(context) {
-	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled');
+async function cancelarConfirma(context) {
+	const { cancelarNumero } = context.state;
+	const { cancelarCPF } = context.state;
+	const { recipientID } = context.state;
+
+	const ticket = await assistenteAPI.getBrowserTicket(cancelarNumero, recipientID, cancelarCPF);
+
+	if (ticket && ticket.id && ticket.status !== 'canceled') {
+		const ticketText = help.viewTicket(ticket);
+		if (ticketText) {
+			await context.setState({ ticketID: ticket.id });
+			await context.sendText(flow.cancelarTicket.found);
+			await context.sendHTML(`<p class="botui-message-content text">${ticketText}</p>`);
+			// await context.sendHTML(`<div class="botui-message-content text ticketView">${ticketText}</div>`);
+			await context.sendText(flow.cancelarTicket.success.text, await attach.getQR(flow.cancelarTicket.success));
+			return;
+		}
+	}
+
+	await context.sendText(flow.cancelarTicket.failure.text, await attach.getQR(flow.cancelarTicket.failure));
+}
+
+
+async function cancelTicket(context, cpf = null) {
+	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled', cpf);
 	if (res && res.id) {
 		await context.sendText(flow.cancelConfirmation.cancelSuccess);
-		await sendMainMenu(context);
 	} else {
 		await context.sendText(flow.cancelConfirmation.cancelFailure);
 	}
+	await sendMainMenu(context);
 }
 
 async function seeTicketMessages(context) {
@@ -365,5 +373,5 @@ export default {
 	confirmaSolicitacao,
 	ask,
 	checkInteger,
-	cancelarFinal,
+	cancelarConfirma,
 };

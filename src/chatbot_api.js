@@ -9,7 +9,7 @@ const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADD
 
 const makeRequest = async (opt) => {
 	if (opt.params) opt.params.security_token = security_token;
-	const result = await axios(opt);
+	const result = await axios(opt).then((res) => res).catch((err) => err.response);
 	return helper.handleRequestAnswer(result);
 };
 
@@ -106,8 +106,10 @@ export default {
 		return makeRequest({ url: `${apiUri}/api/chatbot/ticket`, method: 'get', params: { recipient_id } });
 	},
 
-	async putStatusTicket(TicketID, status) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params: { status } });
+	async putStatusTicket(TicketID, status, cpf) {
+		const params = { status };
+		if (cpf) params.cpf = cpf;
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params });
 	},
 
 	async putAddMsgTicket(TicketID, message) {
@@ -127,8 +129,8 @@ export default {
 		});
 	},
 
-	async cancelTicket(recipient_cpf, TicketID) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_cpf } });
+	async getBrowserTicket(TicketID, recipient_id, cpf) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_id, cpf } });
 	},
 
 	async logFlowChange(recipient_fb_id, politician_id, payload, human_name) {

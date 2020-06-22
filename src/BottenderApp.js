@@ -106,8 +106,11 @@ export default async function App(context) {
 		case 'cancelarAskCPF':
 			await dialogs.ask(context, flow.cancelarTicket.askCPF, flow.ask, flow.ask.cpfPlaceholder);
 			break;
+		case 'cancelarConfirma':
+			await dialogs.cancelarConfirma(context);
+			break;
 		case 'cancelarFinal':
-			await dialogs.cancelarFinal(context);
+			await dialogs.cancelTicket(context, context.state.cancelarCPF);
 			break;
 		case 'duvidas':
 			await context.sendText(flow.duvidas.intro);

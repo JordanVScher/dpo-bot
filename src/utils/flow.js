@@ -35,9 +35,14 @@ export default {
 		intro: 'Para cancelar um ticket, será necessário o número do chamado e o seu CPF para confirmar que o Ticket foi aberto por você.',
 		askNumber: 'Entre com o número do Ticket.\nVocê pode encontrar o número do ticket no e-mail que você recebeu ao abri-lo.',
 		askCPF: 'Agora, entre seu CPF, para sabermos que você é o criador desse ticket.',
-		success: 'O Ticket <TICKET_ID> foi cancelado com sucesso!',
+		found: 'Encontramos seu ticket!',
+		success: {
+			text: 'Deseja mesmo cancelar esse ticket?',
+			menuOptions: ['Sim', 'Não'],
+			menuPostback: ['cancelarFinal', 'mainMenu'],
+		},
 		failure: {
-			text: 'A operação não pode ser concluída pois os dados estão incorretos! Quer tentar novamente?',
+			text: 'Não encontrei o seu ticket! Quer tentar novamente?',
 			menuOptions: ['Sim', 'Não'],
 			menuPostback: ['cancelarTicket', 'mainMenu'],
 		},

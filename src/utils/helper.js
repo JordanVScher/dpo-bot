@@ -4,6 +4,7 @@ import accents from 'remove-accents';
 import validarCpf from 'validar-cpf';
 import Sentry from './sentry';
 import mailer from './mailer';
+import flow from './flow';
 
 // Sentry - error reporting
 Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
@@ -245,6 +246,15 @@ async function expectText(context, text, buttons, placeholder) {
 	}
 }
 
+function viewTicket(ticket) {
+	let msg = `Número de Protocolo: ${ticket.id}<br>`;
+	if (ticket.status && flow.ticketStatus[ticket.status]) msg += `Estado: ${flow.ticketStatus[ticket.status].name}<br>`;
+	if (ticket.data && ticket.data.titularNome) msg += `Nome do Titular: ${ticket.data.titularNome}<br>`;
+	if (ticket.created_at) msg += `Data de criação: ${moment(ticket.created_at).format('DD/MM/YY')}<br>`;
+	if (ticket.closed_at) msg += `Data de encerramento: ${moment(ticket.closed_at).format('DD/MM/YY')}<br>`;
+
+	return msg;
+}
 
 export default {
 	Sentry,
@@ -266,4 +276,5 @@ export default {
 	resumoTicket,
 	expectText,
 	maskEmail,
+	viewTicket,
 };
