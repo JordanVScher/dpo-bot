@@ -101,8 +101,8 @@
 .botui-message-content, 
 .botui-actions-text-input {
     /* background: red; */
-    opacity: 0;
 
+    opacity: 0;
     animation: fadeIn 0.5s;
     animation-delay: 1s;
     animation-fill-mode: forwards;

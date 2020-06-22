@@ -14,16 +14,16 @@ const makeRequest = async (opt) => {
 };
 
 export default {
-	async getPoliticianData(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { chatbot_id: 1 } });
+	async getPoliticianData(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { fb_page_id } });
 	},
 
 	async addAssistenteUser(name, email, password) {
 		return makeRequest({ url: `${apiUri}/api/register`, method: 'post', params: { name, email, password } });
 	},
 
-	async getPollData(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { chatbot_id: 1 } });
+	async getPollData(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { fb_page_id } });
 	},
 
 	async postRecipient(politician_id, recipient) {
@@ -90,12 +90,12 @@ export default {
 	},
 
 	// has pagination
-	async getAvailableIntents(chatbot_id, page) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { chatbot_id: 1, page } });
+	async getAvailableIntents(fb_page_id, page) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, page } });
 	},
 
-	async getAllAvailableIntents(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { chatbot_id: 1 } });
+	async getAllAvailableIntents(fb_page_id) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id } });
 	},
 
 	async getTicketTypes(chatbot_id) {

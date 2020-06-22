@@ -97,7 +97,8 @@ export default async function App(context) {
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'duvidas':
-			await dialogs.ask(context, flow.duvidas.intro, flow.ask, flow.duvidas.duvidaPlaceholder);
+			await context.sendText(flow.duvidas.intro);
+			await dialogs.ask(context, '', flow.ask, flow.duvidas.duvidaPlaceholder);
 			break;
 		case 'askEmailDuvida':
 			await context.sendText(flow.duvidas.naoEntendi);
