@@ -11,6 +11,21 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
+
+async function cancelarFinal(context) {
+	const { cancelarNumero } = context.state;
+	const { cancelarCPF } = context.state;
+
+	const res = await assistenteAPI.cancelTicket(cancelarCPF, cancelarNumero);
+
+	if (res && res.id) {
+		await context.sendText(flow.cancelarTicket.success);
+		await sendMainMenu(context);
+	} else {
+		await context.sendText(flow.cancelarTicket.failure.text, await attach.getQR(flow.cancelarTicket.failure));
+	}
+}
+
 async function ticketFollowUp(context, ticket, desiredTicket) {
 	if (ticket && ticket.id) {
 		await context.typing(1000 * 2.5);
@@ -120,6 +135,23 @@ async function checkPhone(context, stateName, successDialog, invalidDialog, reas
 	if (phone) {
 		await context.setState({ [stateName]: phone, dialog: successDialog });
 		return phone;
+	}
+
+	await context.setState({ dialog: invalidDialog || '' });
+	if (reaskMsg) {
+		await ask(context, reaskMsg, flow.ask);
+	}
+
+	return '';
+}
+
+async function checkInteger(context, stateName, successDialog, invalidDialog, reaskMsg = flow.dataFail.phone) {
+	const number = Number.parseInt(context.state.whatWasTyped, 10);
+	const isInteger = Number.isInteger(number);
+
+	if (isInteger) {
+		await context.setState({ [stateName]: number, dialog: successDialog });
+		return number;
 	}
 
 	await context.setState({ dialog: invalidDialog || '' });
@@ -332,4 +364,6 @@ export default {
 	atendimentoAvançado,
 	confirmaSolicitacao,
 	ask,
+	checkInteger,
+	cancelarFinal,
 };

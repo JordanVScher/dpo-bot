@@ -96,6 +96,19 @@ export default async function App(context) {
 			await attach.sendMsgFromAssistente(context, 'fale-conosco', []);
 			await dialogs.sendMainMenu(context);
 			break;
+		case 'cancelarTicket':
+			await context.sendText(flow.cancelarTicket.intro);
+			// fallsthrought
+		case 'cancelarAskNumber':
+			await context.setState({ dialog: 'cancelarAskNumber' });
+			await dialogs.ask(context, flow.cancelarTicket.askNumber, flow.ask, flow.ask.numberPlaceholder);
+			break;
+		case 'cancelarAskCPF':
+			await dialogs.ask(context, flow.cancelarTicket.askCPF, flow.ask, flow.ask.cpfPlaceholder);
+			break;
+		case 'cancelarFinal':
+			await dialogs.cancelarFinal(context);
+			break;
 		case 'duvidas':
 			await context.sendText(flow.duvidas.intro);
 			await dialogs.ask(context, '', flow.ask, flow.duvidas.duvidaPlaceholder);

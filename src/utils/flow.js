@@ -30,7 +30,17 @@ export default {
 		emailPlaceholder: 'Entre seu e-mail:',
 		success: 'Recebi a sua dúvida. Logo mais nossa equipe entrará em contato pelo seu e-mail.',
 		failure: 'Não te entendi, tente novamente.',
-
+	},
+	cancelarTicket: {
+		intro: 'Para cancelar um ticket, será necessário o número do chamado e o seu CPF para confirmar que o Ticket foi aberto por você.',
+		askNumber: 'Entre com o número do Ticket.\nVocê pode encontrar o número do ticket no e-mail que você recebeu ao abri-lo.',
+		askCPF: 'Agora, entre seu CPF, para sabermos que você é o criador desse ticket.',
+		success: 'O Ticket <TICKET_ID> foi cancelado com sucesso!',
+		failure: {
+			text: 'A operação não pode ser concluída pois os dados estão incorretos! Quer tentar novamente?',
+			menuOptions: ['Sim', 'Não'],
+			menuPostback: ['cancelarTicket', 'mainMenu'],
+		},
 	},
 	solicitacoes: {
 		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],
@@ -98,6 +108,7 @@ export default {
 		cpfPlaceholder: 'Ex: 123.123.123-11',
 		cpfFail: 'CPF inválido! Exemplo de CPF: 123.123.123-11.',
 		mailPlaceholder: 'Ex: meuemail@mail.com',
+		numberPlaceholder: 'Ex: 64',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
 	},

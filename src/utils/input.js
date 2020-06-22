@@ -78,6 +78,10 @@ const handleText = async (context, incidenteCPFAux) => {
 		await dialogs.checkNome(context, 'titularNome', 'askMail', 'invalidNome');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
 		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
+	} else if (['cancelarAskNumber'].includes(context.state.dialog)) {
+		await dialogs.checkInteger(context, 'cancelarNumero', 'cancelarAskCPF', 'cancelarAskNumber');
+	} else if (['cancelarAskCPF'].includes(context.state.dialog)) {
+		await dialogs.checkCPF(context, 'cancelarCPF', 'cancelarFinal', 'cancelarAskCPF');
 		// -- 1
 	} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');

@@ -47,6 +47,7 @@ async function buildMainMenu(context) {
 	const sobreDipiou = { content_type: 'text', title: 'Sobre Dipiou', payload: 'sobreDipiou' };
 	const atendimentoAvancado = { content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' };
 	const duvidas = { content_type: 'text', title: 'Dúvidas', payload: 'duvidas' };
+	const cancelarTicket = { content_type: 'text', title: 'Cancelar Ticket', payload: 'cancelarTicket' };
 
 	options.push(consumidor);
 	if (context.session.platform === 'browser') options.push(duvidas);
@@ -64,6 +65,8 @@ async function buildMainMenu(context) {
 
 	const shouldHaveAvancado = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9 || x.ticket_type_id === 10);
 	if (shouldHaveAvancado) options.push(atendimentoAvancado);
+
+	if (context.session.platform === 'browser') options.push(cancelarTicket);
 
 	return { quick_replies: options };
 }

@@ -127,6 +127,10 @@ export default {
 		});
 	},
 
+	async cancelTicket(recipient_cpf, TicketID) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_cpf } });
+	},
+
 	async logFlowChange(recipient_fb_id, politician_id, payload, human_name) {
 		const d = new Date();
 		return makeRequest({
