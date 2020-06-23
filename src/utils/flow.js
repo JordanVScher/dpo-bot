@@ -20,6 +20,7 @@ export default {
 		firstTime: 'Você pode me fazer uma pergunta a qualquer momento ou escolher uma das opções abaixo:',
 		gerando: 'Gerando seu ticket...',
 		createTicket: 'Foi aberto um chamado para sua solicitação e você pode consultá-la em "Meus Tickets".',
+		createTicketBrowser: 'Foi aberto um chamado para sua solicitação, você pode encerrá-lo a qualquer momento em “Meu chamado”.',
 		ticketTime: 'O Número de protocolo do seu chamado é: <TICKET>.\nEm até <TIME> nossa equipe entrará em contato com você.',
 	},
 	duvidas: {

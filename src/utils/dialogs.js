@@ -16,7 +16,7 @@ async function ticketFollowUp(context, ticket, desiredTicket) {
 		await context.typing(1000 * 2.5);
 		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, desiredTicket);
 
-		if (context.session.platform !== 'browser') await context.sendText(flow.mainMenu.createTicket);
+		await context.sendText(context.session.platform === 'browser' ? flow.mainMenu.createTicketBrowser : flow.mainMenu.createTicket);
 
 		const { ticketID } = context.state;
 		if (ticketID && ticketID.toString() === '7') {
