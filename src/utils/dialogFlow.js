@@ -111,6 +111,8 @@ async function buildInformacoesMenu(context) {
 		// { intent: 'Processo de coleta de dados', btn: 'Coleta de Dados' },
 	];
 
+	const browserExtraOption = { content_type: 'text', title: 'Fazer Pergunta', payload: 'duvidas' };
+
 	for (let i = 0; i < intents.length; i++) {
 		const e = intents[i];
 		const aux = await MaAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.state.recipientID);
@@ -121,6 +123,9 @@ async function buildInformacoesMenu(context) {
 	}
 
 	await context.setState({ infoRes: answer });
+
+	if (context.session.platform === 'browser') options.push(browserExtraOption);
+
 	return options.length > 0 ? { quick_replies: options } : false;
 }
 
