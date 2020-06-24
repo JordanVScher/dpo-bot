@@ -121,3 +121,14 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+/* 2.f19e8123.chunk.css | http://dev-dpo-web.appcivico.com/static/css/2.f19e8123.chunk.css */
+
+@media (min-width: 400px) {
+  .botui-app-container {
+    /* width: 400px; */
+    /* height: 500px; */
+    max-width: 400px;
+    height: auto;
+  }
+}
