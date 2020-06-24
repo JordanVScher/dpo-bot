@@ -7,5 +7,5 @@ RUN yarn
 
 EXPOSE 1990
 
-CMD ["yarn", "start:bottender"]
+CMD ["yarn", "run", "start:bottender"]
 
