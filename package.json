@@ -18,13 +18,17 @@
     "react:build": "react-scripts build",
     "react:test": "react-scripts test",
     "react:eject": "react-scripts eject",
+    "react:serve": " serve -s build -p 1991 ",
+    "react:pm2": "pm2 start --name dpo-browser  npm -- run react:serve",
     "bottender:build": "docker-compose up -d --build bottender",
     "bottender:log": "docker logs dpo-bottender -f",
+    "bottender:pm2": "pm2 start --name dpo-bottender  npm -- run start:bottender",
     "browser:build": "docker-compose up -d --build browser",
     "browser:log": "docker logs dpo-browser -f",
     "dialogflow:build": "docker-compose up -d --build dialogflow",
-    "dialogflow:log": "docker logs dpo-dialogflow -f"
-  },
+    "dialogflow:log": "docker logs dpo-dialogflow -f",
+    "dialogflow:pm2": "pm2 start --name dpo-dialogflow  npm -- run start:dialogflow"
+ },
   "dependencies": {
     "@babel/cli": "^7.10.3",
     "@babel/core": "^7.10.3",
