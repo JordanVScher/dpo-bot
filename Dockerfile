@@ -3,9 +3,9 @@ FROM node:11.13.0
 WORKDIR /home/node/app
 
 COPY . .
-RUN yarn
+RUN npm i 
 
 EXPOSE 1990
 
-CMD ["yarn", "run", "start:bottender"]
+CMD ["npm", "run", "start:bottender"]
 

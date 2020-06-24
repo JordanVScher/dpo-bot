@@ -3,12 +3,12 @@ import 'dotenv/config';
 import bodyParser from 'body-parser';
 import express from 'express';
 import { bottender } from 'bottender';
-import notificacaoCron from './notification';
+// import notificacaoCron from './notification';
 
 // const handler = require('./index');
 // const HangoutContext = require('./hangouts');
 
-if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
+// if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
 
 const requests = require('./requests');
 

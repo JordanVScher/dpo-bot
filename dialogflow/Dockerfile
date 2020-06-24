@@ -3,8 +3,8 @@ FROM node:11.13.0
 WORKDIR /home/node/app_df
 
 COPY . .
-RUN yarn
+RUN npm i
 
 EXPOSE 1992
 
-CMD ["yarn", "run", "start:dialogflow"]
+CMD ["npm", "run", "start:dialogflow"]
