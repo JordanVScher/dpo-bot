@@ -1,7 +1,7 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const textRequestDF = require('./agent');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import textRequestDF from './agent';
 
 const app = express();
 

@@ -1,5 +1,5 @@
-const handler = require('./src/BottenderApp');
+import handler from './src/BottenderApp';
 
-module.exports = async function App(context) {
+export default async function App(context) {
 	await handler(context);
-};
+}

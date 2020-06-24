@@ -1,11 +1,12 @@
 import { MessengerClient } from 'messaging-api-messenger';
 import helper from './helper';
+import config from '../../bottender.config';
 
-const config = require('../../bottender.config').channels.messenger;
+const messengerConfig = config.channels.messenger;
 
 const client = MessengerClient.connect({
-	accessToken: config.accessToken,
-	appSecret: config.appSecret,
+	accessToken: messengerConfig.accessToken,
+	appSecret: messengerConfig.appSecret,
 });
 
 async function sendBroadcast(USER_ID, textMsg, buttons) {

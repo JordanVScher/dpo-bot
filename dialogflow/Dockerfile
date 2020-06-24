@@ -7,4 +7,4 @@ RUN yarn
 
 EXPOSE 1992
 
-CMD ["npm", "run", "start_dialogflow"]
+CMD ["yarn", "start:dialogflow"]

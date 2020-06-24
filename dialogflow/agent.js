@@ -1,4 +1,4 @@
-const dialogflow = require('dialogflow');
+import dialogflow from 'dialogflow';
 
 /* Initialize DialogFlow agent */
 /* set GOOGLE_APPLICATION_CREDENTIALS on .env */
@@ -17,4 +17,4 @@ async function textRequestDF(text, sessionId) {
 	return responses;
 }
 
-module.exports = textRequestDF;
+export default textRequestDF;
