@@ -1,4 +1,4 @@
-import assistenteAPI from '../chatbot_api';
+import chatbotAPI from '../chatbot_api';
 import flow from './flow';
 import attach from './attach';
 import checkQR from './checkQR';
@@ -38,7 +38,7 @@ async function createTicket(context) {
 
 	const { id: desiredTicket } = activeTickets.find((x) => x.ticket_type_id.toString() === ticketID.toString());
 
-	const res = await assistenteAPI.postNewTicket(
+	const res = await chatbotAPI.postNewTicket(
 		context.state.politicianData.organization_chatbot_id, context.state.recipientID, desiredTicket, await help.buildTicket(context.state),
 	);
 
@@ -176,7 +176,7 @@ async function checkDescricao(context, stateName, successDialog, invalidDialog, 
 }
 
 async function meuTicket(context) {
-	await context.setState({ userTickets: await assistenteAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
+	await context.setState({ userTickets: await chatbotAPI.getUserTickets(context.session.user.id), currentTicket: '', ticketID: '' });
 	if (context.state.userTickets.itens_count > 0) {
 		await attach.sendTicketCards(context, context.state.userTickets.tickets);
 		await context.typing(1000 * 3);
@@ -290,7 +290,7 @@ async function cancelarConfirma(context) {
 	const { cancelarCPF } = context.state;
 	const { recipientID } = context.state;
 
-	const ticket = await assistenteAPI.getBrowserTicket(cancelarNumero, recipientID, cancelarCPF);
+	const ticket = await chatbotAPI.getBrowserTicket(cancelarNumero, recipientID, cancelarCPF);
 
 	if (ticket && ticket.id && ticket.status !== 'canceled') {
 		const ticketText = help.viewTicket(ticket);
@@ -309,7 +309,7 @@ async function cancelarConfirma(context) {
 
 
 async function cancelTicket(context, cpf = null) {
-	const res = await assistenteAPI.putStatusTicket(context.state.ticketID, 'canceled', cpf);
+	const res = await chatbotAPI.putStatusTicket(context.state.ticketID, 'canceled', cpf);
 	if (res && res.id) {
 		await context.sendText(flow.cancelConfirmation.cancelSuccess);
 	} else {
@@ -331,7 +331,7 @@ async function seeTicketMessages(context) {
 
 async function newTicketMessage(context) {
 	await context.setState({ currentTicket: await context.state.userTickets.tickets.find((x) => x.id.toString() === context.state.ticketID) });
-	const res = await assistenteAPI.putAddMsgTicket(context.state.currentTicket.id, context.state.ticketMsg);
+	const res = await chatbotAPI.putAddMsgTicket(context.state.currentTicket.id, context.state.ticketMsg);
 	if (res && res.id) {
 		await context.sendText(flow.leaveTMsg.cancelSuccess);
 		await sendMainMenu(context);
@@ -341,11 +341,11 @@ async function newTicketMessage(context) {
 }
 
 async function handleReset(context) {
-	console.log('Deletamos o quiz?', await assistenteAPI.resetQuiz(context.session.user.id, 'preparatory'));
-	const meusTickets = await assistenteAPI.getUserTickets(context.session.user.id);
+	console.log('Deletamos o quiz?', await chatbotAPI.resetQuiz(context.session.user.id, 'preparatory'));
+	const meusTickets = await chatbotAPI.getUserTickets(context.session.user.id);
 	if (meusTickets && meusTickets.tickets) {
 		meusTickets.tickets.forEach((element) => {
-			assistenteAPI.putStatusTicket(element.id, 'canceled');
+			chatbotAPI.putStatusTicket(element.id, 'canceled');
 		});
 	}
 	await context.setState({ dialog: 'greetings', quizEnded: false, sendShare: false });

@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 // import opt from './util/options';
-import assistenteAPI from './chatbot_api';
+import chatbotAPI from './chatbot_api';
 import flow from './utils/flow';
 import help from './utils/helper';
 import dialogs from './utils/dialogs';
@@ -38,7 +38,7 @@ const postRecipient = async (context) => {
 	}
 
 	// return recipient id, which will be used on the others endpoints
-	const recipient = await assistenteAPI.postRecipient(context.state.politicianData.user_id, params);
+	const recipient = await chatbotAPI.postRecipient(context.state.politicianData.user_id, params, context.state.JWT);
 	return recipient.id;
 };
 
@@ -46,7 +46,7 @@ const postRecipient = async (context) => {
 export default async function App(context) {
 	try {
 		await context.setState({
-			politicianData: await assistenteAPI.getPoliticianData(getPageID(context)),
+			politicianData: await chatbotAPI.getPoliticianData(getPageID(context)),
 			sessionUser: { ...await context.getUserProfile() },
 		});
 
@@ -59,12 +59,11 @@ export default async function App(context) {
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
 			await input.handlePostback(context);
-			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id,
-				context.event.postback.payload, context.event.postback.title);
+			await chatbotAPI.logFlowChange(context, context.event.postback.payload, context.event.postback.title);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
 			await input.handleQuickReply(context);
-			await assistenteAPI.logFlowChange(context.session.user.id, context.state.politicianData.user_id, context.state.lastQRpayload, context.state.lastQRpayload);
+			await chatbotAPI.logFlowChange(context, context.state.lastQRpayload, context.state.lastQRpayload);
 		} else if (input.isButton(context) === true) {
 			await context.setState({ lastQRpayload: context.event.rawEvent.message.value });
 			await input.handleQuickReply(context);
@@ -278,14 +277,14 @@ export default async function App(context) {
 			await dialogs.sendMainMenu(context); }
 			break;
 		case 'notificationOn':
-			await assistenteAPI.updateBlacklistMA(context.session.user.id, 1);
-			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
+			await chatbotAPI.updateBlacklistMA(context.session.user.id, 1);
+			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
 			await context.sendText(flow.notifications.on);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'notificationOff':
-			await assistenteAPI.updateBlacklistMA(context.session.user.id, 0);
-			await assistenteAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
+			await chatbotAPI.updateBlacklistMA(context.session.user.id, 0);
+			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
 			await context.sendText(flow.notifications.off);
 			await dialogs.sendMainMenu(context);
 			break;

@@ -139,14 +139,21 @@ export default {
 		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_id, cpf } });
 	},
 
-	async logFlowChange(recipient_fb_id, politician_id, payload, human_name) {
+	async logFlowChange(context, payload, human_name) {
 		const d = new Date();
+
+		const params = {
+			recipient_fb_id: context.session.user.id,
+			politician_id: context.state.politicianData.user_id,
+			action_id: 1,
+			payload,
+			human_name,
+			timestamp: d.toGMTString(),
+		};
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/log`,
 			method: 'post',
-			params: {
-				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 1, payload, human_name,
-			},
+			params,
 		});
 	},
 

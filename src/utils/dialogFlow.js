@@ -1,7 +1,7 @@
 import sendIssue from './send_issue';
 import sendAnswer from './sendAnswer';
 import dialogs from './dialogs';
-import MaAPI from '../chatbot_api';
+import chatbotAPI from '../chatbot_api';
 import help from './helper';
 
 /**
@@ -12,7 +12,7 @@ import help from './helper';
 async function textRequestDF(queryText, sessionId) {
 	queryText = await help.formatDialogFlow(queryText);
 	if (typeof sessionId === 'number') sessionId = sessionId.toString();
-	const res = await MaAPI.dialogflowText(queryText, sessionId);
+	const res = await chatbotAPI.dialogflowText(queryText, sessionId);
 	return res;
 }
 
@@ -60,7 +60,7 @@ async function checkPosition(context) {
 	default: {
 		// default acts for every intent - position on MA
 		// getting knowledge base. We send the complete answer from dialogflow
-		const knowledge = await MaAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.state.recipientID);
+		const knowledge = await chatbotAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.state.recipientID);
 		await context.setState({ knowledge });
 		// check if there's at least one answer in knowledge_base
 		if (knowledge && knowledge.knowledge_base && knowledge.knowledge_base.length >= 1) {
@@ -115,7 +115,7 @@ async function buildInformacoesMenu(context) {
 
 	for (let i = 0; i < intents.length; i++) {
 		const e = intents[i];
-		const aux = await MaAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.state.recipientID);
+		const aux = await chatbotAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.state.recipientID);
 		if (aux && aux.knowledge_base && aux.knowledge_base.length > 0) {
 			options.push({ content_type: 'text', title: e.btn, payload: `InfoRes${answer.length}` });
 			answer.push(aux.knowledge_base[0]);

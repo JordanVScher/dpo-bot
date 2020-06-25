@@ -1,4 +1,4 @@
-import assistenteApi from '../chatbot_api';
+import chatbotAPI from '../chatbot_api';
 import aux from './quiz_aux';
 import flow from './flow';
 
@@ -8,7 +8,7 @@ async function answerQuiz(context) {
 	// if the user never started the quiz (or if the user already ended the quiz once === '') the type is 'preparatory'
 	if (!context.state.typeQuiz || context.state.typeQuiz === '') { await context.setState({ typeQuiz: 'preparatory' }); }
 
-	await context.setState({ currentQuestion: await assistenteApi.getPendinQuestion(context.session.user.id, context.state.typeQuiz) });
+	await context.setState({ currentQuestion: await chatbotAPI.getPendinQuestion(context.session.user.id, context.state.typeQuiz) });
 	console.log('\nA nova pergunta do get', context.state.currentQuestion, '\n');
 	console.log('typeQuiz', context.state.typeQuiz);
 
@@ -30,7 +30,7 @@ async function answerQuiz(context) {
 async function handleAnswer(context, quizOpt) {
 	// context.state.currentQuestion.code -> the code for the current question
 	// quizOpt -> the quiz option the user clicked/wrote
-	await context.setState({ sentAnswer: await assistenteApi.postQuizAnswer(context.session.user.id, context.state.typeQuiz, context.state.currentQuestion.question.code, quizOpt) });
+	await context.setState({ sentAnswer: await chatbotAPI.postQuizAnswer(context.session.user.id, context.state.typeQuiz, context.state.currentQuestion.question.code, quizOpt) });
 	console.log(`\nResultado do post da pergunta ${context.state.currentQuestion.question.code} - ${quizOpt}:`, context.state.sentAnswer, '\n');
 	await context.setState({ onTextQuiz: false });
 
