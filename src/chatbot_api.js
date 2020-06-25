@@ -3,12 +3,19 @@
 import axios from 'axios';
 import helper from './utils/helper';
 
+const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADDRESS;
 const apiUri = `${dialogFlowAddress}/request`;
 
 const makeRequest = async (data) => {
 	data.url = data.url.replace(apiUri, '<NOVA_API>');
 	const result = await axios({ url: apiUri, method: 'post', data }).then((res) => res).catch((err) => err.response);
+	return helper.handleRequestAnswer(result);
+};
+
+const makeInternalRequest = async (params) => {
+	if (params) params.security_token = security_token;
+	const result = await axios(params).then((res) => res).catch((err) => err.response);
 	return helper.handleRequestAnswer(result);
 };
 
@@ -220,8 +227,10 @@ export default {
 	},
 
 	async dialogflowText(queryText, sessionId) {
-		const opt = { url: `${dialogFlowAddress}/text-request`, method: 'post', data: { queryText, sessionId } };
-		const result = await axios(opt).then((res) => res).catch((err) => err.response);
-		return helper.handleRequestAnswer(result);
+		return makeInternalRequest({ url: `${dialogFlowAddress}/text-request`, method: 'post', data: { queryText, sessionId } });
+	},
+
+	async registerUser(userKey) {
+		return makeInternalRequest({ url: `${dialogFlowAddress}/register`, method: 'post', data: { userKey } });
 	},
 };

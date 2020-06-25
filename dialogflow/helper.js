@@ -1,8 +1,17 @@
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const redis = require('redis');
+const randtoken = require('rand-token');
 // import axios from 'axios';
+// import jwt from 'jsonwebtoken';
+// import redis from 'redis';
+// import randtoken from 'rand-token';
 
 const securityToken = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
+
+const rediscl = redis.createClient({ password: process.env.REDIS_PASSWORD });
+rediscl.on('connect', () => { console.log('Redis plugged in.'); });
 
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`;
@@ -15,7 +24,7 @@ async function handleErrorApi(options, res, statusCode, err) {
 	if (res) msg += `\nResposta: ${JSON.stringify(res, null, 2)}`;
 	if (err) msg += `\nErro: ${err.stack || err}`;
 
-	console.log('----------------------------------------------', `\n${msg}`, '\n\n');
+	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
 		if (process.env.ENV !== 'local') {
@@ -45,5 +54,31 @@ async function makeRequest(opt) {
 	return handleRequestAnswer(backResponse);
 }
 
+const jwtSecret = process.env.JWT_SECRET;
+const jwtExpiration = process.env.JWT_EXPIRATION;
+const jwtRefreshExpiration = process.env.JWT_REFRESH_EXPIRATION;
 
-module.exports = { handleRequestAnswer, makeRequest };
+async function registerJWT(userKey) {
+	// Generate new refresh token and it's expiration
+	const refreshToken = randtoken.uid(64);
+	const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
+
+	// Generate new access token
+	console.log('jwtExpiration', jwtExpiration);
+	const token = jwt.sign({ uid: userKey }, jwtSecret, {
+		expiresIn: jwtExpiration,
+	});
+
+	console.log('token', token);
+
+	rediscl.set(userKey, JSON.stringify({
+		refreshToken,
+		expires: refreshTokenMaxage,
+	}),
+	redis.print);
+
+	return { token, refreshToken };
+}
+
+
+module.exports = { handleRequestAnswer, makeRequest, registerJWT };

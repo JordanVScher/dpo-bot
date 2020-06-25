@@ -41,6 +41,14 @@ app.post('/request', async (req, res) => {
 	res.send(tosend);
 });
 
+app.post('/register', async (req, res) => {
+	const { userKey } = req.body;
+	const result = await helper.registerJWT(userKey);
+
+	if (!result || !result.token) res.status(500).send({ error: 'There was an error generating the JWT.' });
+	res.send(result);
+});
+
 
 const port = process.env.DF_PORT || process.env.REACT_APP_DF_PORT;
 app.listen(port, (err) => {

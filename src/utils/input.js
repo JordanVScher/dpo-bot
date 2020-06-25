@@ -4,6 +4,7 @@ import attach from './attach';
 import DF from './dialogFlow';
 import dialogs from './dialogs';
 import labels from './labels';
+import assistenteAPI from '../chatbot_api';
 
 const checkNextStep = async (context, browser, regular) => {
 	if (context.session.platform === 'browser') {
@@ -20,6 +21,7 @@ const handleQuickReply = async (context) => {
 	if (lastQRpayload === 'greetings') {
 		if (context.session.platform === 'browser') await context.resetMessages();
 		await context.setState({ dialog: 'greetings' });
+		context.setState({ JWT: await assistenteAPI.registerUser(context.session.user.id) });
 	} else if (lastQRpayload === 'checkNextStepRevogar') {
 		await checkNextStep(context, 'askRevogarNome', 'askRevogarMail');
 	} else if (lastQRpayload === 'checkNextStep') {

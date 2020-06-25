@@ -22,8 +22,6 @@ class BrowserConnector {
 	updateSession(session) {
 		if (!session.user) {
 			session.user = {
-				// id: 2494416780638428,
-				// id: 2323142361097483,
 				id: this.getUniqueSessionKey(),
 				name: 'you',
 				_updatedAt: new Date().toISOString(),
