@@ -60,7 +60,9 @@ async function checkPosition(context) {
 	default: {
 		// default acts for every intent - position on MA
 		// getting knowledge base. We send the complete answer from dialogflow
-		const knowledge = await chatbotAPI.getknowledgeBase(context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.state.recipientID);
+		const knowledge = await chatbotAPI.getknowledgeBase(
+			context.state.politicianData.user_id, await getExistingRes(context.state.apiaiResp), context.state.recipientID, context.state.JWT,
+		);
 		await context.setState({ knowledge });
 		// check if there's at least one answer in knowledge_base
 		if (knowledge && knowledge.knowledge_base && knowledge.knowledge_base.length >= 1) {
@@ -115,7 +117,9 @@ async function buildInformacoesMenu(context) {
 
 	for (let i = 0; i < intents.length; i++) {
 		const e = intents[i];
-		const aux = await chatbotAPI.getknowledgeBaseByName(context.state.politicianData.user_id, e.intent, context.state.recipientID);
+		const aux = await chatbotAPI.getknowledgeBaseByName(
+			context.state.politicianData.user_id, e.intent, context.state.recipientID, context.state.JWT,
+		);
 		if (aux && aux.knowledge_base && aux.knowledge_base.length > 0) {
 			options.push({ content_type: 'text', title: e.btn, payload: `InfoRes${answer.length}` });
 			answer.push(aux.knowledge_base[0]);

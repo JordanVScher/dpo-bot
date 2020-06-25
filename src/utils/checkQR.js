@@ -4,10 +4,10 @@ import labels from './labels';
 import flow from './flow';
 
 async function reloadTicket(context) {
-	await context.setState({ ticketTypes: await chatbotAPI.getTicketTypes(context.state.politicianData.organization_chatbot_id) });
+	await context.setState({ ticketTypes: await chatbotAPI.getTicketTypes(context.state.politicianData.organization_chatbot_id, context.state.JWT) });
 	if (context.session.platform !== 'browser') {
-		await context.setState({ userTickets: await chatbotAPI.getUserTickets(context.session.user.id) });
-		await context.setState({ userTicketTypes: await chatbotAPI.getUserTicketTypes(context.state.userTickets.tickets) });
+		await context.setState({ userTickets: await chatbotAPI.getUserTickets(context.session.user.id, context.state.JWT) });
+		await context.setState({ userTicketTypes: await chatbotAPI.getUserTicketTypes(context.state.userTickets.tickets, context.state.JWT) });
 	} else {
 		await context.setState({ userTickets: [], userTicketTypes: [] });
 	}

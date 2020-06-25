@@ -45,8 +45,11 @@ const postRecipient = async (context) => {
 
 export default async function App(context) {
 	try {
+		if (!context.state.spokeOnce) context.setState({ JWT: await chatbotAPI.registerUser(context.session.user.id) });
+		const { JWT } = context.state;
+
 		await context.setState({
-			politicianData: await chatbotAPI.getPoliticianData(getPageID(context)),
+			politicianData: await chatbotAPI.getPoliticianData(getPageID(context), JWT),
 			sessionUser: { ...await context.getUserProfile() },
 		});
 
@@ -55,15 +58,14 @@ export default async function App(context) {
 
 		await timer.deleteTimers(context.session.user.id);
 
-
 		if (context.event.isPostback) {
 			await context.setState({ lastPBpayload: context.event.postback.payload });
 			await input.handlePostback(context);
-			await chatbotAPI.logFlowChange(context, context.event.postback.payload, context.event.postback.title);
+			await chatbotAPI.logFlowChange(context, context.event.postback.payload, context.event.postback.title, JWT);
 		} else if (context.event.isQuickReply) {
 			await context.setState({ lastQRpayload: context.event.quickReply.payload });
 			await input.handleQuickReply(context);
-			await chatbotAPI.logFlowChange(context, context.state.lastQRpayload, context.state.lastQRpayload);
+			await chatbotAPI.logFlowChange(context, context.state.lastQRpayload, context.state.lastQRpayload, JWT);
 		} else if (input.isButton(context) === true) {
 			await context.setState({ lastQRpayload: context.event.rawEvent.message.value });
 			await input.handleQuickReply(context);
@@ -277,14 +279,14 @@ export default async function App(context) {
 			await dialogs.sendMainMenu(context); }
 			break;
 		case 'notificationOn':
-			await chatbotAPI.updateBlacklistMA(context.session.user.id, 1);
-			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3);
+			await chatbotAPI.updateBlacklistMA(context.session.user.id, 1, JWT);
+			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 3, JWT);
 			await context.sendText(flow.notifications.on);
 			await dialogs.sendMainMenu(context);
 			break;
 		case 'notificationOff':
-			await chatbotAPI.updateBlacklistMA(context.session.user.id, 0);
-			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4);
+			await chatbotAPI.updateBlacklistMA(context.session.user.id, 0, JWT);
+			await chatbotAPI.logNotification(context.session.user.id, context.state.politicianData.user_id, 4, JWT);
 			await context.sendText(flow.notifications.off);
 			await dialogs.sendMainMenu(context);
 			break;
@@ -298,6 +300,8 @@ export default async function App(context) {
 		default:
 			break;
 		} // end switch case
+
+		await context.setState({ spokeOnce: true });
 	} catch (error) {
 		console.log('error', error);
 		await help.errorDetail(context, error);

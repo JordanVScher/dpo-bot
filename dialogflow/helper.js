@@ -64,12 +64,9 @@ async function registerJWT(userKey) {
 	const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
 
 	// Generate new access token
-	console.log('jwtExpiration', jwtExpiration);
 	const token = jwt.sign({ uid: userKey }, jwtSecret, {
 		expiresIn: jwtExpiration,
 	});
-
-	console.log('token', token);
 
 	rediscl.set(userKey, JSON.stringify({
 		refreshToken,
@@ -80,5 +77,41 @@ async function registerJWT(userKey) {
 	return { token, refreshToken };
 }
 
+async function checkJWT(myJwt) {
+	const { token } = myJwt;
+	const { refreshToken } = myJwt;
 
-module.exports = { handleRequestAnswer, makeRequest, registerJWT };
+	if (!token || !refreshToken) return { error: 'Token missing' };
+
+	const results = await jwt.verify(token, jwtSecret, async (err, decoded) => {
+		if (err) {
+			if (err.name === 'TokenExpiredError') {
+				const redisToken = rediscl.get(decoded.uid, (error, val) => (error ? null : val || null));
+				if (!redisToken || redisToken.refresh_token === refreshToken) {
+					return { error: 'invalid refresh token' };
+				}
+
+				if (redisToken.expires > new Date()) {
+					const newRefreshToken = randtoken.uid(64);
+					const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
+					rediscl.set(decoded.uid, JSON.stringify({ refreshToken, expires: refreshTokenMaxage }), rediscl.print);
+
+					const newToken = jwt.sign({ uid: decoded.uid }, jwtSecret, { expiresIn: jwtExpiration });
+					return { token: newToken, refreshToken: newRefreshToken };
+				}
+			}
+			// error
+			return { error: 'Invalid token' };
+		}
+		// no error
+		return { decoded };
+	});
+	return results;
+}
+
+module.exports = {
+	handleRequestAnswer,
+	makeRequest,
+	registerJWT,
+	checkJWT,
+};

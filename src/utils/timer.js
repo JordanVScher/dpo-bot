@@ -26,7 +26,7 @@ async function createFilesTimer(userID, context) {
 					await chatbotApi.postNewTicket(
 						context.state.politicianData.organization_chatbot_id,
 						context.session.user.id, desiredTicket,
-						'', '', 1, context.state.titularFiles,
+						'', '', 1, context.state.titularFiles, context.state.JWT,
 					), desiredTicket);
 			} else {
 				await dialogs.ask(context, flow.incidente.incidenteCPF, flow.ask, flow.ask.cpfPlaceholder);

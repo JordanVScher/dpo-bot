@@ -20,42 +20,50 @@ const makeInternalRequest = async (params) => {
 };
 
 export default {
-	async getPoliticianData(fb_page_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { fb_page_id } });
+	async getPoliticianData(fb_page_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/politician`, method: 'get', params: { fb_page_id, jwt } });
 	},
 
 	async addAssistenteUser(name, email, password) {
 		return makeRequest({ url: `${apiUri}/api/register`, method: 'post', params: { name, email, password } });
 	},
 
-	async getPollData(fb_page_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { fb_page_id } });
+	async getPollData(fb_page_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/poll`, method: 'get', params: { fb_page_id, jwt } });
 	},
 
-	async postRecipient(politician_id, recipient) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/recipient`, method: 'post', params: { ...recipient, politician_id } });
+	async postRecipient(politician_id, recipient, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/recipient`, method: 'post', params: { ...recipient, politician_id, jwt } });
 	},
 
-	async postPollAnswer(recipient_id, poll_question_option_id, origin) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/poll-result`, method: 'post', params: { recipient_id, poll_question_option_id, origin } });
+	async postPollAnswer(recipient_id, poll_question_option_id, origin, jwt) {
+		return makeRequest({
+			url: `${apiUri}/api/chatbot/poll-result`,
+			method: 'post',
+			params: {
+				recipient_id, poll_question_option_id, origin, jwt,
+			},
+		});
 	},
 
-	async getPollAnswer(recipient_id, poll_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/poll-result`, method: 'get', params: { recipient_id, poll_id } });
+	async getPollAnswer(recipient_id, poll_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/poll-result`, method: 'get', params: { recipient_id, poll_id, jwt } });
 	},
 
-	async getDialog(politician_id, dialog_name) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/dialog`, method: 'get', params: { politician_id, dialog_name } });
+	async getDialog(politician_id, dialog_name, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/dialog`, method: 'get', params: { politician_id, dialog_name, jwt } });
 	},
 
-	async getAnswer(politician_id, question_name) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/answer`, method: 'get', params: { politician_id, question_name } });
+	async getAnswer(politician_id, question_name, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/answer`, method: 'get', params: { politician_id, question_name, jwt } });
 	},
 
-	async postIssue(politician_id, recipient_id, message, entities = {}, issue_active) {
+	async postIssue(politician_id, recipient_id, message, entities = {}, issue_active, jwt) {
 		if (!issue_active) return {};
 
-		const params = { politician_id, recipient_id, message };
+		const params = {
+			politician_id, recipient_id, message, jwt,
+		};
 
 		if (entities && Object.keys(entities) && Object.keys(entities).length > 0) {
 			entities = JSON.stringify(entities);
@@ -65,64 +73,82 @@ export default {
 		return makeRequest({ url: `${apiUri}/api/chatbot/issue`, method: 'post', params });
 	},
 
-	async postIssueWithoutEntities(politician_id, recipient_id, message, issue_active) {
+	async postIssueWithoutEntities(politician_id, recipient_id, message, issue_active, jwt) {
 		if (!issue_active) return {};
 		// message = encodeURI(message);
-		return makeRequest({ url: `${apiUri}/api/chatbot/issue`, method: 'post', params: { politician_id, recipient_id, message } });
+		return makeRequest({
+			url: `${apiUri}/api/chatbot/issue`,
+			method: 'post',
+			params: {
+				politician_id, recipient_id, message, jwt,
+			},
+		});
 	},
 
-	async getknowledgeBase(politician_id, entities, recipient_id) {
+	async getknowledgeBase(politician_id, entities, recipient_id, jwt) {
 		entities = JSON.stringify(entities);
-		return makeRequest({ url: `${apiUri}/api/chatbot/knowledge-base`, method: 'get', params: { politician_id, entities, recipient_id } });
+		return makeRequest({
+			url: `${apiUri}/api/chatbot/knowledge-base`,
+			method: 'get',
+			params: {
+				politician_id, entities, recipient_id, jwt,
+			},
+		});
 	},
 
-	async getknowledgeBaseByName(politician_id, intentName, recipient_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/knowledge-base`, method: 'get', params: { politician_id, entities: intentName, recipient_id } });
+	async getknowledgeBaseByName(politician_id, intentName, recipient_id, jwt) {
+		return makeRequest({
+			url: `${apiUri}/api/chatbot/knowledge-base`,
+			method: 'get',
+			params: {
+				politician_id, entities: intentName, recipient_id, jwt,
+			},
+		});
 	},
 
-	async postPrivateReply(entities, page_id, post_id, comment_id, permalink, user_id) {
+	async postPrivateReply(entities, page_id, post_id, comment_id, permalink, user_id, jwt) {
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/private-reply`,
 			method: 'post',
 			params: {
-				page_id, entities, user_id, post_id, permalink, comment_id,
+				page_id, entities, user_id, post_id, permalink, comment_id, jwt,
 			},
 		});
 	},
 
 	// 0 -> turn off notification && 1 -> turn on notification
-	async updateBlacklistMA(recipient_id, active) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/blacklist`, method: 'post', params: { recipient_id, active } });
+	async updateBlacklistMA(recipient_id, active, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/blacklist`, method: 'post', params: { recipient_id, active, jwt } });
 	},
 
 	// has pagination
-	async getAvailableIntents(fb_page_id, page) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, page } });
+	async getAvailableIntents(fb_page_id, page, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, page, jwt } });
 	},
 
-	async getAllAvailableIntents(fb_page_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id } });
+	async getAllAvailableIntents(fb_page_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, jwt } });
 	},
 
-	async getTicketTypes(chatbot_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/type`, method: 'get', params: { chatbot_id } });
+	async getTicketTypes(chatbot_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/type`, method: 'get', params: { chatbot_id, jwt } });
 	},
 
-	async getUserTickets(recipient_id) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket`, method: 'get', params: { recipient_id } });
+	async getUserTickets(recipient_id, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket`, method: 'get', params: { recipient_id, jwt } });
 	},
 
-	async putStatusTicket(TicketID, status, cpf) {
-		const params = { status };
+	async putStatusTicket(TicketID, status, cpf, jwt) {
+		const params = { status, jwt };
 		if (cpf) params.cpf = cpf;
 		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params });
 	},
 
-	async putAddMsgTicket(TicketID, message) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params: { message } });
+	async putAddMsgTicket(TicketID, message, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'put', params: { message, jwt } });
 	},
 
-	async postNewTicket(chatbot_id, recipient_id, type_id, data, message = '', anonymous = 0, files = []) {
+	async postNewTicket(chatbot_id, recipient_id, type_id, data, message = '', anonymous = 0, files = [], jwt) {
 		const aux = {};
 		if (files) files.forEach((e, i) => { aux[`ticket_attachment_${i}`] = e; });
 
@@ -130,16 +156,16 @@ export default {
 			url: `${apiUri}/api/chatbot/ticket`,
 			method: 'post',
 			params: {
-				chatbot_id, recipient_id, type_id, message, data: JSON.stringify(data), anonymous, ...aux,
+				chatbot_id, recipient_id, type_id, message, data: JSON.stringify(data), anonymous, ...aux, jwt,
 			},
 		});
 	},
 
-	async getBrowserTicket(TicketID, recipient_id, cpf) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_id, cpf } });
+	async getBrowserTicket(TicketID, recipient_id, cpf, jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/${TicketID}`, method: 'get', params: { recipient_id, cpf, jwt } });
 	},
 
-	async logFlowChange(context, payload, human_name) {
+	async logFlowChange(context, payload, human_name, jwt) {
 		const d = new Date();
 
 		const params = {
@@ -149,87 +175,84 @@ export default {
 			payload,
 			human_name,
 			timestamp: d.toGMTString(),
+			jwt,
 		};
-		return makeRequest({
-			url: `${apiUri}/api/chatbot/log`,
-			method: 'post',
-			params,
-		});
+		return makeRequest({ url: `${apiUri}/api/chatbot/log`, method: 'post', params });
 	},
 
-	async logAnsweredPoll(recipient_fb_id, politician_id, field_id) {
+	async logAnsweredPoll(recipient_fb_id, politician_id, field_id, jwt) {
 		const d = new Date();
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/log`,
 			method: 'post',
 			params: {
-				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 2, field_id,
+				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 2, field_id, jwt,
 			},
 		});
 	},
 
-	async logAskedEntity(recipient_fb_id, politician_id, field_id) {
+	async logAskedEntity(recipient_fb_id, politician_id, field_id, jwt) {
 		const d = new Date();
 
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/log`,
 			method: 'post',
 			params: {
-				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 5, field_id,
+				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id: 5, field_id, jwt,
 			},
 		});
 	},
 
 	// action_id should be 3 for ACTIVATED_NOTIFICATIONS and 4 for DEACTIVATED_NOTIFICATIONS
-	async logNotification(recipient_fb_id, politician_id, action_id) {
+	async logNotification(recipient_fb_id, politician_id, action_id, jwt) {
 		const d = new Date();
 
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/log`,
 			method: 'post',
 			params: {
-				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id,
+				timestamp: d.toGMTString(), recipient_fb_id, politician_id, action_id, jwt,
 			},
 		});
 	},
 
-	async getLogAction() {
-		return makeRequest({ url: `${apiUri}/api/chatbot/log/actions`, method: 'get', params: {} });
+	async getLogAction(jwt) {
+		return makeRequest({ url: `${apiUri}/api/chatbot/log/actions`, method: 'get', params: { jwt } });
 	},
 
-	async setIntentStatus(politician_id, recipient_fb_id, intent, entity_is_correct) {
+	async setIntentStatus(politician_id, recipient_fb_id, intent, entity_is_correct, jwt) {
 		if (!intent || !intent.id) return false;
 
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/politician/${politician_id}/intents/${intent.id}/stats`,
 			method: 'post',
-			params: { entity_is_correct, recipient_fb_id },
+			params: { entity_is_correct, recipient_fb_id, jwt },
 		});
 	},
 
-	async getPendinQuestion(fb_id, type = 'preparatory') {
+	async getPendinQuestion(fb_id, type = 'preparatory', jwt) {
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/questionnaire/pending`,
 			method: 'get',
-			params: { fb_id, type },
+			params: { fb_id, type, jwt },
 		});
 	},
 
-	async postQuizAnswer(fb_id, type, code, answer_value) {
+	async postQuizAnswer(fb_id, type, code, answer_value, jwt) {
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/questionnaire/answer`,
 			method: 'post',
 			params: {
-				fb_id, type, code, answer_value,
+				fb_id, type, code, answer_value, jwt,
 			},
 		});
 	},
 
-	async resetQuiz(fb_id, type) {
+	async resetQuiz(fb_id, type, jwt) {
 		return makeRequest({
 			url: `${apiUri}/api/chatbot/questionnaire/reset`,
 			method: 'post',
-			params: { fb_id, type },
+			params: { fb_id, type, jwt },
 		});
 	},
 

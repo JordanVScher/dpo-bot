@@ -36,6 +36,9 @@ app.post('/text-request', async (req, res) => {
 
 app.post('/request', async (req, res) => {
 	const opt = req.body;
+	const userJwt = opt && opt.params && opt.params.jwt ? opt.params.jwt : {};
+	const access = await helper.checkJWT(userJwt);
+	if (!access || access.error) res.status(400).send({ error: access && access.error ? access.error : 'invalid jwt' });
 
 	const tosend = await helper.makeRequest(opt);
 	res.send(tosend);
