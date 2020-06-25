@@ -256,8 +256,8 @@ export default {
 		});
 	},
 
-	async dialogflowText(queryText, sessionId) {
-		return makeInternalRequest({ url: `${dialogFlowAddress}/text-request`, method: 'post', data: { queryText, sessionId } });
+	async dialogflowText(queryText, sessionId, jwt) {
+		return makeInternalRequest({ url: `${dialogFlowAddress}/text-request`, method: 'post', data: { queryText, sessionId, jwt } });
 	},
 
 	async registerUser(userKey) {

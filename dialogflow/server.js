@@ -18,14 +18,18 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/text-request', async (req, res) => {
-	const { sessionId, queryText } = req.body;
+	const { sessionId, queryText, jwt } = req.body;
+
+	const access = await helper.checkJWT(jwt);
+	if (!access || access.error) res.status(400).send({ error: access && access.error ? access.error : 'invalid jwt' });
+
 	if (typeof sessionId !== 'string' || typeof queryText !== 'string') {
 		res.status(422).send({ error: 'Missing "sessionId" or "queryText" params.' });
 		return;
 	}
-	console.log('queryText', queryText);
+
 	const result = await textRequestDF(queryText, sessionId);
-	console.log(JSON.stringify(result, null, 2));
+
 	if (!result || !result[0] || !result[0].responseId) {
 		res.status(500).send({ error: 'There was an error processing the request.' });
 		return;

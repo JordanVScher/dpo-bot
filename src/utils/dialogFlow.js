@@ -9,10 +9,10 @@ import help from './helper';
  * @param {string} textQuery The text to be queried
  * @param {string} sessionId A unique identifier for the given session
  */
-async function textRequestDF(queryText, sessionId) {
+async function textRequestDF(queryText, sessionId, jwt) {
 	queryText = await help.formatDialogFlow(queryText);
 	if (typeof sessionId === 'number') sessionId = sessionId.toString();
-	const res = await chatbotAPI.dialogflowText(queryText, sessionId);
+	const res = await chatbotAPI.dialogflowText(queryText, sessionId, jwt);
 	return res;
 }
 
@@ -95,7 +95,7 @@ async function dialogFlow(context) {
 	const date = new Date();
 	console.log(`\n${date.toLocaleTimeString('pt-BR')} de ${date.getDate()}/${date.getMonth() + 1}:${context.state.sessionUser.name} digitou ${context.state.whatWasTyped} - DF Status: ${context.state.politicianData.use_dialogflow}`);
 	if (context.state.politicianData.use_dialogflow === 1) { // check if 'politician' is using dialogFlow
-		await context.setState({ apiaiResp: await textRequestDF(context.state.whatWasTyped, context.session.user.id) });
+		await context.setState({ apiaiResp: await textRequestDF(context.state.whatWasTyped, context.session.user.id, context.state.JWT) });
 		await getDFAnswerData(context);
 		await checkPosition(context);
 	} else {

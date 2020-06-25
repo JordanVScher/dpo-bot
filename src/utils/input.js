@@ -47,7 +47,7 @@ const handlePostback = async (context) => {
 	await context.setState({ onSolicitacoes: false, solicitacaoCounter: 0 });
 
 	const { lastPBpayload } = context.state;
-	if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id);
+	if (context.state.onSolicitacoes) await DF.textRequestDF('sair', context.session.user.id, context.state.JWT);
 
 	if (lastPBpayload === 'greetings' || !context.state.dialog || context.state.dialog === '') {
 		await context.setState({ dialog: 'greetings' });
