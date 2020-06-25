@@ -45,5 +45,5 @@ services:
       - $PWD/redis-data:/var/lib/redis
       - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
     ports:
-      - '6379:6379'
+      - '${REDIS_PORT}:6379'
 
