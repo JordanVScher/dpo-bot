@@ -24,17 +24,17 @@ services:
       - .:/home/node/app_browser
       - /home/node/app_browser/node_modules
     network_mode: "bridge"
-  dialogflow:
-    container_name: dpo-dialogflow
+  proxy:
+    container_name: dpo-proxy
     build: 
         context: .
-        dockerfile: ./dialogflow/Dockerfile
+        dockerfile: ./proxy/Dockerfile
     restart: unless-stopped
     ports:
       - "1992:2777"
     volumes:
-      - .:/home/node/app_df
-      - /home/node/app_df/node_modules
+      - .:/home/node/app_proxy
+      - /home/node/app_proxy/node_modules
     network_mode: "bridge"
   redis:
     container_name: dpo-redis

@@ -4,8 +4,8 @@ import axios from 'axios';
 import helper from './utils/helper';
 
 const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
-const dialogFlowAddress = process.env.DF_ADDRESS || process.env.REACT_APP_DF_ADDRESS;
-const apiUri = `${dialogFlowAddress}/request`;
+const proxyAddress = process.env.PROXY_ADDRESS || process.env.REACT_APP_PROXY_ADDRESS;
+const apiUri = `${proxyAddress}/request`;
 
 const makeRequest = async (data) => {
 	data.url = data.url.replace(apiUri, '<NOVA_API>');
@@ -257,10 +257,10 @@ export default {
 	},
 
 	async dialogflowText(queryText, sessionId, jwt) {
-		return makeInternalRequest({ url: `${dialogFlowAddress}/text-request`, method: 'post', data: { queryText, sessionId, jwt } });
+		return makeInternalRequest({ url: `${proxyAddress}/text-request`, method: 'post', data: { queryText, sessionId, jwt } });
 	},
 
 	async registerUser(userKey) {
-		return makeInternalRequest({ url: `${dialogFlowAddress}/register`, method: 'post', data: { userKey } });
+		return makeInternalRequest({ url: `${proxyAddress}/register`, method: 'post', data: { userKey } });
 	},
 };
