@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const redis = require('redis');
@@ -11,10 +12,10 @@ const securityToken = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SEC
 const nextDomain = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
 
 const rediscl = redis.createClient({ password: process.env.REDIS_PASSWORD });
-rediscl.on('connect', () => { console.log('Redis plugged in.'); });
+const redisGetAsync = promisify(rediscl.get).bind(rediscl);
 
 async function handleErrorApi(options, res, statusCode, err) {
-	let msg = `Endereço: ${options.url}`;
+	let msg = `Endereço: ${options.url}`; // eslint-disable-line
 	msg += `\nMethod: ${options.method}`;
 	if (options.params) msg += `\nQuery: ${JSON.stringify(options.params, null, 2)}`;
 	if (options.headers) msg += `\nHeaders: ${JSON.stringify(options.headers, null, 2)}`;
@@ -77,6 +78,7 @@ async function registerJWT(userKey) {
 	return { token, refreshToken };
 }
 
+
 async function checkJWT(myJwt) {
 	const { token } = myJwt;
 	const { refreshToken } = myJwt;
@@ -86,8 +88,11 @@ async function checkJWT(myJwt) {
 	const results = await jwt.verify(token, jwtSecret, async (err, decoded) => {
 		if (err) {
 			if (err.name === 'TokenExpiredError') {
-				const redisToken = rediscl.get(decoded.uid, (error, val) => (error ? null : val || null));
-				if (!redisToken || redisToken.refresh_token === refreshToken) {
+				const newDecoded = await jwt.decode(token);
+				let redisToken = await redisGetAsync(newDecoded.uid);
+
+				if (typeof redisToken === 'string') redisToken = JSON.parse(redisToken);
+				if (!redisToken || redisToken.refreshToken === refreshToken) {
 					return { error: 'invalid refresh token' };
 				}
 
@@ -108,6 +113,10 @@ async function checkJWT(myJwt) {
 	});
 	return results;
 }
+
+rediscl.on('connect', () => {
+	console.log('Redis plugged in.');
+});
 
 module.exports = {
 	handleRequestAnswer,
