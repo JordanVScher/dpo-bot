@@ -47,6 +47,7 @@ export default {
 			menuOptions: ['Sim', 'Não'],
 			menuPostback: ['cancelarTicket', 'mainMenu'],
 		},
+		cancelledAlready: 'Esse ticket já esta cancelado! Se desejar abrir um novo chamado, deverá criar outro ticket.',
 	},
 	solicitacoes: {
 		builtInSairResponse: ['cancelado', 'cancelada', 'cancelar', 'cancelei', 'cancelados', 'canceladas'],

@@ -286,14 +286,20 @@ async function cancelarConfirma(context) {
 
 	const ticket = await chatbotAPI.getBrowserTicket(cancelarNumero, recipientID, cancelarCPF, context.state.JWT);
 
-	if (ticket && ticket.id && ticket.status !== 'canceled') {
-		const ticketText = help.viewTicket(ticket);
-		if (ticketText) {
-			await context.setState({ ticketID: ticket.id });
-			await context.sendText(flow.cancelarTicket.found);
-			await context.sendHTML(`<p class="botui-message-content text">${ticketText}</p>`);
-			// await context.sendHTML(`<div class="botui-message-content text ticketView">${ticketText}</div>`);
-			await context.sendText(flow.cancelarTicket.success.text, await attach.getQR(flow.cancelarTicket.success));
+	if (ticket && ticket.id) {
+		if (ticket.status !== 'canceled') {
+			const ticketText = help.viewTicket(ticket);
+			if (ticketText) {
+				await context.setState({ ticketID: ticket.id });
+				await context.sendText(flow.cancelarTicket.found);
+				await context.sendHTML(`<p class="botui-message-content text">${ticketText}</p>`);
+				// await context.sendHTML(`<div class="botui-message-content text ticketView">${ticketText}</div>`);
+				await context.sendText(flow.cancelarTicket.success.text, await attach.getQR(flow.cancelarTicket.success));
+				return;
+			}
+		} else {
+			await context.sendText(flow.cancelarTicket.cancelledAlready);
+			await sendMainMenu(context);
 			return;
 		}
 	}
