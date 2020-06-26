@@ -11,7 +11,10 @@ const randtoken = require('rand-token');
 const securityToken = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.MANDATOABERTO_API_URL || process.env.REACT_APP_MANDATOABERTO_API_URL;
 
-const rediscl = redis.createClient({ password: process.env.REDIS_PASSWORD });
+const rediscl = redis.createClient({
+	password: process.env.REDIS_PASSWORD,
+	port: process.env.REDIS_PORT,
+});
 const redisGetAsync = promisify(rediscl.get).bind(rediscl);
 
 async function handleErrorApi(options, res, statusCode, err) {

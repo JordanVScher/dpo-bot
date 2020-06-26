@@ -34,10 +34,9 @@ async function createIssue(context) {
 		if (context.session.platform === 'browser') {
 			if (context.state.userEmail) {
 				await chatbotAPI.postRecipient(
-					context.state.politicianData.user_id, { uuid: context.session.user.id, email: context.state.userEmail }, context.state.JWT,
+					context.state.politicianData.user_id, { uuid: context.session.user.id, name: context.state.userEmail, email: context.state.userEmail }, context.state.JWT,
 				);
 
-				await context.setState({ originalDuvida: `${context.state.originalDuvida}\n\nO e-mail desse usuário é: ${context.state.userEmail}` });
 				const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.originalDuvida,
 					context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active, context.state.JWT);
 
