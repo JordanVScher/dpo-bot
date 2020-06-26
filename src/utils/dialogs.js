@@ -13,6 +13,9 @@ async function sendMainMenu(context, text) {
 
 async function ticketFollowUp(context, ticket, desiredTicket) {
 	if (ticket && ticket.id) {
+		await chatbotAPI.postRecipient(
+			context.state.politicianData.user_id, { uuid: context.session.user.id, name: context.state.titularNome, email: context.state.titularMail }, context.state.JWT,
+		);
 		await context.typing(1000 * 2.5);
 		const time = help.getResponseTime(context.state.ticketTypes.ticket_types, desiredTicket);
 
