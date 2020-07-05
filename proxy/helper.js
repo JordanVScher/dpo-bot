@@ -12,7 +12,7 @@ const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
 
 const rediscl = redis.createClient({
-	host: 'dpo-redis',
+	host: 'localhost',
 	port: '6379',
 });
 const redisGetAsync = promisify(rediscl.get).bind(rediscl);

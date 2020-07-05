@@ -79,7 +79,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "requisition": "^1.7.0",
-    "sanitize-html": "^1.26.0",
+    "sanitize-html": "^1.27.0",
     "surveymonkey": "^1.1.0",
     "util": "^0.12.1",
     "util.promisify": "^1.0.0",

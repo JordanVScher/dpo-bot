@@ -1,4 +1,4 @@
-FROM node:11.13.0
+FROM node:14.4.0
 
 WORKDIR /home/node/app_browser
 
