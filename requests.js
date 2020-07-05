@@ -21,7 +21,7 @@ async function getNameFBID(req, res) {
 		res.status(400); res.send('Param security_token is required!');
 	} else {
 		const securityToken = body.security_token;
-		if (securityToken !== process.env.SECURITY_TOKEN_MA) {
+		if (securityToken !== process.env.REACT_APP_SECURITY_TOKEN_MA) {
 			res.status(401); res.send('Unauthorized!');
 		} else {
 			const result = await getFBIDJson();
@@ -42,7 +42,7 @@ async function addLabel(req, res) {
 		const labelName = req.body.label_name;
 		const securityToken = req.body.security_token;
 		const pageToken = req.body.fb_access_token;
-		if (securityToken !== process.env.SECURITY_TOKEN_MA) {
+		if (securityToken !== process.env.REACT_APP_SECURITY_TOKEN_MA) {
 			res.status(401); res.send('Unauthorized!');
 		} else {
 			const response = await linkUserToLabelByName(userID, labelName, pageToken, true);

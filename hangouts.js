@@ -37,7 +37,7 @@ function buildEvent(chatMessage) {
 	const event = {
 		rawEvent: {
 			recipient: {
-				id: process.env.PAGE_ID,
+				id: process.env.REACT_APP_PAGE_ID,
 			},
 		},
 	};

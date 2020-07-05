@@ -7,7 +7,7 @@ import mailer from './mailer';
 import flow from './flow';
 
 // Sentry - error reporting
-Sentry.init({	dsn: process.env.SENTRY_DSN, environment: process.env.ENV, captureUnhandledRejections: false });
+Sentry.init({	dsn: process.env.REACT_APP_SENTRY_DSN, environment: process.env.REACT_APP_ENV, captureUnhandledRejections: false });
 moment.locale('pt-BR');
 
 async function sentryError(msg, err, platform) {
@@ -19,9 +19,9 @@ async function sentryError(msg, err, platform) {
 		erro = err.stack;
 	}
 
-	if (process.env.ENV !== 'local') {
+	if (process.env.REACT_APP_ENV !== 'local') {
 		Sentry.captureMessage(msg);
-		await mailer.sendHTMLMail(`Erro no DPO - ${process.env.ENV || ''}`, process.env.MAILDEV, `${msg || ''}\n\n${erro}`);
+		await mailer.sendHTMLMail(`Erro no DPO - ${process.env.REACT_APP_ENV || ''}`, process.env.REACT_APP_MAILDEV, `${msg || ''}\n\n${erro}`);
 		console.log(`Error sent at ${new Date()}!\n `);
 	} else {
 		console.log('erro', erro);
@@ -56,7 +56,7 @@ async function separateString(someString, platform) {
 }
 
 async function sendTextAnswer(context, knowledge) {
-	const timeToWait = process.env.ISSUE_TIME_WAIT;
+	const timeToWait = process.env.REACT_APP_ISSUE_TIME_WAIT;
 	if (knowledge && knowledge.answer) {
 		await context.setState({ resultTexts: await separateString(knowledge.answer, context.session.platform) });
 		if (context.state.resultTexts && context.state.resultTexts.firstString) {
@@ -160,8 +160,8 @@ async function handleErrorApi(options, res, statusCode, err) {
 	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
-		if (process.env.ENV !== 'local') {
-			msg += `\nEnv: ${process.env.ENV}`;
+		if (process.env.REACT_APP_ENV !== 'local') {
+			msg += `\nEnv: ${process.env.REACT_APP_ENV}`;
 			await Sentry.captureMessage(msg);
 		}
 	}

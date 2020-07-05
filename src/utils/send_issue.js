@@ -5,7 +5,7 @@ import helper from './helper';
 import chatbotAPI from '../chatbot_api';
 
 const blacklist = ['sim', 'nao'];
-const timeToWait = process.env.ISSUE_TIME_WAIT;
+const timeToWait = process.env.REACT_APP_ISSUE_TIME_WAIT;
 
 async function formatString(text) {
 	let result = text.toLowerCase();

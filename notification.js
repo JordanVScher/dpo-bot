@@ -96,6 +96,6 @@ const notificacaoCron = new CronJob(
 	false, 'America/Sao_Paulo', false, false,
 );
 
-if (process.env.ENV !== 'PROD') notificacaoCron.start();
+// if (process.env.REACT_APP_ENV !== 'PROD') notificacaoCron.start();
 
 export default notificacaoCron;

@@ -7,11 +7,13 @@ services:
       dockerfile: ./Dockerfile
     restart: unless-stopped
     ports:
-      - "1990:2700"
+      - "1992:5000"
+    expose:
+      - "1992"
     volumes:
       - .:/home/node/app
       - /home/node/app/node_modules
-    network_mode: "bridge"
+    # network_mode: "bridge"
   browser:
     container_name: dpo-browser
     build: 
@@ -19,31 +21,29 @@ services:
         dockerfile: ./src/Dockerfile
     restart: unless-stopped
     ports:
-      - "1991:3000"
+      - "33"
     volumes:
       - .:/home/node/app_browser
       - /home/node/app_browser/node_modules
     network_mode: "bridge"
   proxy:
     container_name: dpo-proxy
+    restart: unless-stopped
     build: 
         context: .
         dockerfile: ./proxy/Dockerfile
-    restart: unless-stopped
     ports:
-      - "1992:2777"
-    volumes:
-      - .:/home/node/app_proxy
-      - /home/node/app_proxy/node_modules
-    network_mode: "bridge"
+      - "${REACT_APP_PROXY_PORT}:${REDIS_PORT}"
+    expose:
+      - "${REACT_APP_PROXY_PORT}"
+    links:
+      - redis
   redis:
     container_name: dpo-redis
     image: 'redis:4-alpine'
-    restart: unless-stopped
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-    volumes:
-      - $PWD/redis-data:/var/lib/redis
-      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
     ports:
-      - '${REDIS_PORT}:6379'
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    expose:
+      - "${REDIS_PORT}"
+
 

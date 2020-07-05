@@ -108,11 +108,11 @@ const handleText = async (context, incidenteCPFAux) => {
 			await context.sendText('Formato inválido, digite só um número, exemplo 10');
 			await context.setState({ dialog: 'startQuiz' });
 		}
-	} else if (context.state.whatWasTyped.toLowerCase() === process.env.GET_PERFILDATA && await labels.checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token)) {
+	} else if (context.state.whatWasTyped.toLowerCase() === process.env.REACT_APP_GET_PERFILDATA && await labels.checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token)) {
 		await dialogs.handleReset(context);
 	} else if (context.state.dialog === 'leaveTMsg') {
 		await context.setState({ dialog: 'newTicketMsg', ticketMsg: context.state.whatWasTyped });
-	} else if (context.state.whatWasTyped === process.env.NOTIFICATION_KEY) {
+	} else if (context.state.whatWasTyped === process.env.REACT_APP_NOTIFICATION_KEY) {
 		await context.setState({ wantNotification: true, notificacao: null, dialog: 'mainMenu' });
 		await context.sendText('Você receberá as notificações');
 	} else {

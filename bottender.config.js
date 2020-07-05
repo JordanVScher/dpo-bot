@@ -2,13 +2,13 @@
 import { withTyping } from 'bottender';
 import { getStarted } from './src/utils/flow';
 
-const messageWaiting = eval(process.env.WITH_TYPING); // eslint-disable-line no-eval
+const messageWaiting = eval(process.env.REACT_APP_WITH_TYPING); // eslint-disable-line no-eval
 
 // const { getPoliticianData } = require('./src/chatbot_api');
 
 // const mapPageToAccessToken = async (pageId) => {
 // 	const perfilData = await getPoliticianData(pageId);
-// 	return perfilData && perfilData.fb_access_token ? perfilData.fb_access_token : process.env.MESSENGER_ACCESS_TOKEN;
+// 	return perfilData && perfilData.fb_access_token ? perfilData.fb_access_token : process.env.REACT_APP_MESSENGER_ACCESS_TOKEN;
 // };
 
 export default {
@@ -16,14 +16,14 @@ export default {
 		// whatsapp: {
 		// 	enabled: true,
 		// 	path: '/webhooks/whatsapp',
-		// 	accountSid: process.env.ACCOUNT_SID,
-		// 	authToken: process.env.AUTH_TOKEN,
-		// 	phoneNumber: process.env.PHONE_NUMBER,
+		// 	accountSid: process.env.REACT_APP_ACCOUNT_SID,
+		// 	authToken: process.env.REACT_APP_AUTH_TOKEN,
+		// 	phoneNumber: process.env.REACT_APP_PHONE_NUMBER,
 		// },
 		// telegram: {
 		// enabled: true,
 		// path: '/webhooks/telegram',
-		// accessToken: process.env.TELEGRAM_ACCESS_TOKEN,
+		// accessToken: process.env.REACT_APP_TELEGRAM_ACCESS_TOKEN,
 		// },
 		messenger: {
 			enabled: true,

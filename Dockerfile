@@ -1,11 +1,11 @@
-FROM node:11.13.0
+FROM node:14.4.0
 
 WORKDIR /home/node/app
 
 COPY . .
 RUN npm i 
 
-EXPOSE 1990
+EXPOSE 1992
 
 CMD ["npm", "run", "start:bottender"]
 

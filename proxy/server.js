@@ -57,7 +57,7 @@ app.post('/register', async (req, res) => {
 });
 
 
-const port = process.env.PROXY_PORT || process.env.REACT_APP_PROXY_PORT;
+const port = process.env.REACT_APP_PROXY_PORT;
 app.listen(port, (err) => {
 	if (err) throw err;
 	console.log(`Dialogflow Server is running on ${port} port...`);

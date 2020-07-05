@@ -130,7 +130,7 @@ async function getErrorQR(opt, lastDialog) {
 // 		{
 // 			type: 'web_url',
 // 			title: 'Ver Chatbot',
-// 			url: `m.me/${process.env.MESSENGER_PAGE_ID}`,
+// 			url: `m.me/${process.env.REACT_APP_MESSENGER_PAGE_ID}`,
 // 		},
 // 	];
 
@@ -145,7 +145,7 @@ async function getErrorQR(opt, lastDialog) {
 // 					image_url: cardData.image_url,
 // 					default_action: {
 // 						type: 'web_url',
-// 						url: `${cardData.item_url}/${process.env.MESSENGER_PAGE_ID}`,
+// 						url: `${cardData.item_url}/${process.env.REACT_APP_MESSENGER_PAGE_ID}`,
 // 						messenger_extensions: 'false',
 // 						webview_height_ratio: 'full',
 // 					},

@@ -3,8 +3,8 @@
 import axios from 'axios';
 import helper from './utils/helper';
 
-const security_token = process.env.SECURITY_TOKEN_MA || process.env.REACT_APP_SECURITY_TOKEN_MA;
-const proxyAddress = process.env.PROXY_ADDRESS || process.env.REACT_APP_PROXY_ADDRESS;
+const security_token = process.env.REACT_APP_SECURITY_TOKEN_MA;
+const proxyAddress = process.env.REACT_APP_PROXY_ADDRESS;
 const apiUri = `${proxyAddress}/request`;
 
 const makeRequest = async (data) => {

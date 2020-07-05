@@ -4,12 +4,12 @@ const { createReadStream } = require('fs');
 const nodemailer = require('nodemailer');
 // const { Sentry } = require('./helper');
 
-const user = process.env.MAIL_USER;
-const pass = process.env.MAIL_PASS;
-const host = process.env.MAIL_HOST;
-const port = process.env.MAIL_PORT;
-const service = process.env.MAIL_SERVICE;
-const from = process.env.MAIL_FROM;
+const user = process.env.REACT_APP_MAIL_USER;
+const pass = process.env.REACT_APP_MAIL_PASS;
+const host = process.env.REACT_APP_MAIL_HOST;
+const port = process.env.REACT_APP_MAIL_PORT;
+const service = process.env.REACT_APP_MAIL_SERVICE;
+const from = process.env.REACT_APP_MAIL_FROM;
 
 const transporter = nodemailer.createTransport({
 	service,
