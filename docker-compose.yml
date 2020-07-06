@@ -1,10 +1,12 @@
 version: "3"
+networks:
+  dpo:
 services:
   bottender:
     container_name: dpo-bottender
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./src/Dockerfile
     restart: unless-stopped
     ports:
       - "1992:5000"
@@ -21,11 +23,11 @@ services:
         dockerfile: ./src/Dockerfile
     restart: unless-stopped
     ports:
-      - "33"
+      - "${REACT_APP_BROWSER_PORT}:${REACT_APP_BROWSER_PORT}"
     volumes:
       - .:/home/node/app_browser
-      - /home/node/app_browser/node_modules
-    network_mode: "bridge"
+    networks:
+      - dpo
   proxy:
     container_name: dpo-proxy
     restart: unless-stopped
@@ -38,6 +40,8 @@ services:
       - "${REACT_APP_PROXY_PORT}"
     links:
       - redis
+    networks:
+      - dpo
   redis:
     container_name: dpo-redis
     image: 'redis:4-alpine'
@@ -45,3 +49,5 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     expose:
       - "${REDIS_PORT}"
+    networks:
+      - dpo

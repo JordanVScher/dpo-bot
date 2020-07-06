@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const textRequestDF = require('./agent');
 const helper = require('./helper');
 
@@ -16,6 +17,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan('tiny'));
 
 app.post('/text-request', async (req, res) => {
 	const { sessionId, queryText, jwt } = req.body;

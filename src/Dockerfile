@@ -1,6 +1,6 @@
 FROM node:14.4.0
 
-WORKDIR /home/node/app_browser
+WORKDIR /home/node/app_browser/build
 
 COPY . .
 
