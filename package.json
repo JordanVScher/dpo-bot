@@ -28,6 +28,7 @@
     "proxy:build": "docker-compose up -d --build proxy",
     "proxy:log": "docker logs dpo-proxy -f",
     "proxy:pm2": "pm2 start --name dpo-proxy  npm -- run start:proxy",
+    "proxy:copyEnv": "cp .env proxy/.env",
     "redis:build": "docker-compose up -d --build redis",
     "redis:log": "docker logs dpo-redis -f"
   },

@@ -8,4 +8,4 @@ RUN npm i
 
 # EXPOSE 1992
 
-CMD ["npm", "run", "start:proxy"]
+CMD ["npm", "run", "start"]

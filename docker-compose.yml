@@ -30,10 +30,10 @@ services:
     container_name: dpo-proxy
     restart: unless-stopped
     build: 
-        context: .
-        dockerfile: ./proxy/Dockerfile
+        context: ./proxy
+        dockerfile: ./Dockerfile
     ports:
-      - "${REACT_APP_PROXY_PORT}:${REDIS_PORT}"
+      - "${REACT_APP_PROXY_PORT}:${REACT_APP_PROXY_PORT}"
     expose:
       - "${REACT_APP_PROXY_PORT}"
     links:
@@ -45,5 +45,3 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     expose:
       - "${REDIS_PORT}"
-
-

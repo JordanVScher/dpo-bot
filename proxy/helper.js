@@ -10,10 +10,16 @@ const randtoken = require('rand-token');
 
 const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
+const redisHost = process.env.REDIS_HOST || 'localhost';
+const redisPort = process.env.REDIS_PORT_TO_RUN || '6379';
+
+console.log('redisPort', redisPort);
+console.log('redisHost', redisHost);
+console.log('nextDomain', nextDomain);
 
 const rediscl = redis.createClient({
-	host: 'localhost',
-	port: '6379',
+	host: redisHost,
+	port: redisPort,
 });
 const redisGetAsync = promisify(rediscl.get).bind(rediscl);
 
