@@ -6,5 +6,10 @@ COPY . .
 
 EXPOSE 1991
 
-RUN yarn global add serve
-CMD ["serve", "-p", "1991", "-s", "."]
+RUN npm install react-scripts
+RUN npm run build
+# CMD ["npm", "run", "build"]
+
+
+# RUN npm install -g serve
+# CMD ["serve", "-p", "1991", "-s", "."]
