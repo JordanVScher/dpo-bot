@@ -38,7 +38,5 @@ services:
       - "${REACT_APP_PROXY_PORT}:${REACT_APP_PROXY_PORT}"
     expose:
       - "${REACT_APP_PROXY_PORT}"
-    links:
-      - redis
     networks:
       - dpo
