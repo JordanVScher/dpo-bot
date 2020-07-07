@@ -42,13 +42,3 @@ services:
       - redis
     networks:
       - dpo
-  redis:
-    container_name: dpo-redis
-    restart: unless-stopped
-    image: 'redis:4-alpine'
-    ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
-    expose:
-      - "${REDIS_PORT}"
-    networks:
-      - dpo

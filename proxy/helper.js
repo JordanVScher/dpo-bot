@@ -1,8 +1,8 @@
-const { promisify } = require('util');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const redis = require('redis');
 const randtoken = require('rand-token');
+const jsonfile = require('jsonfile');
+
 // import axios from 'axios';
 // import jwt from 'jsonwebtoken';
 // import redis from 'redis';
@@ -10,18 +10,7 @@ const randtoken = require('rand-token');
 
 const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
-const redisHost = process.env.REDIS_HOST || 'localhost';
-const redisPort = process.env.REDIS_PORT_TO_RUN || '6379';
-
-console.log('redisPort', redisPort);
-console.log('redisHost', redisHost);
-console.log('nextDomain', nextDomain);
-
-const rediscl = redis.createClient({
-	host: redisHost,
-	port: redisPort,
-});
-const redisGetAsync = promisify(rediscl.get).bind(rediscl);
+const sessionFolder = './jwt_sessions';
 
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`; // eslint-disable-line
@@ -78,11 +67,10 @@ async function registerJWT(userKey) {
 		expiresIn: jwtExpiration,
 	});
 
-	rediscl.set(userKey, JSON.stringify({
+	jsonfile.writeFile(`${sessionFolder}/${userKey}.json`, {
 		refreshToken,
 		expires: refreshTokenMaxage,
-	}),
-	redis.print);
+	}).then(() => { console.log('Write complete');	}).catch((error) => console.error(error));
 
 	return { token, refreshToken };
 }
@@ -98,17 +86,21 @@ async function checkJWT(myJwt) {
 		if (err) {
 			if (err.name === 'TokenExpiredError') {
 				const newDecoded = await jwt.decode(token);
-				let redisToken = await redisGetAsync(newDecoded.uid);
+				let storedToken = await jsonfile.readFile(`${sessionFolder}/${newDecoded.uid}.json`);
 
-				if (typeof redisToken === 'string') redisToken = JSON.parse(redisToken);
-				if (!redisToken || redisToken.refreshToken === refreshToken) {
+				if (typeof redisToken === 'string') storedToken = JSON.parse(storedToken);
+				if (!storedToken || storedToken.refreshToken === refreshToken) {
 					return { error: 'invalid refresh token' };
 				}
 
-				if (redisToken.expires > new Date()) {
+				if (storedToken.expires > new Date()) {
 					const newRefreshToken = randtoken.uid(64);
 					const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
-					rediscl.set(decoded.uid, JSON.stringify({ refreshToken, expires: refreshTokenMaxage }), rediscl.print);
+					jsonfile.writeFile(`${sessionFolder}/${decoded.uid}.json`, {
+						refreshToken,
+						expires: refreshTokenMaxage,
+					}).then(() => { console.log('Write complete'); }).catch((error) => console.error(error));
+
 
 					const newToken = jwt.sign({ uid: decoded.uid }, jwtSecret, { expiresIn: jwtExpiration });
 					return { token: newToken, refreshToken: newRefreshToken };
@@ -122,10 +114,6 @@ async function checkJWT(myJwt) {
 	});
 	return results;
 }
-
-rediscl.on('connect', () => {
-	console.log('Redis plugged in.');
-});
 
 module.exports = {
 	handleRequestAnswer,
