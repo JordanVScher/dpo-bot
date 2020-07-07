@@ -12,6 +12,7 @@ const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
 const sessionFolder = './jwt_sessions';
 
+
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`; // eslint-disable-line
 	msg += `\nMethod: ${options.method}`;
