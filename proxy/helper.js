@@ -10,7 +10,7 @@ const jsonfile = require('jsonfile');
 
 const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
-const sessionFolder = './jwt_sessions';
+const sessionFolder = `${__dirname}/.jwt_sessions`;
 
 
 async function handleErrorApi(options, res, statusCode, err) {
@@ -64,32 +64,33 @@ async function registerJWT(userKey) {
 	const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
 
 	// Generate new access token
-	const token = jwt.sign({ uid: userKey }, jwtSecret, {
-		expiresIn: jwtExpiration,
-	});
+	const token = jwt.sign({ uid: userKey },
+		jwtSecret, { expiresIn: jwtExpiration });
 
-	jsonfile.writeFile(`${sessionFolder}/${userKey}.json`, {
-		refreshToken,
-		expires: refreshTokenMaxage,
-	}).then(() => { console.log('Write complete');	}).catch((error) => console.error(error));
+	await jsonfile.writeFileSync(`${sessionFolder}/${userKey}.json`,
+		{
+			token, refreshToken, expires: refreshTokenMaxage,
+		},
+		{ spaces: 2 });
 
-	return { token, refreshToken };
+	return { token };
 }
 
 
 async function checkJWT(myJwt) {
 	const { token } = myJwt;
-	const { refreshToken } = myJwt;
 
-	if (!token || !refreshToken) return { error: 'Token missing' };
+	if (!token) return { error: 'Token missing' };
 
 	const results = await jwt.verify(token, jwtSecret, async (err, decoded) => {
 		if (err) {
 			if (err.name === 'TokenExpiredError') {
 				const newDecoded = await jwt.decode(token);
-				let storedToken = await jsonfile.readFile(`${sessionFolder}/${newDecoded.uid}.json`);
+				const onFile = await jsonfile.readFile(`${sessionFolder}/${newDecoded.uid}.json`);
 
-				if (typeof redisToken === 'string') storedToken = JSON.parse(storedToken);
+				const storedToken = onFile.token;
+				const { refreshToken } = onFile;
+
 				if (!storedToken || storedToken.refreshToken === refreshToken) {
 					return { error: 'invalid refresh token' };
 				}
@@ -101,7 +102,6 @@ async function checkJWT(myJwt) {
 						refreshToken,
 						expires: refreshTokenMaxage,
 					}).then(() => { console.log('Write complete'); }).catch((error) => console.error(error));
-
 
 					const newToken = jwt.sign({ uid: decoded.uid }, jwtSecret, { expiresIn: jwtExpiration });
 					return { token: newToken, refreshToken: newRefreshToken };

@@ -68,6 +68,7 @@ typings/
 # file session storage
 .sessions
 .sessions_hangouts
+.jwt_sessions
 
 # for prod container
 run-container.sh

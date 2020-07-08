@@ -54,8 +54,8 @@ app.post('/register', async (req, res) => {
 	const { userKey } = req.body;
 	const result = await helper.registerJWT(userKey);
 
-	if (!result || !result.token) res.status(500).send({ error: 'There was an error generating the JWT.' });
-	res.send(result);
+	if (!result || !result.token) return res.status(500).send({ error: 'There was an error generating the JWT.' });
+	return res.send(result);
 });
 
 
