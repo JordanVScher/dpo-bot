@@ -130,10 +130,6 @@ export default {
 		return makeRequest({ url: `${apiUri}/api/chatbot/intents/available`, method: 'get', params: { fb_page_id, jwt } });
 	},
 
-	async getTicketTypes(chatbot_id, jwt) {
-		return makeRequest({ url: `${apiUri}/api/chatbot/ticket/type`, method: 'get', params: { chatbot_id, jwt } });
-	},
-
 	async getUserTickets(recipient_id, jwt) {
 		return makeRequest({ url: `${apiUri}/api/chatbot/ticket`, method: 'get', params: { recipient_id, jwt } });
 	},
@@ -254,6 +250,10 @@ export default {
 			method: 'post',
 			params: { fb_id, type, jwt },
 		});
+	},
+
+	async getTicketTypes(jwt) {
+		return makeInternalRequest({ url: `${proxyAddress}/ticket-types`, method: 'post', data: { jwt } });
 	},
 
 	async getCustomAswers(jwt) {

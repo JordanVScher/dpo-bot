@@ -65,6 +65,20 @@ app.post('/text-answers', async (req, res) => {
 	return res.send(answers);
 });
 
+app.post('/ticket-types', async (req, res) => {
+	const opt = req.body;
+	const userJwt = opt && opt.jwt ? opt.jwt : {};
+
+	const { decoded } = await helper.checkJWT(userJwt);
+	if (!decoded || decoded.error) return res.status(400).send({ error: decoded && decoded.error ? decoded.error : 'invalid jwt' });
+
+	const newOpt = { url: '<NOVA_API>/api/chatbot/ticket/type', method: 'get', params: { chatbot_id: decoded.chatbotData.organization_chatbot_id } };
+
+	const response = await helper.makeRequest(newOpt);
+	response.ticket_types.forEach((e) => { delete e.send_email_to; });
+	return res.send(response);
+});
+
 app.post('/register', async (req, res) => {
 	const { body } = req;
 	const result = await helper.registerJWT(body);

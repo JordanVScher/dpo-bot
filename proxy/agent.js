@@ -4,7 +4,7 @@ const dialogflow = require('dialogflow');
 /* Initialize DialogFlow agent */
 /* set GOOGLE_APPLICATION_CREDENTIALS on .env */
 const sessionClient = new dialogflow.SessionsClient();
-const projectId = process.env.REACT_APP_GOOGLE_PROJECT_ID;
+const projectId = process.env.GOOGLE_PROJECT_ID;
 
 /**
  * Send a text query to the dialogflow agent, and return the query result.
