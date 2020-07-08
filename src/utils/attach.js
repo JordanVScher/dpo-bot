@@ -1,5 +1,6 @@
 import helper from './helper';
 import flow from './flow';
+import getCustomText from './customText';
 
 function capQR(text) {
 	let result = text;
@@ -210,7 +211,7 @@ async function sendTicketCards(context, tickets) {
 
 async function sendMsgFromAssistente(context, code, defaultMsgs) {
 	try {
-		const msgToSend = await helper.getCustomText(context, code);
+		const msgToSend = await getCustomText(context, code);
 
 		if (msgToSend && typeof msgToSend === 'string' && msgToSend.length > 0) {
 			await context.sendText(msgToSend);

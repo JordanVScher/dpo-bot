@@ -51,6 +51,20 @@ app.post('/request', async (req, res) => {
 	return res.send(tosend);
 });
 
+app.post('/text-answers', async (req, res) => {
+	const opt = req.body;
+	const userJwt = opt && opt.jwt ? opt.jwt : {};
+
+	const { decoded } = await helper.checkJWT(userJwt);
+	if (!decoded || decoded.error) return res.status(400).send({ error: decoded && decoded.error ? decoded.error : 'invalid jwt' });
+
+	const newOpt = { url: '<NOVA_API>/api/chatbot/politician', method: 'get', params: { fb_page_id: decoded.chatbotData.pageId } };
+
+	const response = await helper.makeRequest(newOpt);
+	const { answers } = response;
+	return res.send(answers);
+});
+
 app.post('/register', async (req, res) => {
 	const { body } = req;
 	const result = await helper.registerJWT(body);

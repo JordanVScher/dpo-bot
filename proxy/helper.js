@@ -67,6 +67,7 @@ async function filterchatbotData(data) {
 async function registerJWT({ userKey, pageId, uuid }) {
 	// get chatbot profile data
 	const chatbotData = await makeRequest({ url: `${nextApiPH}/api/chatbot/politician`, method: 'get', params: { fb_page_id: pageId } });
+	chatbotData.pageId = pageId;
 	filterchatbotData(chatbotData);
 
 	const { id: userId } = await makeRequest({

@@ -1,5 +1,5 @@
 import chatbotAPI from '../chatbot_api';
-import helper from './helper';
+import getCustomText from './customText';
 import labels from './labels';
 import flow from './flow';
 
@@ -22,7 +22,7 @@ async function buildConsumidorMenu(context) {
 	options.push(informacoes);
 	options.push(solicitacoes);
 
-	const faleConoscoText = await helper.getCustomText(context, 'fale-conosco');
+	const faleConoscoText = await getCustomText(context, 'fale-conosco');
 	if (faleConoscoText) options.push(faleConosco);
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {

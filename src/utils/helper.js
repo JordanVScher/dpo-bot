@@ -183,16 +183,6 @@ function getRandomArray(array) {
 	return array[Math.floor((Math.random() * array.length))];
 }
 
-async function getCustomText(context, code) {
-	const answers = context.state && context.state.politicianData && context.state.politicianData.answers ? context.state.politicianData.answers : false;
-	if (answers && answers.length > 0) {
-		const currentMsg = answers.find((x) => x.code === code);
-		if (currentMsg && currentMsg.content) return currentMsg.content;
-	}
-
-	return false;
-}
-
 async function errorDetail(context, error) {
 	const date = new Date();
 	await context.sendText('Ops. Tive um erro interno. Tente novamente.');
@@ -272,7 +262,6 @@ export default {
 	sendAttachment,
 	getResponseTime,
 	errorDetail,
-	getCustomText,
 	resumoTicket,
 	expectText,
 	maskEmail,

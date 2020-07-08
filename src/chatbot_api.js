@@ -256,6 +256,10 @@ export default {
 		});
 	},
 
+	async getCustomAswers(jwt) {
+		return makeInternalRequest({ url: `${proxyAddress}/text-answers`, method: 'post', data: { jwt } });
+	},
+
 	async dialogflowText(queryText, sessionId, jwt) {
 		return makeInternalRequest({ url: `${proxyAddress}/text-request`, method: 'post', data: { queryText, sessionId, jwt } });
 	},
