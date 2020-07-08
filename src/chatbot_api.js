@@ -260,7 +260,7 @@ export default {
 		return makeInternalRequest({ url: `${proxyAddress}/text-request`, method: 'post', data: { queryText, sessionId, jwt } });
 	},
 
-	async registerUser(userKey) {
-		return makeInternalRequest({ url: `${proxyAddress}/register`, method: 'post', data: { userKey } });
+	async registerUser(userKey, pageId, uuid) {
+		return makeInternalRequest({ url: `${proxyAddress}/register`, method: 'post', data: { userKey, pageId, uuid } });
 	},
 };

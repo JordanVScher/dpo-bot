@@ -8,10 +8,10 @@ const jsonfile = require('jsonfile');
 // import redis from 'redis';
 // import randtoken from 'rand-token';
 
+const nextApiPH = '<NOVA_API>';
 const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
 const sessionFolder = `${__dirname}/.jwt_sessions`;
-
 
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`; // eslint-disable-line
@@ -48,7 +48,7 @@ async function handleRequestAnswer(response) {
 
 async function makeRequest(opt) {
 	opt.params.security_token = securityToken;
-	opt.url = opt.url.replace('<NOVA_API>', nextDomain);
+	opt.url = opt.url.replace(nextApiPH, nextDomain);
 
 	const backResponse = await axios(opt).then((response) => response).catch((err) => err.response);
 	return handleRequestAnswer(backResponse);
@@ -58,28 +58,42 @@ const jwtSecret = process.env.JWT_SECRET;
 const jwtExpiration = process.env.JWT_EXPIRATION;
 const jwtRefreshExpiration = process.env.JWT_REFRESH_EXPIRATION;
 
-async function registerJWT(userKey) {
+async function filterchatbotData(data) {
+	delete data.fb_access_token;
+	delete data.answers;
+	delete data.name;
+}
+
+async function registerJWT({ userKey, pageId, uuid }) {
+	// get chatbot profile data
+	const chatbotData = await makeRequest({ url: `${nextApiPH}/api/chatbot/politician`, method: 'get', params: { fb_page_id: pageId } });
+	filterchatbotData(chatbotData);
+
+	const { id: userId } = await makeRequest({
+		url: `${nextApiPH}/api/chatbot/recipient`,
+		method: 'post',
+		params: { uuid, politician_id: chatbotData.user_id, name: `browser:${uuid}` },
+	});
+
 	// Generate new refresh token and it's expiration
 	const refreshToken = randtoken.uid(64);
 	const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
 
 	// Generate new access token
-	const token = jwt.sign({ uid: userKey },
+	const token = jwt.sign({ uid: userKey, chatbotData, userId },
 		jwtSecret, { expiresIn: jwtExpiration });
-
+	console.log(`created ${userId}:${token}`);
 	await jsonfile.writeFileSync(`${sessionFolder}/${userKey}.json`,
 		{
 			token, refreshToken, expires: refreshTokenMaxage,
 		},
 		{ spaces: 2 });
 
-	return { token };
+	return { token, chatbotData, userId };
 }
 
 
-async function checkJWT(myJwt) {
-	const { token } = myJwt;
-
+async function checkJWT(token) {
 	if (!token) return { error: 'Token missing' };
 
 	const results = await jwt.verify(token, jwtSecret, async (err, decoded) => {

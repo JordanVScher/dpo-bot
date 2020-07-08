@@ -22,39 +22,33 @@ const getPageID = (context) => {
 	return process.env.REACT_APP_MESSENGER_PAGE_ID;
 };
 
-// we update context data at every interaction that's not a comment or a post
-const postRecipient = async (context) => {
-	const params = {
-		name: context.state.sessionUser.name,
-		origin_dialog: 'greetings',
-	};
-
+const registerRecipient = async (context) => {
 	if (context.session.platform === 'browser') {
-		params.uuid = context.session.user.id;
+		if (!context.state.spokeOnce) {
+			const initialData = await chatbotAPI.registerUser(context.session.user.id, getPageID(context), context.session.user.id);
+			await context.setState({ JWT: initialData.token, politicianData: initialData.chatbotData, recipientID: initialData.userId });
+		}
 	} else {
-		params.fb_id = context.session.user.id;
-		params.picture = context.state.sessionUser.profilePic;
-		// session: JSON.stringify(context.state),
+		// return recipient id, which will be used on the others endpoints
+		const recipient = await chatbotAPI.postRecipient(context.state.politicianData.user_id, {
+			name: context.state.sessionUser.name,
+			origin_dialog: 'greetings',
+			fb_id: context.session.user.id,
+			picture: context.state.sessionUser.profilePic,
+			// session: JSON.stringify(context.state),
+		}, context.state.JWT);
+		await context.setState({ recipientID: recipient.id });
+		return recipient.id;
 	}
-
-	// return recipient id, which will be used on the others endpoints
-	const recipient = await chatbotAPI.postRecipient(context.state.politicianData.user_id, params, context.state.JWT);
-	return recipient.id;
 };
 
 
 export default async function App(context) {
 	try {
-		if (!context.state.spokeOnce) context.setState({ JWT: await chatbotAPI.registerUser(context.session.user.id) });
+		await context.setState({ sessionUser: { ...await context.getUserProfile() } });
+		await registerRecipient(context);
 		const { JWT } = context.state;
 
-		await context.setState({
-			politicianData: await chatbotAPI.getPoliticianData(getPageID(context), JWT),
-			sessionUser: { ...await context.getUserProfile() },
-		});
-
-		await context.setState({ recipientID: await postRecipient(context) });
-		// await checkQR.reloadTicket(context); // await help.resumoTicket(context.state.ticketTypes.ticket_types);
 
 		await timer.deleteTimers(context.session.user.id);
 
