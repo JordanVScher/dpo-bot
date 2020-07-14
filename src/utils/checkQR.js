@@ -22,8 +22,8 @@ async function buildConsumidorMenu(context) {
 	options.push(informacoes);
 	options.push(solicitacoes);
 
-	const faleConoscoText = await getCustomText(context, 'fale-conosco');
-	if (faleConoscoText) options.push(faleConosco);
+	// const faleConoscoText = await getCustomText(context, 'fale-conosco');
+	// if (faleConoscoText) options.push(faleConosco);
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
 	// const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
