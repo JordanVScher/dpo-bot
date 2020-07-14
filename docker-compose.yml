@@ -40,3 +40,6 @@ services:
       - "${REACT_APP_PROXY_PORT}"
     networks:
       - dpo
+    volumes:
+      - .:/home/node/proxy/dpo_proxy_app
+      - /home/node/proxy/dpo_proxy_app/node_modules

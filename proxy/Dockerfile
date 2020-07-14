@@ -1,6 +1,6 @@
 FROM node:14.4.0
 
-WORKDIR /home/node/app_df
+WORKDIR /home/node/dpo_proxy_app/proxy
 
 COPY . .
 

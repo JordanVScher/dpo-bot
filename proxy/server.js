@@ -80,6 +80,7 @@ app.post('/ticket-types', async (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
+	console.log('ESTOU NO REGISTER');
 	const { body } = req;
 	const result = await helper.registerJWT(body);
 
@@ -91,5 +92,6 @@ app.post('/register', async (req, res) => {
 const port = process.env.REACT_APP_PROXY_PORT;
 app.listen(port, (err) => {
 	if (err) throw err;
+	console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 	console.log(`Dialogflow Server is running on ${port} port...`);
 });
