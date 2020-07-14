@@ -26,8 +26,8 @@ async function buildConsumidorMenu(context) {
 	if (faleConoscoText) options.push(faleConosco);
 
 	if (context.state.ticketTypes && context.state.ticketTypes.ticket_types) {
-		const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
-		if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
+		// const getFaleConosco = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 5);
+		// if (getFaleConosco) options.push({ content_type: 'text', title: getFaleConosco.name, payload: 'solicitacao5' });
 		// const getFaleDPO = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 6);
 		// if (getFaleDPO) options.push({ content_type: 'text', title: 'Fale com DPO', payload: 'solicitacao6' });
 	}
