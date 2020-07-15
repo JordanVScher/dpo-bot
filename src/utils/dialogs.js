@@ -90,6 +90,9 @@ async function checkNome(context, stateName, successDialog, invalidDialog, reask
 	const nome = context.state.whatWasTyped;
 
 	if (nome) {
+		if (context.session.platform === 'browser') {
+			await chatbotAPI.postRecipient(context.state.politicianData.user_id, { uuid: context.session.user.id, name: nome }, context.state.JWT);
+		}
 		await context.setState({ [stateName]: nome, dialog: successDialog });
 		return nome;
 	}

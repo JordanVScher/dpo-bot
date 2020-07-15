@@ -1,5 +1,5 @@
 import chatbotAPI from '../chatbot_api';
-import getCustomText from './customText';
+// import getCustomText from './customText';
 import labels from './labels';
 import flow from './flow';
 
@@ -17,7 +17,7 @@ async function buildConsumidorMenu(context) {
 	const options = [];
 	const informacoes = { content_type: 'text', title: 'Informações', payload: 'informacoes' };
 	const solicitacoes = { content_type: 'text', title: 'Solicitações', payload: 'solicitacoes' };
-	const faleConosco = { content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' };
+	// const faleConosco = { content_type: 'text', title: 'Fale Conosco', payload: 'faleConosco' };
 
 	options.push(informacoes);
 	options.push(solicitacoes);
