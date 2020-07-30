@@ -67,7 +67,7 @@ async function checkPosition(context) {
 		// check if there's at least one answer in knowledge_base
 		if (knowledge && knowledge.knowledge_base && knowledge.knowledge_base.length >= 1) {
 			await sendAnswer(context);
-			await dialogs.sendMainMenu(context);
+			await dialogs.endDialogflow(context);
 		} else { // no answers in knowledge_base (We know the entity but politician doesn't have a position)
 			await sendIssue.createIssue(context);
 		}

@@ -11,6 +11,14 @@ async function sendMainMenu(context, text) {
 	await context.sendText(textToSend, await checkQR.buildMainMenu(context));
 }
 
+async function endDialogflow(context) {
+	if (context.session.platform === 'browser') {
+		await context.sendText(flow.sendAnswerEnd.text1, await attach.getQR(flow.sendAnswerEnd));
+	} else {
+		await sendMainMenu(context);
+	}
+}
+
 async function ticketFollowUp(context, ticket, desiredTicket) {
 	if (ticket && ticket.id) {
 		await chatbotAPI.postRecipient(
@@ -380,4 +388,5 @@ export default {
 	ask,
 	checkInteger,
 	cancelarConfirma,
+	endDialogflow,
 };

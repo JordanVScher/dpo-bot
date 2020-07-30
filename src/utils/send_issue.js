@@ -42,7 +42,7 @@ async function createIssue(context) {
 
 				await endProcess(context, issueResponse, flow.duvidas.success, flow.duvidas.failure);
 				await context.setState({ dialog: 'null' });
-				await dialogs.sendMainMenu(context);
+				await dialogs.endDialogflow(context);
 			} else {
 				await context.setState({ originalDuvida: context.state.whatWasTyped });
 				await context.setState({ dialog: 'askEmailDuvida' });
@@ -51,7 +51,8 @@ async function createIssue(context) {
 			const issueResponse = await chatbotAPI.postIssue(context.state.politicianData.user_id, context.state.recipientID, context.state.whatWasTyped,
 				context.state.resultParameters ? context.state.resultParameters : {}, context.state.politicianData.issue_active, context.state.JWT);
 			await endProcess(context, issueResponse, helper.getRandomArray(flow.issueText.success), flow.issueText.failure);
-			await context.setState({ dialog: 'mainMenu' });
+			await context.setState({ dialog: 'null' });
+			await dialogs.endDialogflow(context);
 		}
 	}
 }

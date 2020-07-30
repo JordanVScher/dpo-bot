@@ -237,4 +237,9 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		on: 'Legal! Estarei te interando das novidades! Se quiser parar de receber nossas novidades, clique na opção "Parar Notificações 🛑" no menu abaixo. ⬇️',
 		off: 'Você quem manda. Não estarei mais te enviando nenhuma notificação. Se quiser voltar a receber nossas novidades, clique na opção "Ligar Notificações 👌" no menu abaixo. ⬇️',
 	},
+	sendAnswerEnd: {
+		text1: 'Posso tirar mais alguma duvida?',
+		menuOptions: ['Voltar', 'Mande outra mensagem'],
+		menuPostback: ['mainMenu', 'duvidas'],
+	},
 };
