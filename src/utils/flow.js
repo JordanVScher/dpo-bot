@@ -189,7 +189,7 @@ A legislação se fundamenta em diversos valores, como o respeito à privacidade
 		videoLink: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/files/d3f121c6-ac3e-4881-a484-9fa33c272bd0/y2mate.com_patricia_peck_fala_sobre_protecao_dos_dados_pessoais_duLAb_PQuMw_360p.mp4',
 	},
 	sobreDipiou: {
-		text1: 'Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua comunição com as empresas, um robô interativo, estou aqui para harmonizar a sua comunicação com as empresas, sempre pensando em valorizar a sua privacidade. com as empresas, sempre pensando em valorizar a sua privacidade.',
+		text1: 'Sou um chatbot apaixonado por proteção de dados e que fica muito feliz em te ajudar! Quanto mais você me pergunta, mais eu aprendo e mais consigo contribuir com você. Legal, né? É um prazer estar contigo.',
 	},
 	issueText: {
 		success: ['Você me pegou. Preciso pensar e te retorno em breve.',
