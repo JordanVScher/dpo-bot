@@ -2,6 +2,7 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const randtoken = require('rand-token');
 const jsonfile = require('jsonfile');
+const redis = require('./redis');
 
 // import axios from 'axios';
 // import jwt from 'jsonwebtoken';

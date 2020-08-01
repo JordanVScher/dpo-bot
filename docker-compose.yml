@@ -1,6 +1,7 @@
 version: "3"
 networks:
   dpo:
+  redis:
 services:
   bottender:
     container_name: dpo-bottender
@@ -40,6 +41,19 @@ services:
       - "${REACT_APP_PROXY_PORT}"
     networks:
       - dpo
+      - redis
     volumes:
       - .:/home/node/proxy/dpo_proxy_app
       - /home/node/proxy/dpo_proxy_app/node_modules
+  redis:
+    image: "redis"
+    container_name: dpo-redis
+    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
+    volumes:
+    - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+     - "${REDIS_PORT}:${REDIS_PORT}"
+    restart: unless-stopped
+    networks:
+      - dpo
+      - redis
