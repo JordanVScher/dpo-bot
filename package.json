@@ -60,7 +60,6 @@
     "grpc": "^1.24.2",
     "itsa-surveymonkey-promise": "0.0.6",
     "jest": "^25.3.0",
-    "jsonfile": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "linkifyjs": "^2.1.9",
     "messaging-api-messenger": "^0.7.16",

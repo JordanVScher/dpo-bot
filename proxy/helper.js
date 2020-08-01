@@ -1,7 +1,6 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const randtoken = require('rand-token');
-const jsonfile = require('jsonfile');
 const redis = require('./redis');
 
 // import axios from 'axios';
@@ -12,7 +11,6 @@ const redis = require('./redis');
 const nextApiPH = '<NOVA_API>';
 const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
 const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
-const sessionFolder = `${__dirname}/.jwt_sessions`;
 
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`; // eslint-disable-line
@@ -66,7 +64,6 @@ async function filterchatbotData(data) {
 }
 
 async function registerJWT({ userKey, pageId, uuid }) {
-	console.log('AAAAAAAAAAAA', `${sessionFolder}/${userKey}`);
 	// get chatbot profile data
 	const chatbotData = await makeRequest({ url: `${nextApiPH}/api/chatbot/politician`, method: 'get', params: { fb_page_id: pageId } });
 	chatbotData.pageId = pageId;
@@ -85,12 +82,9 @@ async function registerJWT({ userKey, pageId, uuid }) {
 	// Generate new access token
 	const token = jwt.sign({ uid: userKey, chatbotData, userId },
 		jwtSecret, { expiresIn: jwtExpiration });
-	console.log(`created ${userId}:${token}`);
-	await jsonfile.writeFileSync(`${sessionFolder}/${userKey}.json`,
-		{
-			token, refreshToken, expires: refreshTokenMaxage,
-		},
-		{ spaces: 2 });
+
+	await redis.set(uuid, JSON.stringify({ token, refreshToken, expires: refreshTokenMaxage }));
+
 
 	return { token, chatbotData, userId };
 }
@@ -103,7 +97,8 @@ async function checkJWT(token) {
 		if (err) {
 			if (err.name === 'TokenExpiredError') {
 				const newDecoded = await jwt.decode(token);
-				const onFile = await jsonfile.readFile(`${sessionFolder}/${newDecoded.uid}.json`);
+				let onFile = await redis.get(newDecoded.decoded.uid);
+				if (typeof onFile === 'string') onFile = JSON.parse(onFile);
 
 				const storedToken = onFile.token;
 				const { refreshToken } = onFile;
@@ -115,10 +110,7 @@ async function checkJWT(token) {
 				if (storedToken.expires > new Date()) {
 					const newRefreshToken = randtoken.uid(64);
 					const refreshTokenMaxage = new Date() + jwtRefreshExpiration;
-					jsonfile.writeFile(`${sessionFolder}/${decoded.uid}.json`, {
-						refreshToken,
-						expires: refreshTokenMaxage,
-					}).then(() => { console.log('Write complete'); }).catch((error) => console.error(error));
+					await redis.set(decoded.uid, JSON.stringify({ token: storedToken, refreshToken, expires: refreshTokenMaxage }));
 
 					const newToken = jwt.sign({ uid: decoded.uid }, jwtSecret, { expiresIn: jwtExpiration });
 					return { token: newToken, refreshToken: newRefreshToken };
@@ -130,6 +122,7 @@ async function checkJWT(token) {
 		// no error
 		return { decoded };
 	});
+
 	return results;
 }
 

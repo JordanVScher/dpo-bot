@@ -8,4 +8,4 @@ RUN npm i
 
 # EXPOSE 1992
 
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]
