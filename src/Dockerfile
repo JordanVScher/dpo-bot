@@ -1,14 +1,11 @@
 FROM node:14.4.0
 
-WORKDIR /home/node/app_browser/
+WORKDIR /home/node/app
 
-COPY . .
+COPY ../. .
+RUN npm i 
 
-EXPOSE 1991
+EXPOSE 1992
 
-RUN yarn add react-scripts
-RUN yarn run react:build
+CMD ["npm", "run", "start:bottender"]
 
-RUN yarn global add serve
-CMD ["serve", "public", "-p", "1991"]
-#CMD ["serve", "build", "-p", "1991", "-s", "."]

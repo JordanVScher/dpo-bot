@@ -15,17 +15,14 @@ services:
     volumes:
       - .:/home/node/app
       - /home/node/app/node_modules
-    # network_mode: "bridge"
   browser:
     container_name: dpo-browser
     build: 
         context: .
-        dockerfile: ./src/Dockerfile
+        dockerfile: ./Dockerfile
     restart: unless-stopped
     ports:
       - "${REACT_APP_BROWSER_PORT}:${REACT_APP_BROWSER_PORT}"
-    volumes:
-      - .:/home/node/app_browser
     networks:
       - dpo
   proxy:
