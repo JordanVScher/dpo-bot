@@ -2,12 +2,15 @@ FROM node:14.4.0
 
 WORKDIR /home/node/app_browser/
 
+COPY package.json package-lock.json* ./
+
+RUN npm install && npm cache clean --force
+RUN npm i react-scripts
+
 COPY . .
 
 EXPOSE 1991
 
-RUN npm i
-RUN npm i react-scripts
 RUN npx react-scripts build
 
 RUN npm install -g serve

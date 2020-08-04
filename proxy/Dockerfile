@@ -2,9 +2,11 @@ FROM node:14.4.0
 
 WORKDIR /home/node/dpo_proxy_app/proxy
 
-COPY . .
+COPY package.json package-lock.json* ./
 
-RUN npm i 
+RUN npm install && npm cache clean --force
+
+COPY . .
 
 # EXPOSE 1992
 
