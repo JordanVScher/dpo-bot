@@ -3,11 +3,11 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const express = require('express');
 const { bottender } = require('bottender');
-const { notificacaoCron } = require('./notification');
+// const { notificacaoCron } = require('./notification');
 // const handler = require('./index');
 // const HangoutContext = require('./hangouts');
 
-if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
+// if (notificacaoCron.running) console.log(`Crontab notificacaoCron is running? => ${notificacaoCron.running}`);
 
 const requests = require('./requests');
 
@@ -51,7 +51,10 @@ app.prepare().then(() => {
 	// 	await handler(hangouts);
 	// });
 
-	server.all('*', (req, res) => handle(req, res));
+	server.all('*', (req, res) => { // eslint-disable-line
+
+		return handle(req, res);
+	});
 
 	server.listen(port, (err) => {
 		if (err) throw err;
