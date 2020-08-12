@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  chatbot:
+    image: dpo-chatbot
+    container_name: '${PROJECT_NAME}'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    restart: unless-stopped

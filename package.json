@@ -11,7 +11,9 @@
     "logs": "pm2 logs \"dpo-homol\" --lines 1000",
     "webhook": "npx bottender messenger webhook set",
     "profileGet": "npx bottender messenger profile get",
-    "profileSet": "npx bottender messenger profile set"
+    "profileSet": "npx bottender messenger profile set",
+    "bot:build": "docker-compose up -d --build chatbot",
+    "bot:log": "docker-compose logs chatbot"
   },
   "dependencies": {
     "@sentry/node": "^5.15.4",
@@ -27,7 +29,7 @@
     "fs-extra": "^7.0.0",
     "get-audio-duration": "0.0.1",
     "googleapis": "^51.0.0",
-    "grpc": "^1.24.2",
+    "grpc": "^1.24.3",
     "itsa-surveymonkey-promise": "0.0.6",
     "jest": "^25.3.0",
     "jsonfile": "^5.0.0",
@@ -35,7 +37,7 @@
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.2",
-    "nodemon": "^1.19.1",
+    "nodemon": "^2.0.4",
     "promisepipe": "^3.0.0",
     "query-string": "^5.1.0",
     "remove-accents": "^0.4.2",
