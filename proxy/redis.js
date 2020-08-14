@@ -1,7 +1,7 @@
 const redis = require('redis');
 const { promisify } = require('util');
 
-const host = process.env.REDIS_HOST;
+const host = `${process.env.REDIS_HOST}_${process.env.PROJECT_NAME}`;
 const port = process.env.REDIS_PORT;
 const password = process.env.REDIS_PASSWORD;
 
