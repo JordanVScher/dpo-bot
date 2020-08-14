@@ -3,7 +3,7 @@ networks:
   dpo:
 services:
   bottender:
-    container_name: dpo-bottender
+    container_name: 'dpo-bottender_${PROJECT_NAME}'
     build:
       context: .
       dockerfile: ./src/Dockerfile
@@ -16,7 +16,7 @@ services:
       - .:/home/node/app
       - /home/node/app/node_modules
   browser:
-    container_name: dpo-browser
+    container_name: 'dpo-browser_${PROJECT_NAME}'
     build: 
         context: .
         dockerfile: ./Dockerfile
@@ -26,7 +26,7 @@ services:
     networks:
       - dpo
   proxy:
-    container_name: dpo-proxy
+    container_name: 'dpo-proxy_${PROJECT_NAME}'
     restart: unless-stopped
     build: 
         context: ./proxy
@@ -41,7 +41,7 @@ services:
       - ./proxy:/home/node/dpo_proxy_app/proxy
   redis:
     image: "redis"
-    container_name: dpo-redis
+    container_name: 'dpo-redis_${PROJECT_NAME}'
     command: "redis-server /usr/local/etc/redis/redis.conf --port ${REDIS_PORT} --requirepass ${REDIS_PASSWORD}"
     volumes:
     - ./redis.conf:/usr/local/etc/redis/redis.conf
