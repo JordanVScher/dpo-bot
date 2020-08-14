@@ -24,7 +24,7 @@
     "bottender:log": "docker logs dpo-bottender -f",
     "bottender:pm2": "pm2 start --name dpo-bottender  npm -- run start:bottender",
     "browser:build": "docker-compose up -d --build browser",
-    "browser:log": "docker-compose browser proxy",
+    "browser:log": "docker-compose logs browser",
     "redis:build": "docker-compose up -d --build redis",
     "redis:log": "docker-compose logs redis",
     "proxy:build": "docker-compose up -d --build proxy",
