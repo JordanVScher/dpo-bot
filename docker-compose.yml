@@ -12,9 +12,9 @@ services:
       - "1992:5000"
     expose:
       - "1992"
-    volumes:
-      - .:/home/node/app
-      - /home/node/app/node_modules
+    # volumes:
+    #   - .:/home/node/app
+    #   - /home/node/app/node_modules
   browser:
     container_name: 'dpo-browser_${PROJECT_NAME}'
     build: 
@@ -39,8 +39,8 @@ services:
       - "${REACT_APP_PROXY_PORT}"
     networks:
       - dpo
-    volumes:
-      - ./proxy:/home/node/dpo_proxy_app/proxy
+    # volumes:
+    #   - ./proxy:/home/node/dpo_proxy_app/proxy
   redis:
     image: "redis"
     container_name: 'dpo-redis_${PROJECT_NAME}'
