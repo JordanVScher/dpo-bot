@@ -9,8 +9,8 @@ const redis = require('./redis');
 // import randtoken from 'rand-token';
 
 const nextApiPH = '<NOVA_API>';
-const securityToken = process.env.REACT_APP_SECURITY_TOKEN_MA;
-const nextDomain = process.env.REACT_APP_MANDATOABERTO_API_URL;
+const securityToken = process.env.SECURITY_TOKEN_MA;
+const nextDomain = process.env.MANDATOABERTO_API_URL;
 
 async function handleErrorApi(options, res, statusCode, err) {
 	let msg = `Endereço: ${options.url}`; // eslint-disable-line
@@ -26,8 +26,8 @@ async function handleErrorApi(options, res, statusCode, err) {
 	// console.log('----------------------------------------------', `\n${msg}`, '\n\n');
 
 	if ((res && (res.error || res.form_error)) || (!res && err)) {
-		if (process.env.REACT_APP_ENV !== 'local') {
-			msg += `\nEnv: ${process.env.REACT_APP_ENV}`;
+		if (process.env.NODE_ENV !== 'local') {
+			msg += `\nEnv: ${process.env.NODE_ENV}`;
 			// await Sentry.captureMessage(msg);
 		}
 	}

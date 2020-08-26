@@ -93,3 +93,4 @@ test.html
 ticket_types.js
 
 build/
+proxy.env
