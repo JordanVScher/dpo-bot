@@ -28,11 +28,11 @@ export default {
 		messenger: {
 			enabled: true,
 			path: '/webhooks/messenger',
-			pageId: process.env.MESSENGER_PAGE_ID,
-			accessToken: process.env.MESSENGER_ACCESS_TOKEN,
-			appId: process.env.MESSENGER_APP_ID,
-			appSecret: process.env.MESSENGER_APP_SECRET,
-			verifyToken: process.env.MESSENGER_VERIFY_TOKEN,
+			pageId: process.env.REACT_APP_MESSENGER_PAGE_ID,
+			accessToken: process.env.REACT_APP_MESSENGER_ACCESS_TOKEN,
+			appId: process.env.REACT_APP_MESSENGER_APP_ID,
+			appSecret: process.env.REACT_APP_MESSENGER_APP_SECRET,
+			verifyToken: process.env.REACT_APP_MESSENGER_VERIFY_TOKEN,
 			// mapPageToAccessToken,
 			profile: {
 				getStarted: {
