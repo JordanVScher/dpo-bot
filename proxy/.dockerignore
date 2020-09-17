@@ -5,4 +5,3 @@ node_modules
 google-secret-key.json
 google_private_key.json
 hangouts_private_key.json
-*.env
