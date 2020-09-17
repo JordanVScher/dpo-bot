@@ -34,7 +34,7 @@ services:
         context: ./proxy
         dockerfile: ./Dockerfile
     ports:
-      - "${REACT_APP_PROXY_PORT}:${REACT_APP_PROXY_PORT}"
+      - "${REACT_APP_PROXY_PORT}:${REACT_APP_API_PORT}"
     expose:
       - "${REACT_APP_PROXY_PORT}"
     networks:
