@@ -41,6 +41,7 @@ services:
       - dpo
     volumes:
       - ./proxy:/home/node/dpo_proxy_app/proxy
+      - /home/node/dpo_proxy_app/proxy/node_modules
   redis:
     image: "redis"
     container_name: 'dpo-redis-${PROJECT_NAME}'
