@@ -39,8 +39,8 @@ services:
       - "${REACT_APP_PROXY_PORT}"
     networks:
       - dpo
-    # volumes:
-    #   - ./proxy:/home/node/dpo_proxy_app/proxy
+    volumes:
+      - ./proxy:/home/node/dpo_proxy_app/proxy
   redis:
     image: "redis"
     container_name: 'dpo-redis-${PROJECT_NAME}'
