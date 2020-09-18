@@ -197,11 +197,14 @@ async function errorDetail(context, error) {
 	// });
 }
 
+
+const defaultAnswerTime = 'Em até 15 dias nossa equipe entrará em contato com você. Mas fique tranquilo/a, usualmente nosso contato ocorre antes deste prazo.';
+
 function formatTimeString(originalText) {
-	if (!originalText || originalText.slice(0, 1) === '0') return '48 horas';
+	if (!originalText || originalText.slice(0, 1) === '0') return defaultAnswerTime;
 
 	const text = originalText.replace(/\D/g, '');
-	if (!text) return '48 horas';
+	if (!text) return defaultAnswerTime;
 	let res = '';
 
 	if (['1', '2', '3'].includes(text)) {
@@ -218,7 +221,7 @@ function getResponseTime(tickets, ticketID) {
 	const currentTicket = tickets.find((x) => x.ticket_type_id.toString() === ticketID.toString());
 	res = currentTicket && currentTicket.usual_response_interval ? currentTicket.usual_response_interval : null;
 	res = formatTimeString(res);
-	return res || '48 horas';
+	return res || defaultAnswerTime;
 }
 
 async function resumoTicket(ticketTypes) {

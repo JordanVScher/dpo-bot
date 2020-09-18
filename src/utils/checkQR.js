@@ -48,8 +48,8 @@ async function buildMainMenu(context) {
 	const duvidas = { content_type: 'text', title: 'Falar com o bot', payload: 'duvidas' };
 	const cancelarTicket = { content_type: 'text', title: 'Meu Chamado', payload: 'cancelarTicket' };
 
-	options.push(consumidor);
 	if (context.session.platform === 'browser') options.push(duvidas);
+	options.push(consumidor);
 
 	if (context.session.platform !== 'browser') {
 		if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push(meusTickets);

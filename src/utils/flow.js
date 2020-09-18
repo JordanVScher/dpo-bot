@@ -178,7 +178,7 @@ export default {
 	},
 	atendimentoAvançado: {
 		intro1: 'Essa área é destinada para Autoridade e para Mídia. Vou pedir alguns dados de identificação para solicitar que o nosso DPO entre em contato com você.',
-		intro2: 'Você é da Mídia ou uma Autoridade nacional de proteção de dados? Mas caso você seja um titular de dados, vá em consumidor, que consigo te atender melhor ;)',
+		intro2: 'Se você é da Mídia ou representante de uma Autoridade de Proteção de Dados está no local certo!\nMas, se você é cliente vá para o espaço “Cliente”, que lá eu consigo lhe atender melhor.',
 		menuOptions: ['Mídia', 'ANPD', 'Voltar'],
 		menuPostback: ['solicitacao9', 'solicitacao10', 'mainMenu'],
 	},
