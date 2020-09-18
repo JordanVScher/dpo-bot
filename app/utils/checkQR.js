@@ -36,7 +36,7 @@ async function buildMainMenu(context) {
 	await reloadTicket(context);
 	const options = [];
 
-	options.push({ content_type: 'text', title: 'Consumidor', payload: 'consumidor' });
+	options.push({ content_type: 'text', title: 'Cliente', payload: 'consumidor' });
 	if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push({ content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' });
 	if (context.state.quizEnded !== true) {
 		await context.setState({ isFuncionario: await checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
