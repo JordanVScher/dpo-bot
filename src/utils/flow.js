@@ -177,8 +177,8 @@ export default {
 		askMailFail: 'E-mail inválido! Tente Novamente.',
 	},
 	atendimentoAvançado: {
-		intro1: 'Essa área é destinada para Autoridade e para Mídia. Vou pedir alguns dados de identificação para solicitar que o nosso DPO entre em contato com você.',
-		intro2: 'Se você é da Mídia ou representante de uma Autoridade de Proteção de Dados está no local certo!\nMas, se você é cliente vá para o espaço “Cliente”, que lá eu consigo lhe atender melhor.',
+		intro1: 'Se você é da Mídia ou representante de uma Autoridade de Proteção de Dados está no local certo!',
+		intro2: 'Mas, se você é cliente vá para o espaço “Cliente”, que lá eu consigo lhe atender melhor.',
 		menuOptions: ['Mídia', 'ANPD', 'Voltar'],
 		menuPostback: ['solicitacao9', 'solicitacao10', 'mainMenu'],
 	},
