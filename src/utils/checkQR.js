@@ -39,7 +39,7 @@ async function buildMainMenu(context) {
 	await reloadTicket(context);
 	const options = [];
 
-	const consumidor = { content_type: 'text', title: 'Consumidor', payload: 'consumidor' };
+	const consumidor = { content_type: 'text', title: 'Cliente', payload: 'consumidor' };
 	const meusTickets = { content_type: 'text', title: 'Meus Tickets', payload: 'meuTicket' };
 	const quiz = { content_type: 'text', title: 'Quiz Preparatório', payload: 'beginQuiz' };
 	const sobreLGPD = { content_type: 'text', title: 'O que é LGPD', payload: 'sobreLGPD' };
