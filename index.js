@@ -121,7 +121,7 @@ module.exports = async function App(context) {
 
 		switch (context.state.dialog) {
 		case 'greetings':
-			await context.sendImage(flow.avatarImage);
+			await context.sendImage(context.state.politicianData.chatbot_picture || flow.avatarImage)
 			await context.sendText(flow.greetings.text1.replace('<USERNAME>', context.state.sessionUser.firstName));
 			await attach.sendMsgFromAssistente(context, 'greetings', [flow.greetings.text2]);
 			await dialogs.sendMainMenu(context, flow.mainMenu.firstTime);
