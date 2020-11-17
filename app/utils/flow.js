@@ -1,12 +1,12 @@
 module.exports = {
-	avatarImage: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
+	avatarImage: 'https://api-assistente.appcivico.com/public/dpo-logo.png',
 	getStarted: 'Olá, sou o DIPIOU',
 	share: {
 		txt1: 'Encaminhe nosso bot!',
 		cardData: {
 			title: 'DIPIOU_BOT',
 			subtitle: 'Dippy',
-			image_url: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/images/c3687467-aa57-43c4-b369-0a09824808f6.jpg',
+			image_url: 'https://api-assistente.appcivico.com/public/dpo-logo.png',
 			item_url: 'https://www.facebook.com',
 		},
 	},
@@ -143,7 +143,7 @@ module.exports = {
 		text1: `A Lei Geral de Proteção de Dados Pessoais (LGPD ou LGPDP), Lei nº 13.709/2018, é a legislação brasileira que regula as atividades de tratamento de dados pessoais e que também altera os artigos 7º e 16 do Marco Civil da Internet.
 
 A legislação se fundamenta em diversos valores, como o respeito à privacidade; à autodeterminação informativa; à liberdade de expressão, de informação, de comunicação e de opinião; à inviolabilidade da intimidade, da honra e da imagem; ao desenvolvimento econômico e tecnológico e a inovação; à livre iniciativa, livre concorrência e defesa do consumidor e aos direitos humanos liberdade e dignidade das pessoas. `,
-		videoLink: 'https://gallery.mailchimp.com/926cb477483bcd8122304bc56/files/d3f121c6-ac3e-4881-a484-9fa33c272bd0/y2mate.com_patricia_peck_fala_sobre_protecao_dos_dados_pessoais_duLAb_PQuMw_360p.mp4',
+		videoLink: 'https://api-assistente.appcivico.com/public/dpo-video-v1.mp4',
 	},
 	sobreDipiou: {
 		text1: 'Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua Sou um chatbot, um robô interativo, estou aqui para harmonizar a sua comunicação com as empresas, sempre pensando em valorizar a sua privacidade. com as empresas, sempre pensando em valorizar a sua privacidade.',
