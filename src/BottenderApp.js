@@ -84,6 +84,10 @@ export default async function App(context) {
 			await attach.sendMsgFromAssistente(context, 'greetings', [flow.greetings.text2]);
 			await dialogs.sendMainMenu(context, flow.mainMenu.firstTime);
 			break;
+		case 'maisInfos':
+			await context.sendText(flow.greetings.text3);
+			await dialogs.sendMainMenu(context);
+			break;
 		case 'mainMenu':
 			await dialogs.sendMainMenu(context);
 			break;
@@ -150,6 +154,12 @@ export default async function App(context) {
 			break;
 		case 'askRevogarMail':
 			await dialogs.ask(context, flow.revogar.askRevogarMail, flow.ask, flow.ask.mailPlaceholder);
+			break;
+		case 'askDescription':
+			await dialogs.ask(context, 'Insira um breve relato sobre', flow.ask, flow.ask.descriptionPlaceholder);
+			break;
+		case 'askRevogarDescription':
+			await dialogs.ask(context, 'Insira um breve relato sobre', flow.ask, flow.ask.descriptionPlaceholder);
 			break;
 		case 'gerarTicket1':
 			await context.setState({ ticketID: '1' });

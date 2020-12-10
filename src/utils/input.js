@@ -77,20 +77,28 @@ const handleText = async (context, incidenteCPFAux) => {
 	} else if (['askNome', 'invalidNome'].includes(context.state.dialog)) {
 		await dialogs.checkNome(context, 'titularNome', 'askMail', 'invalidNome');
 	} else if (['askMail', 'invalidMail'].includes(context.state.dialog)) {
-		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket', 'invalidMail');
+		await dialogs.checkEmail(context, 'titularMail', 'askDescription', 'invalidMail');
 	} else if (['cancelarAskNumber'].includes(context.state.dialog)) {
 		await dialogs.checkInteger(context, 'cancelarNumero', 'cancelarAskCPF', 'cancelarAskNumber');
 	} else if (['cancelarAskCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'cancelarCPF', 'cancelarConfirma', 'cancelarAskCPF');
-		// -- 1
-	} else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
+	} else if ( ['askDescription', 'askDescriptionFail'].includes(context.state.dialog) ) {
+		await dialogs.checkDescricao(context, 'titularDescription', 'gerarTicket', 'askDescricaoIdentificadoReAsk');
+	}
+			
+	// -- 1
+	else if (['askRevogarCPF', 'invalidCPF'].includes(context.state.dialog)) {
 		await dialogs.checkCPF(context, 'titularCPF', 'askRevogarTitular', 'invalidCPF');
 	} else if (['askRevogarNome', 'invalidNome'].includes(context.state.dialog)) {
 		await dialogs.checkNome(context, 'titularNome', 'askRevogarMail', 'invalidNome');
 	} else if (['askRevogarMail', 'invalidMail'].includes(context.state.dialog)) {
-		await dialogs.checkEmail(context, 'titularMail', 'gerarTicket1', 'invalidMail');
-		// -- 7
-	} else if (['incidenteAskCPF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
+		await dialogs.checkEmail(context, 'titularMail', 'askRevogarDescription', 'invalidMail');
+	} else if ( ['askRevogarDescription', 'askDescriptionFail'].includes(context.state.dialog) ) {
+		await dialogs.checkDescricao(context, 'titularDescription', 'gerarTicket1', 'askDescricaoIdentificadoReAsk');
+	}
+
+	// -- 7	
+	else if (['incidenteAskCPF', 'incidenteCPF', 'incidenteFilesTimer'].includes(context.state.dialog)) {
 		incidenteCPFAux[context.session.user.id] = await dialogs.checkCPF(context, 'titularCPF', 'incidenteTitular', 'incidenteCPF');
 	} else if (['incidenteNome', 'incidenteNomeReAsk'].includes(context.state.dialog)) {
 		await dialogs.checkNome(context, 'titularNome', 'incidenteEmail', 'incidenteNomeReAsk');
