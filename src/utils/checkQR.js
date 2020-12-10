@@ -47,26 +47,27 @@ async function buildMainMenu(context) {
 	const atendimentoAvancado = { content_type: 'text', title: 'Atendimento Avançado', payload: 'atendimentoAvançado' };
 	const duvidas = { content_type: 'text', title: 'Falar com o bot', payload: 'duvidas' };
 	const cancelarTicket = { content_type: 'text', title: 'Meu Chamado', payload: 'cancelarTicket' };
+	const maisInfos = { content_type: 'text', title: 'Mais informações', payload: 'maisInfos' };
 
 	if (context.session.platform === 'browser') options.push(duvidas);
-	options.push(consumidor);
+	// options.push(consumidor);
 
 	if (context.session.platform !== 'browser') {
-		if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push(meusTickets);
+		// if (context.state.userTickets && context.state.userTickets.itens_count > 0) options.push(meusTickets);
 
 		if (context.state.quizEnded !== true) {
 			await context.setState({ isFuncionario: await labels.checkUserOnLabelName(context.session.user.id, 'admin', context.state.politicianData.fb_access_token) });
-			if (context.state.isFuncionario && context.state.isFuncionario.name) options.push(quiz);
+			// if (context.state.isFuncionario && context.state.isFuncionario.name) options.push(quiz);
 		}
 	}
-	options.push(sobreLGPD);
-	options.push(sobreDipiou);
+	// options.push(sobreLGPD);
+	// options.push(sobreDipiou);
 
 	const shouldHaveAvancado = context.state.ticketTypes.ticket_types.find((x) => x.ticket_type_id === 9 || x.ticket_type_id === 10);
-	if (shouldHaveAvancado) options.push(atendimentoAvancado);
+	// if (shouldHaveAvancado) options.push(atendimentoAvancado);
 
-	if (context.session.platform === 'browser') options.push(cancelarTicket);
-
+	// if (context.session.platform === 'browser') options.push(cancelarTicket);
+	options.push(maisInfos)
 	return { quick_replies: options };
 }
 

@@ -15,6 +15,7 @@ export default {
 		text1: 'Olá, <USERNAME>! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
 		text1b: 'Olá! Que bom te ver por aqui! Eu sou o Dipiou, mas pode me chamar de Dipi.',
 		text2: 'Sou o assistente digital e estou aqui para te ajudar sobre a Lei Geral de Proteção de Dados (LGPD) 🤓',
+		text3: 'Para mais informações acesse o nosso site: '
 	},
 	mainMenu: {
 		text1: ['Ajudo em algo mais?', 'Como posso te ajudar?', 'Em que posso ser útil?'],
@@ -106,13 +107,14 @@ export default {
 		askRevogarCPF: 'Primeiro, preciso que você entre com seu CPF.',
 		askRevogarName: 'Agora, insira seu nome completo.',
 		askRevogarPhone: 'Insira seu telefone com DDD para que a gente possa entrar em contato sobre o seu pedido. Guardaremos esse dado apenas para a equipe entrar em contato com você sobre seu pedido!',
-		askRevogarMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askRevogarMail: 'Insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 	},
 	ask: {
 		clickTheButton: 'Ou clique no botão abaixo para cancelar o pedido.',
 		writeKeyword: 'Ou digite "Cancelar" para voltar.',
 		nomePlaceholder: 'Entre seu nome completo',
 		descricaoPlaceholder: 'Explique-nos o ocorrido',
+		descriptionPlaceholder: 'Explique-nos o ocorrido',
 		cpfPlaceholder: 'Ex: 123.123.123-11',
 		cpfFail: 'CPF inválido! Exemplo de CPF: 123.123.123-11.',
 		mailPlaceholder: 'Ex: meuemail@mail.com',
@@ -153,7 +155,7 @@ export default {
 		menuPostback: ['mainMenu'],
 	},
 	askMail: {
-		ask: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		ask: 'Insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		fail: 'E-mail inválido! Tente Novamente.',
 		menuOptions: ['Cancelar'],
 		menuPostback: ['mainMenu'],
@@ -173,7 +175,7 @@ export default {
 		incidenteCPF: 'Ok, primeiro preciso que você me forneça seu CPF para que seja possível abrir um chamado para reportar o incidente.',
 		time: 1000 * 20,
 		CPFNext: 'checkNextStepIncidente',
-		askMail: 'E, por fim, insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
+		askMail: 'Insira um e-mail válido que você mais utiliza. Usararemos apenas para garantir que consigamos falar contigo. Tudo bem?',
 		askMailFail: 'E-mail inválido! Tente Novamente.',
 	},
 	atendimentoAvançado: {
