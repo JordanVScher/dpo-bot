@@ -29,7 +29,7 @@
     "fs-extra": "^7.0.0",
     "get-audio-duration": "0.0.1",
     "googleapis": "^51.0.0",
-    "grpc": "^1.24.3",
+    "grpc": "^1.24.9",
     "itsa-surveymonkey-promise": "0.0.6",
     "jest": "^25.3.0",
     "jsonfile": "^5.0.0",
